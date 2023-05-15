@@ -1,14 +1,23 @@
 import HomePage from "@centrin/components/home/HomePage";
-import { isLogged } from "@centrin/utils/auth";
+import { getUser, isLogged } from "@centrin/utils/auth";
 import { redirect } from 'next/navigation';
 
 const Home = async () => {
-  const logged =  await isLogged();
+  const logged = await isLogged();
   if (!logged) {
     redirect("/login");
   };
+  
+  const user = await getUser();
 
-  return <HomePage/>;
+  if (!user) {
+    redirect("/login");
+  }
+
+  return (
+    <HomePage user = {user} />
+  );
 };
 
 export default Home;
+ 

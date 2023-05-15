@@ -33,15 +33,6 @@ export const verifyToken = async (token: string) : Promise<IUser | null> => {
   }
 };
 
-// /**
-//  * Function to set JWT token to cookies
-//  * @param {string} token
-//  * */
-// export const setToken = async (token: string): void => {
-//   console.log('setToken', token)
-//   Cookies.set(TOKEN_NAME, token);
-// };
-
 /**
  * Function to get JWT token from cookies
  * @returns {string | undefined} token
@@ -64,7 +55,7 @@ export const getToken = async (): Promise<string | undefined> => {
  * @returns {boolean} isAuthorized
  * */
 export const authUser = async (validRoles: RoleEnum[]) : Promise<boolean> => {
-    const token = await await getToken();
+    const token = await getToken();
     if (token) {
         const user = await verifyToken(token);
         if (user) {
@@ -114,7 +105,7 @@ export const isLogged = async () : Promise<boolean> => {
 export const getUser = async () : Promise<IUser | null> => {
     const token = await getToken();
     if (token) {
-        return verifyToken(token);
+        return await verifyToken(token);
     }
     return null;
 }

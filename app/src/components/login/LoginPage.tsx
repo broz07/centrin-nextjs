@@ -1,16 +1,25 @@
 'use client'
-import { RoleEnum, User } from "@centrin/types/User/User";
+
+import { IUser, RoleEnum } from "@centrin/types/User/User";
 import { generateToken } from "@centrin/utils/auth";
 import { setToken } from "@centrin/utils/cookies";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-
-const TestUser: User = new User (1, "Test", "User", "", [RoleEnum.ADMIN]);
 
 const LoginPage: React.FC = () => {
     const router = useRouter();
     const handleClick = async () => {
         console.log("Login clicked");
-        setToken(await generateToken(TestUser.toJson()));
+        const user: IUser = {
+            id: 1,
+            name: "Test",
+            surname: "Admin",
+            displayName: "Test Admin",
+            roles: [RoleEnum.ADMIN]
+        };
+        const token = await generateToken(user)
+        setToken(token);
+
         router.push("/");
     };
 
