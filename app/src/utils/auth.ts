@@ -1,13 +1,71 @@
 'use server';
-import { IUser, RoleEnum, User } from '@centrin/types/User/User';
+import { IUser, RoleEnum, IRole} from '@centrin/types/User/User';
 //import Cookies from 'js-cookie';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import pool from './db';
+
 
 const TOKEN_NAME = 'jwtToken';
 const SECRET_KEY = 'secretKey';
 // const TOKEN_TTL = 60 * 60 * 24 * 7; // 7 days
 const TOKEN_TTL = 60 * 60 * 24; // 1 day
+
+interface IQueryUser {
+  id: number;
+  name: string;
+  surname: string;
+  username: string;
+  email?: string;
+  role_id: number;
+  role_name: string;
+  role_desc?: string;
+}
+
+/**
+ * Function to hash password
+ * @param {string} password
+ * @returns {string} hashed password
+ */
+const hashPassword = (password: string): string => {
+  const hash = crypto.createHash('sha256');
+  const saltedPassword = `${SECRET_KEY}${password}`;
+  hash.update(saltedPassword);
+  return hash.digest('hex');
+}
+
+export const login = async (username: string, password: string): Promise<IUser | null> => {
+  const client = await pool.connect();
+  // const query = `SELECT * FROM centrin.users WHERE username=${username} AND password=${hashPassword(password)}`;
+  const query = `SELECT users.id AS id, users.name AS name, users.surname AS surname, users.username AS username, users.email AS email, users.role_id AS role_id, roles.name AS role_name, roles.description AS role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id WHERE username='${username}' AND password='${hashPassword(password)}';`;
+  // select * from centrin.users as users join centrin.roles as roles on users.role_id = roles.id where users.username='admin' and users.password='admin'
+  const result = await client.query<IQueryUser>(query);
+  const data = result.rows
+
+  if (data.length === 0) {
+    return null;
+  }
+
+  const user: IUser = {
+    id: data[0].id,
+    name: data[0].name,
+    surname: data[0].surname,
+    username: data[0].username,
+    email: data[0].email,
+    displayName: `${data[0].name} ${data[0].surname}`,
+    role: {
+      id: data[0].role_id,
+      name: data[0].role_name,
+      description: data[0].role_desc,
+    },
+  };
+
+  client.release();
+
+  return user;
+};
+
 
 /**
  * Function to generate JWT token
@@ -16,7 +74,7 @@ const TOKEN_TTL = 60 * 60 * 24; // 1 day
  * */
 export const generateToken = async (user: IUser) : Promise<string> => {
   const token = jwt.sign(user, SECRET_KEY, { expiresIn: TOKEN_TTL });
-  console.log('generateToken', token)
+  //console.log('generateToken', token)
   return token;
 };
 
@@ -59,7 +117,10 @@ export const authUser = async (validRoles: RoleEnum[]) : Promise<boolean> => {
     if (token) {
         const user = await verifyToken(token);
         if (user) {
-            return validRoles.some(role => user.roles.includes(role));
+            const userRole = user.role.id;
+            if (validRoles.includes(userRole)) {
+                return true;
+            }
         }
         return false;
     }

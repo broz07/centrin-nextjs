@@ -55,7 +55,7 @@ const Sidebar: React.FC<Props> = ({user}) => {
                 <footer>
                     <button className={`${styles.userAvatar}`}>
                         <Avatar src={avatar} />
-                        <span>{user.displayName}<br />{user.roles[0]}</span>
+                        <span>{user.displayName}<br />{user.role.description}</span>
                     </button>
                     <button type="button" onClick={handleLogout}>
                         <Image src={LogoutIcon} alt="Logout Icon"/>

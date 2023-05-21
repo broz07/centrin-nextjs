@@ -9,7 +9,7 @@ const TOKEN_TTL = 60 * 60 * 24; // 1 day
  * @param {string} token
  * */
 export const setToken = (token: string): void => {
-  console.log('setToken', token)
+  // console.log('setToken', token)
   Cookies.set(TOKEN_NAME, token);
 };
 
