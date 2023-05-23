@@ -1,5 +1,5 @@
 import styles from '@centrin/styles/ui/ui.module.css';
-import {ReactNode} from 'react';
+import { ReactNode } from 'react';
 
 interface Props{
     children: ReactNode;

@@ -1,10 +1,11 @@
 'use server';
-import { IUser, RoleEnum, IRole} from '@centrin/types/User/User';
+import { IUser, RoleEnum, IRole, IQueryUser} from '@centrin/types/User/User';
 //import Cookies from 'js-cookie';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import pool from './db';
+ 
 
 
 const TOKEN_NAME = 'jwtToken';
@@ -12,23 +13,13 @@ const SECRET_KEY = 'secretKey';
 // const TOKEN_TTL = 60 * 60 * 24 * 7; // 7 days
 const TOKEN_TTL = 60 * 60 * 24; // 1 day
 
-interface IQueryUser {
-  id: number;
-  name: string;
-  surname: string;
-  username: string;
-  email?: string;
-  role_id: number;
-  role_name: string;
-  role_desc?: string;
-}
 
 /**
  * Function to hash password
  * @param {string} password
  * @returns {string} hashed password
  */
-const hashPassword = (password: string): string => {
+export const hashPassword = (password: string): string => {
   const hash = crypto.createHash('sha256');
   const saltedPassword = `${SECRET_KEY}${password}`;
   hash.update(saltedPassword);

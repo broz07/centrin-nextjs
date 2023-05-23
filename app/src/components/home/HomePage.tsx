@@ -14,7 +14,7 @@ const HomePage: React.FC<Props> = ({user}) => {
             <Sidebar user={user}/>
             <PageContentWrapper>
                 <h1>Home</h1>
-            </PageContentWrapper>
+            </PageContentWrapper>            
         </PageWrapper>
     );
 };

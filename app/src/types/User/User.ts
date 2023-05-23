@@ -10,6 +10,29 @@ export interface IRole{
     description?: string;
 }
 
+export interface IQueryUser {
+    id: number;
+    name: string;
+    surname: string;
+    username: string;
+    email?: string;
+    role_id: number;
+    role_name: string;
+    role_desc?: string;
+}
+ 
+
+export interface IGetUsersQuery {
+    id: number;
+    name: string;
+    surname: string;
+    username: string;
+    email: string;
+    role_id: number;
+    role_name: string;
+    role_desc: string;
+  }
+
 export interface IUser {
     id: number;
     name: string;
@@ -20,6 +43,14 @@ export interface IUser {
     role: IRole;
 }
 
+export interface IUserAdd {
+    name: string;
+    surname: string;
+    username: string;
+    email?: string;
+    password: string;
+    role: RoleEnum;
+}
 // export class User {
 //     private id? : number;
 //     private name?: string;
