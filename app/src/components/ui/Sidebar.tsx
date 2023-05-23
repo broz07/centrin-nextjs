@@ -57,7 +57,7 @@ const Sidebar: React.FC<Props> = ({user}) => {
                         <Link href="/admin">
                             <button type="button">
                                 <Image src={AdminIcon} alt="Admin Icon" />
-                                <span>Admin Panel</span>
+                                <span>Administrace</span>
                             </button>
                         </Link>
                     )}

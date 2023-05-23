@@ -2,18 +2,16 @@
 import styles from "@centrin/styles/login/login.module.css";
 import LoginNotes from "./LoginNotes";
 import LoginForm from "./LoginForm";
-import PageWrapper from "../ui/PageWrapper";
+import PageLayout from "../ui/PageLayout";
 
 
 const LoginPage: React.FC = () => {
 
     return (
-        <PageWrapper>
-            <div className={styles.pageWrapper}>
-                <LoginNotes />
-                <LoginForm />            
-            </div>
-        </PageWrapper>        
+        <div className={styles.pageWrapper}>
+            <LoginNotes />
+            <LoginForm />            
+        </div>       
     );
 };
 
