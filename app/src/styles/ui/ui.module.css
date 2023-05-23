@@ -53,6 +53,10 @@
   width: 24px;
   height: 24px;
 }
+.sidebar button > svg {
+  width: 24px;
+  height: 24px;
+}
 .sidebar button > span {
   color: #f9f9f9;
   opacity: 0;

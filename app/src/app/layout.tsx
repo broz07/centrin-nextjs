@@ -1,4 +1,8 @@
+'use client'
 import { Poppins } from 'next/font/google'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './global.css';
 
 const poppins = Poppins({
@@ -18,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="cs" className={poppins.className}>
       <body>
         {children}
+        <ToastContainer />
       </body>
     </html>
   );

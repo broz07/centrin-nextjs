@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { IUser } from "@centrin/types/User/User";
+import { IUser, RoleEnum } from "@centrin/types/User/User";
 import { removeToken } from "@centrin/utils/cookies";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -10,11 +10,13 @@ import { Avatar } from '@mui/material';
 
 import PageLogo from '../../../public/assets/app-logo.svg'
 import HomeIcon from '../../../public/assets/icon-home.svg'
+import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
 import CustomersIcon from '../../../public/assets/icon-customers.svg'
 import PanelIcon from '../../../public/assets/icon-search.svg'
 import LogoutIcon from '../../../public/assets/icon-lock.svg'
-import AdminIcon from '../../../public/assets/icon-admin.svg'
+// import AdminIcon from '../../../public/assets/icon-admin.svg'
 const defaultAvatar = '../../../public/assets/default-user-avatar.svg';
+
 
 
 //TODO
@@ -48,9 +50,17 @@ const Sidebar: React.FC<Props> = ({user}) => {
                     <Link href="/">
                         <button type="button">
                             <Image src={HomeIcon} alt="Home Icon"/>
-                            <span>Homepage</span>
+                            <span>Hlavní stránka</span>
                         </button>
                     </Link>
+                    {user.role.id === RoleEnum.ADMIN && (
+                        <Link href="/admin">
+                            <button type="button">
+                                <Image src={AdminIcon} alt="Admin Icon" />
+                                <span>Admin Panel</span>
+                            </button>
+                        </Link>
+                    )}
                 </nav>
                 <footer>
                     <button className={`${styles.userAvatar}`}>
