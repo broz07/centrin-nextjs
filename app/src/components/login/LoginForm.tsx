@@ -8,7 +8,6 @@ import { generateToken, login } from "@centrin/utils/auth";
 import { setToken } from "@centrin/utils/cookies";
 
 import styles from "@centrin/styles/login/login.module.css";
-// const router = useRouter();
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required("Vyplňte uživatelské jméno"),
@@ -41,6 +40,7 @@ const LoginForm: React.FC = () => {
                     return;
                 }
 
+
                 const token = await generateToken(user)
                 setToken(token);
                 
@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
     return (
         <div className={styles.loginBar}>
             <div className={styles.loginWrapper}>
-                <h1>MService</h1>
+                <h1>Informační systém - Centrin</h1>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={`${styles.formElement} ${styles.formStack}`}>
                         <label htmlFor="username" className={styles.formLabel}>Username</label>

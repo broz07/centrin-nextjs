@@ -1,0 +1,4 @@
+"id","name","description"
+1,admin,Administrátor
+2,user,Běžný uživatel
+3,guest,Host
