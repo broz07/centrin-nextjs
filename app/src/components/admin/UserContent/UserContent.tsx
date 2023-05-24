@@ -22,7 +22,7 @@ const UserContent: React.FC = () => {
         setOpen(false);
     };
 
-    const handlePasswordChange = () => {
+    const handlePasswordChange = (): void => {
         const password = (document.getElementById("password") as HTMLInputElement).value;
         const passwordAgain = (document.getElementById("password-again") as HTMLInputElement).value;
 
