@@ -1,0 +1,73 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Clinton";
+  src: url("/fonts/Clinton/ClintonBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.headerGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+}
+.headerGroup h1 {
+  margin: 0;
+  height: 50%;
+}
+.headerGroup span {
+  height: 50%;
+}
+.headerGroup .buttonsWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.headerGroup .buttonsWrapper button {
+  margin-right: 10px;
+}
+
+.userContentHeader {
+  width: 100%;
+  height: 50px;
+  padding: 0 1rem;
+  background-color: #303030;
+  color: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}/*# sourceMappingURL=admin.module.css.map */

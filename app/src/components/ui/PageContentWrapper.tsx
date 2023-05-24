@@ -6,8 +6,13 @@ interface Props{
 }
 
 const PageContentWrapper: React.FC<Props> = ({children}) => {
+    const handleSidebarClose = () => {
+        const sidebar = document.querySelector(`.${styles.sidebar}`);
+        sidebar?.classList.remove(`${styles.open}`);
+    }
+
     return (
-        <div className={styles.pageContentWrapper}>
+        <div className={styles.pageContentWrapper} onClick={handleSidebarClose}>
             {children}
         </div>
     )

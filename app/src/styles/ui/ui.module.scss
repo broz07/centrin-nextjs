@@ -137,3 +137,39 @@
     //padding: 0 0px 0 16px !important;
     gap: 17px !important;
 }
+
+.pageHeader{
+    background-color: #f6f6f6;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    display: flex;
+    box-shadow: 0 0 10px #0003;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    padding: 0 1rem;
+    z-index: 100;
+}
+
+.pageContent{
+    position: absolute;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 72px);
+    overflow-y: auto;
+    //background-color: red;
+
+    &::-webkit-scrollbar{
+        background-color: #303030;
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb{
+        // background-color: #31308e;
+        background-color: #1f52a7;
+    }
+}

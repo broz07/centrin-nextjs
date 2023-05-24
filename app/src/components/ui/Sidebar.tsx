@@ -17,10 +17,6 @@ import LogoutIcon from '../../../public/assets/icon-lock.svg'
 // import AdminIcon from '../../../public/assets/icon-admin.svg'
 const defaultAvatar = '../../../public/assets/default-user-avatar.svg';
 
-
-
-//TODO
-
 interface Props{
     readonly user : IUser;
 }

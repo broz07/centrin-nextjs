@@ -1,5 +1,6 @@
 import AdminPage from "@centrin/components/admin/AdminPage";
-import { authAdmin } from "@centrin/utils/auth";
+import { RoleEnum } from "@centrin/types/User/User";
+import { authUser } from "@centrin/utils/auth";
 import { getUser, isLogged } from "@centrin/utils/auth";
 import { redirect } from 'next/navigation';
 
@@ -16,7 +17,7 @@ const Admin = async () => {
         redirect("/login");
     }
 
-    const verified = await authAdmin();
+    const verified = await authUser([RoleEnum.ADMIN, RoleEnum.MANAGER, RoleEnum.REDITEL]);
     if (!verified) {
         redirect("/");
     }

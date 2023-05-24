@@ -152,4 +152,36 @@
 .userAvatar {
   padding: 0 17px !important;
   gap: 17px !important;
+}
+
+.pageHeader {
+  background-color: #f6f6f6;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  display: flex;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  padding: 0 1rem;
+  z-index: 100;
+}
+
+.pageContent {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 72px);
+  overflow-y: auto;
+}
+.pageContent::-webkit-scrollbar {
+  background-color: #303030;
+  width: 6px;
+}
+.pageContent::-webkit-scrollbar-thumb {
+  background-color: #1f52a7;
 }/*# sourceMappingURL=ui.module.css.map */

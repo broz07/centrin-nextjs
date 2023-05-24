@@ -33,16 +33,14 @@ export const getUsers = async (): Promise<IUser[]> => {
 export const addUser = async (user: IUserAdd, role: RoleEnum = RoleEnum.USER): Promise<boolean> => {
   const client = await pool.connect(); 
   const query = `INSERT INTO centrin.users (name, surname, username, email, password, role_id) VALUES ('${user.name}', '${user.surname}', '${user.username}', '${user.email}', '${hashPassword(user.password)}', ${role});`;
-
   try {
     await client.query(query);
     client.release();
     return true;
   } catch (err) {
     console.error(err);
+    return false; 
   }
-
-  return false;
 };
 
 export const deleteUser = async (id: number): Promise<boolean> => {
