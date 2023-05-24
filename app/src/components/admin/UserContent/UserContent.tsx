@@ -6,6 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
 import { IUserAdd, RoleEnum, roleSelectValues} from "@centrin/types/User/User";
 import { addUser } from "@centrin/utils/users";
 import { NotificationPosition, NotificationType, notify } from "@centrin/utils/notify";
+import UserContentDataProvider from "./UserContentDataProvider";
 
 const UserContent: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
@@ -13,6 +14,7 @@ const UserContent: React.FC = () => {
     const [requiredError, setRequiredError] = useState<string[]>([]);
     const [passwordErrorText, setPasswordErrorText] = useState<string>("");
     const [selectValue, setSelectValue] = useState<RoleEnum>(RoleEnum.USER);
+    const [refresh, setRefresh] = useState<boolean>(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -83,6 +85,7 @@ const UserContent: React.FC = () => {
 
             if (added) {
                 notify("Uživatel byl úspěšně přidán! 🤗", NotificationType.SUCCESS, NotificationPosition.BR);
+                setRefresh(!refresh);
                 setOpen(false);
             }else{
                 notify("Uživatele se nepodařilo přidat! 😥", NotificationType.ERROR, NotificationPosition.BR)
@@ -181,6 +184,7 @@ const UserContent: React.FC = () => {
                 </DialogActions>
             </Dialog>
             <UserContentHeader handleClickOpen={handleClickOpen}/>
+            <UserContentDataProvider refresh={refresh} />
         </>
     );
 }

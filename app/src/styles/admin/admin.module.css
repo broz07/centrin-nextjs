@@ -70,4 +70,43 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.tableWrapper {
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+}
+.tableWrapper table {
+  width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  border-collapse: collapse;
+}
+.tableWrapper table thead {
+  background-color: #fefefe;
+  color: #2b2b2b;
+  position: sticky;
+  top: 50px;
+  z-index: 5;
+  border-bottom: 1px solid #2b2b2b;
+}
+.tableWrapper table tbody tr td {
+  padding: 0.05rem 1rem;
+  border-left: 1px solid #2b2b2b;
+  border-top: 1px solid #2b2b2b;
+}
+.tableWrapper table tbody tr td:first-child {
+  text-align: center;
+  border-left: none;
+}
+.tableWrapper table tbody tr:hover {
+  background-color: rgb(139, 139, 139);
 }/*# sourceMappingURL=admin.module.css.map */

@@ -6,7 +6,7 @@ import { hashPassword } from './auth';
 
 export const getUsers = async (): Promise<IUser[]> => {
   const client = await pool.connect();
-  const query = 'SELECT users.name, users.surname, users.username, users.email, users.role_id, roles.name, roles.description FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id;';
+  const query = 'SELECT users.id as id, users.name, users.surname, users.username, users.email, users.role_id, roles.name as role_name, roles.description as role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id;';
   const result = await client.query<IGetUsersQuery>(query);
   const data = result.rows;
   client.release();
