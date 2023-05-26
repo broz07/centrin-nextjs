@@ -27,7 +27,7 @@ const Sidebar: React.FC<Props> = ({user}) => {
     
     const handleLogout = () => {
         removeToken();
-        router.replace("/login");
+        router.refresh();
     };
 
     const toggleOpen = () => {

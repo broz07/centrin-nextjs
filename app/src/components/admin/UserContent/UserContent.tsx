@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import UserContentHeader from "./UserContentHeader";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, MenuItem, TextField } from "@mui/material";
 import { IUserAdd, RoleEnum, roleSelectValues} from "@centrin/types/User/User";
 import { addUser } from "@centrin/utils/users";
@@ -73,6 +74,9 @@ const UserContent: React.FC = () => {
         handleRequiredError();
 
         if (requiredError.length === 0 && !passwordError) {
+            if (name.trim() === "" || surname.trim() === "" || username.trim() === "" || password.trim() === "") {
+                return;
+            }
             const user: IUserAdd = {
                 name,
                 surname,
@@ -85,6 +89,7 @@ const UserContent: React.FC = () => {
 
             if (added) {
                 notify("Uživatel byl úspěšně přidán! 🤗", NotificationType.SUCCESS, NotificationPosition.BR);
+                setSelectValue(RoleEnum.USER);
                 setRefresh(!refresh);
                 setOpen(false);
             }else{
@@ -179,8 +184,8 @@ const UserContent: React.FC = () => {
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleSubmit}>Odeslat</Button>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Zrušit</Button>
+                    <Button onClick={handleSubmit} variant="contained" endIcon={<PersonAddIcon />}>Přidat</Button>                    
                 </DialogActions>
             </Dialog>
             <UserContentHeader handleClickOpen={handleClickOpen}/>

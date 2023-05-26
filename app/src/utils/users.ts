@@ -1,6 +1,6 @@
 'use server';
 import pool from './db';
-import { IGetUsersQuery, IQueryUser, IUser, IUserAdd, RoleEnum } from '@centrin/types/User/User';
+import { IGetUsersQuery, IQueryUser, IUser, IUserAdd, IUserUpdate, RoleEnum } from '@centrin/types/User/User';
 import { hashPassword } from './auth';
 
 
@@ -59,9 +59,9 @@ export const deleteUser = async (id: number): Promise<boolean> => {
   return false;
 }
 
-export const updateUser = async (id: number, user: IUser): Promise<boolean> => {
+export const updateUser = async (id: number, user: IUserUpdate): Promise<boolean> => {
   const client = await pool.connect();
-  const query = `UPDATE centrin.users SET name='${user.name}', surname='${user.surname}', username='${user.username}', email='${user.email}', role_id=${user.role.id} WHERE id=${id};`;
+  const query = `UPDATE centrin.users SET name='${user.name}', surname='${user.surname}', username='${user.username}', email='${user.email}', role_id=${user.role} WHERE id=${id};`;
 
   try {
     await client.query(query);

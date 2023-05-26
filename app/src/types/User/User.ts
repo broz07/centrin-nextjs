@@ -39,7 +39,7 @@ export const roleSelectValues = [
     },
     {
         value: RoleEnum.UKLIZEC,
-        label: 'Úklizeč',
+        label: 'Uklízeč',
     },
     {
         value: RoleEnum.REDITEL,
@@ -101,4 +101,12 @@ export interface IUserAdd {
     username: string;
     email?: string;
     password: string;
+}
+
+export interface IUserUpdate {
+    name: string;
+    surname: string;
+    username: string;
+    email?: string;
+    role: RoleEnum;
 }
