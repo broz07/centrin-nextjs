@@ -8,14 +8,18 @@ import styles from '@centrin/styles/ui/ui.module.css';
 import Image from "next/image";
 import { Avatar } from '@mui/material';
 
+
+import StatIcon from '../../../public/assets/icon-chart-line.svg'
+import DefectIcon from '../../../public/assets/icon-alarm.svg'
+//import StatIcon from '../../../public/assets/icon-bar-chart.svg'
 import PageLogo from '../../../public/assets/app-logo.svg'
 import HomeIcon from '../../../public/assets/icon-home.svg'
-import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
-import CustomersIcon from '../../../public/assets/icon-customers.svg'
-import PanelIcon from '../../../public/assets/icon-search.svg'
+//import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
+import AdminIcon from '../../../public/assets/icon-shield.svg'
+// import CustomersIcon from '../../../public/assets/icon-customers.svg'
+// import PanelIcon from '../../../public/assets/icon-search.svg'
 import LogoutIcon from '../../../public/assets/icon-lock.svg'
-// import AdminIcon from '../../../public/assets/icon-admin.svg'
-const defaultAvatar = '../../../public/assets/default-user-avatar.svg';
+//const defaultAvatar = '../../../public/assets/default-user-avatar.svg';
 
 interface Props{
     readonly user : IUser;
@@ -23,7 +27,7 @@ interface Props{
 
 const Sidebar: React.FC<Props> = ({user}) => {
     const router = useRouter();
-    const [avatar, setAvatar] = useState<string>(defaultAvatar)
+    const [avatar, setAvatar] = useState<string|undefined>(undefined)
     
     const handleLogout = () => {
         removeToken();
@@ -49,6 +53,20 @@ const Sidebar: React.FC<Props> = ({user}) => {
                             <span>Hlavní stránka</span>
                         </button>
                     </Link>
+                    <Link href="/defects">
+                        <button type="button">
+                            <Image src={DefectIcon} alt="Defect Icon"/>
+                            <span>Závady</span>
+                        </button>
+                    </Link>
+                    {user.role.id === RoleEnum.ADMIN && (
+                        <Link href="/statistics">
+                            <button type="button">
+                                <Image src={StatIcon} alt="Stat Icon"/>
+                                <span>Statistiky</span>
+                            </button>
+                        </Link>
+                    )}
                     {user.role.id === RoleEnum.ADMIN && (
                         <Link href="/admin">
                             <button type="button">
@@ -59,10 +77,12 @@ const Sidebar: React.FC<Props> = ({user}) => {
                     )}
                 </nav>
                 <footer>
-                    <button className={`${styles.userAvatar}`}>
-                        <Avatar src={avatar} />
-                        <span>{user.displayName}<br />{user.role.description}</span>
-                    </button>
+                    <Link href="/profile">
+                        <button className={`${styles.userAvatar}`}>
+                            <Avatar src={avatar} />
+                            <span>{user.displayName}<br />{user.role.description}</span>
+                        </button>
+                    </Link>
                     <button type="button" onClick={handleLogout}>
                         <Image src={LogoutIcon} alt="Logout Icon"/>
                         <span>Logout</span>
