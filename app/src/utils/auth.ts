@@ -1,5 +1,5 @@
 'use server';
-import { IUser, RoleEnum, IRole, IQueryUser} from '@centrin/types/User/User';
+import { IUser, RoleEnum, IRole, IQueryUser} from '@centrin/types/user';
 //import Cookies from 'js-cookie';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';

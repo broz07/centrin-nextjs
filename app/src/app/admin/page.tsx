@@ -1,5 +1,5 @@
 import AdminPage from "@centrin/components/admin/AdminPage";
-import { RoleEnum } from "@centrin/types/User/User";
+import { RoleEnum } from "@centrin/types/user";
 import { authUser } from "@centrin/utils/auth";
 import { getUser, isLogged } from "@centrin/utils/auth";
 import { redirect } from 'next/navigation';

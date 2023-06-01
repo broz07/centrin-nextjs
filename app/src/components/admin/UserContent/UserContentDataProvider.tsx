@@ -1,7 +1,7 @@
 import styles from '@centrin/styles/admin/admin.module.css';
 import UserContentTable from './UserContentTable';
 import { useEffect, useState } from 'react';
-import { IUser } from '@centrin/types/User/User';
+import { IUser } from '@centrin/types/user';
 import { getUsers } from '@centrin/utils/users';
 
 interface Props {

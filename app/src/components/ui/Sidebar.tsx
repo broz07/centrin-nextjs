@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { IUser, RoleEnum } from "@centrin/types/User/User";
+import { IUser, RoleEnum } from "@centrin/types/user";
 import { removeToken } from "@centrin/utils/cookies";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

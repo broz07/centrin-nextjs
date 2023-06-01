@@ -4,7 +4,7 @@ import { useState } from "react";
 import UserContentHeader from "./UserContentHeader";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, MenuItem, TextField } from "@mui/material";
-import { IUserAdd, RoleEnum, roleSelectValues} from "@centrin/types/User/User";
+import { IUserAdd, RoleEnum, roleSelectValues} from "@centrin/types/user";
 import { addUser } from "@centrin/utils/users";
 import { NotificationPosition, NotificationType, notify } from "@centrin/utils/notify";
 import UserContentDataProvider from "./UserContentDataProvider";

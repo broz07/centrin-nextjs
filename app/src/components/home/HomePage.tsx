@@ -1,6 +1,6 @@
 'use client'
 
-import { IUser } from "@centrin/types/User/User";
+import { IUser } from "@centrin/types/user";
 import PageLayout from "@centrin/components/ui/PageLayout"
 
 interface Props{

@@ -1,7 +1,7 @@
 'use client'
 
 import { use, useEffect, useState } from "react";
-import { IUser, IUserUpdate, RoleEnum, roleSelectValues } from "@centrin/types/User/User";
+import { IUser, IUserUpdate, RoleEnum, roleSelectValues } from "@centrin/types/user";
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, MenuItem, TextField, Tooltip } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';

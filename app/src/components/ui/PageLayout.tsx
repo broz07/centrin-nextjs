@@ -1,6 +1,6 @@
 'use client'
 import styles from '@centrin/styles/ui/ui.module.css';
-import { IUser } from '@centrin/types/User/User';
+import { IUser } from '@centrin/types/user';
 import { ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import PageContentWrapper from './PageContentWrapper';

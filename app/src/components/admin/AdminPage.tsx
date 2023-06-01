@@ -1,6 +1,6 @@
 'use client'
 
-import { IUser } from "@centrin/types/User/User";
+import { IUser } from "@centrin/types/user";
 import PageLayout from "../ui/PageLayout";
 import PageHeader from "../ui/PageHeader";
 import AdminHeader from "./AdminHeader";

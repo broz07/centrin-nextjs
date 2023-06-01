@@ -1,6 +1,6 @@
 'use client';
 
-import { IUser } from "@centrin/types/User/User";
+import { IUser } from "@centrin/types/user";
 import { createContext, useState } from "react";
 
 export interface IUserContextValue {

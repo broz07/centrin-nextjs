@@ -1,6 +1,6 @@
 'use server';
 import pool from './db';
-import { IGetUsersQuery, IQueryUser, IUser, IUserAdd, IUserUpdate, RoleEnum } from '@centrin/types/User/User';
+import { IGetUsersQuery, IQueryUser, IUser, IUserAdd, IUserUpdate, RoleEnum } from '@centrin/types/user';
 import { hashPassword } from './auth';
 
 
