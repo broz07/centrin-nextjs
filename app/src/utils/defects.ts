@@ -1,8 +1,8 @@
 import pool from './db';
 
-export const getDefects = async () =>{
-    const client = await pool.connect();
-    const query = `
+export const getDefects = async () => {
+  const client = await pool.connect();
+  const query = `
 SELECT 
 	d.*,
 	r.name AS room_name,
@@ -51,12 +51,12 @@ LEFT JOIN
     OR (c.floor_id = f.id AND d.corridor_id IS NOT NULL)
 LEFT JOIN
     centrin.buildings b ON f.building_id  = b.id;
-`
-        
-    const result = await client.query<any>(query);
-    const data = result.rows
+`;
 
-	client.release();
+  const result = await client.query<any>(query);
+  const data = result.rows;
 
-    return data;
-}
+  client.release();
+
+  return data;
+};

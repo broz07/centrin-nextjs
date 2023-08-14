@@ -1,31 +1,31 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/Poppins/Poppins-Bold.ttf") format("truetype");
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/Poppins/Poppins-Italic.ttf") format("truetype");
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
-  font-family: "Poppins";
-  src: url("/fonts/Poppins/Poppins-BoldItalic.ttf") format("truetype");
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
   font-weight: bold;
   font-style: italic;
 }
 @font-face {
-  font-family: "Clinton";
-  src: url("/fonts/Clinton/ClintonBold.ttf") format("truetype");
+  font-family: 'Clinton';
+  src: url('/fonts/Clinton/ClintonBold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
@@ -36,8 +36,16 @@
   height: 100vh;
   width: 100%;
   background: rgb(17, 62, 138);
-  background: linear-gradient(135deg, rgb(17, 62, 138) 0%, rgb(31, 107, 197) 32%, rgb(36, 116, 215) 56%, rgb(36, 116, 215) 68%, rgb(36, 117, 217) 84%, rgb(45, 136, 253) 100%);
-  font-family: "Open Sans", sans-serif;
+  background: linear-gradient(
+    135deg,
+    rgb(17, 62, 138) 0%,
+    rgb(31, 107, 197) 32%,
+    rgb(36, 116, 215) 56%,
+    rgb(36, 116, 215) 68%,
+    rgb(36, 117, 217) 84%,
+    rgb(45, 136, 253) 100%
+  );
+  font-family: 'Open Sans', sans-serif;
   color: #1b1c1e;
 }
 
@@ -215,18 +223,26 @@
   line-height: 1em;
   letter-spacing: 0.6px;
   border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    0 3px 6px rgba(0, 0, 0, 0.1);
   border: 0;
   outline: 0;
   transition: all 0.25s;
 }
-.button:focus, .button:active, .button:hover {
-  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.1);
+.button:focus,
+.button:active,
+.button:hover {
+  box-shadow:
+    0 4px 7px rgba(0, 0, 0, 0.1),
+    0 3px 6px rgba(0, 0, 0, 0.1);
 }
 .button.login {
   background: rgb(17, 62, 138);
   cursor: pointer;
 }
-.button.login:focus.login, .button.login:active.login, .button.login:hover.login {
+.button.login:focus.login,
+.button.login:active.login,
+.button.login:hover.login {
   background: rgb(10, 49, 116);
-}/*# sourceMappingURL=login.module.css.map */
+} /*# sourceMappingURL=login.module.css.map */

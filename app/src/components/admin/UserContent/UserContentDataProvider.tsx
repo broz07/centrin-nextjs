@@ -5,27 +5,27 @@ import { IUser } from '@centrin/types/user';
 import { getUsers } from '@centrin/utils/users';
 
 interface Props {
-    refresh: boolean
+  refresh: boolean;
 }
 
-const UserContentDataProvider: React.FC<Props> = ({refresh}) => {
-    const [data, setData] = useState<IUser[]>([]);
-    const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+const UserContentDataProvider: React.FC<Props> = ({ refresh }) => {
+  const [data, setData] = useState<IUser[]>([]);
+  const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const users = await getUsers();
-            setData(users);
-        };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getUsers();
+      setData(users);
+    };
 
-        fetchUsers();
-    }, [refresh, refreshFlag]);
+    fetchUsers();
+  }, [refresh, refreshFlag]);
 
-    return (
-        <div className={styles.tableWrapper}>
-            <UserContentTable refreshFlag={refreshFlag} setRefreshFlag={setRefreshFlag} data={data}/>
-        </div>
-    );
-}
+  return (
+    <div className={styles.tableWrapper}>
+      <UserContentTable refreshFlag={refreshFlag} setRefreshFlag={setRefreshFlag} data={data} />
+    </div>
+  );
+};
 
 export default UserContentDataProvider;

@@ -1,7 +1,7 @@
-import PlanContent from "./PlanContent";
+import PlanContent from './PlanContent';
 
 const PlanContentDataProvider: React.FC = () => {
-    return <PlanContent/>
-}
+  return <PlanContent />;
+};
 
 export default PlanContentDataProvider;

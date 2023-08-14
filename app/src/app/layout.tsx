@@ -1,8 +1,7 @@
-'use client'
+'use client';
 // import { Poppins } from 'next/font/google'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 import './global.css';
 
@@ -12,7 +11,6 @@ import './global.css';
 //   subsets: ['latin'],
 //   display: 'swap',
 // });
-
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

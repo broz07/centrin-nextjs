@@ -35,7 +35,7 @@ export const removeToken = (): void => {
  * @param {number} ttl
  * */
 export const setCookie = (key: string, value: any, ttl?: number): void => {
-  if (!ttl){
+  if (!ttl) {
     Cookies.set(key, value);
     return;
   }
@@ -49,7 +49,7 @@ export const setCookie = (key: string, value: any, ttl?: number): void => {
  * */
 export const getCookie = (key: string): any | string | undefined => {
   return Cookies.get(key);
-}
+};
 
 /**
  * Function to remove cookie from cookies
@@ -57,4 +57,4 @@ export const getCookie = (key: string): any | string | undefined => {
  * */
 export const removeCookie = (key: string): void => {
   Cookies.remove(key);
-}
+};
