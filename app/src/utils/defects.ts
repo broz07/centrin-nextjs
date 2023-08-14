@@ -1,8 +1,8 @@
 import pool from './db';
 
 export const getDefects = async () => {
-  const client = await pool.connect();
-  const query = `
+	const client = await pool.connect();
+	const query = `
 SELECT 
 	d.*,
 	r.name AS room_name,
@@ -53,10 +53,10 @@ LEFT JOIN
     centrin.buildings b ON f.building_id  = b.id;
 `;
 
-  const result = await client.query<any>(query);
-  const data = result.rows;
+	const result = await client.query<any>(query);
+	const data = result.rows;
 
-  client.release();
+	client.release();
 
-  return data;
+	return data;
 };

@@ -12,14 +12,18 @@ import './global.css';
 //   display: 'swap',
 // });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    // <html lang="cs" className={poppins.className}>
-    <html lang="cs">
-      <body>
-        {children}
-        <ToastContainer />
-      </body>
-    </html>
-  );
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		// <html lang="cs" className={poppins.className}>
+		<html lang="cs">
+			<body>
+				{children}
+				<ToastContainer />
+			</body>
+		</html>
+	);
 }

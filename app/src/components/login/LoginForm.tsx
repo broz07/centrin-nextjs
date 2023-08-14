@@ -1,104 +1,186 @@
 'use client';
-import { useState } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { notify, NotificationPosition, NotificationType } from '@centrin/utils/notify';
-import { generateToken, login } from '@centrin/utils/auth';
-import { setToken } from '@centrin/utils/cookies';
+import {
+	NotificationPosition,
+	NotificationType,
+	loadToast,
+	updateToast,
+} from '@centrin/utils/client/notify';
+import { generateToken, login } from '@centrin/utils/server/auth';
+import { setToken } from '@centrin/utils/client/cookies';
 
-import styles from '@centrin/styles/login/login.module.css';
+import styles from '@centrin/styles/login/login.module.scss';
+import { TextField } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import DOMPurify from 'dompurify';
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Vyplňte uživatelské jméno'),
-  password: Yup.string().required('Vyplňte heslo'),
-});
+interface IUsernameError {
+	hasError: boolean;
+	message?: string;
+}
 
-interface FormValues {
-  username: string;
-  password: string;
+interface IPasswordError {
+	hasError: boolean;
+	message?: string;
 }
 
 const LoginForm: React.FC = () => {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+	const router = useRouter();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const usernameRef = useRef<HTMLInputElement | null>(null);
+	const passwordRef = useRef<HTMLInputElement | null>(null);
 
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      username: '',
-      password: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      setIsSubmitting(true);
-      try {
-        const user = await login(values.username, values.password);
-        if (!user) {
-          notify('Nesprávné přihlašovací údaje! 😢', NotificationType.ERROR);
-          setIsSubmitting(false);
-          resetForm();
-          return;
-        }
+	const [usernameError, setUsernameError] = useState<IUsernameError>({
+		hasError: false,
+	});
 
-        const token = await generateToken(user);
-        setToken(token);
+	const [passwordError, setPasswordError] = useState<IPasswordError>({
+		hasError: false,
+	});
 
-        notify('Přihlášení proběhlo úspěšně! 🤗', NotificationType.SUCCESS, NotificationPosition.TR);
-        router.push('/');
-      } catch (e) {
-        notify('Něco se pokazilo! 😢', NotificationType.ERROR);
-        resetForm();
-        setIsSubmitting(false);
-      }
-      resetForm();
-      setIsSubmitting(false);
-    },
-  });
+	const resetForm = () => {
+		if (usernameRef.current && passwordRef.current) {
+			usernameRef.current.value = '';
+			passwordRef.current.value = '';
+		}
+	};
 
-  return (
-    <div className={styles.loginBar}>
-      <div className={styles.loginWrapper}>
-        <h1>Informační systém - Centrin</h1>
-        <form onSubmit={formik.handleSubmit}>
-          <div className={`${styles.formElement} ${styles.formStack}`}>
-            <label htmlFor="username" className={styles.formLabel}>
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.username}
-              className={styles.formInput}
-            />
-            {formik.touched.username && formik.errors.username ? <div>{formik.errors.username}</div> : null}
-          </div>
-          <div className={`${styles.formElement} ${styles.formStack}`}>
-            <label htmlFor="password" className={styles.formLabel}>
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-              className={styles.formInput}
-            />
-            {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
-          </div>
-          <div className={`${styles.formElement} ${styles.formSubmit}`}>
-            <button type="submit" className={`${styles.button} ${styles.login}`} disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+	const handleLogin = async () => {
+		if (usernameRef.current && passwordRef.current) {
+			const username = DOMPurify.sanitize(usernameRef.current.value);
+			const password = DOMPurify.sanitize(passwordRef.current.value);
+
+			if (
+				!username ||
+				username.trim() == '' ||
+				!password ||
+				password.trim() == ''
+			) {
+				if (!username || username.trim() == '') {
+					setUsernameError({
+						hasError: true,
+						message: 'Přihlašovací jméno je povinné',
+					});
+				}
+
+				if (!password || password.trim() == '') {
+					setPasswordError({
+						hasError: true,
+						message: 'Heslo je povinné',
+					});
+				}
+				return;
+			}
+
+			setIsSubmitting(true);
+
+			const toast = loadToast('Přihlašování...', NotificationPosition.BR);
+
+			try {
+				const user = await login(username, password);
+
+				if (user === null) {
+					updateToast(
+						toast,
+						'Nemáte oprávnění pro přístup do aplikace! 😓',
+						NotificationType.ERROR,
+						NotificationPosition.BR,
+						2000,
+					);
+					setIsSubmitting(false);
+					resetForm();
+					return;
+				} else {
+					const token = await generateToken(user);
+
+					setToken(token);
+
+					updateToast(
+						toast,
+						'Přihlášení proběhlo úspěšně! 🤗',
+						NotificationType.SUCCESS,
+						NotificationPosition.BR,
+						2000,
+					);
+
+					router.refresh();
+				}
+			} catch (e) {
+				console.log(e);
+				updateToast(
+					toast,
+					'Něco se pokazilo! 😓',
+					NotificationType.ERROR,
+					NotificationPosition.BR,
+					2000,
+				);
+				setIsSubmitting(false);
+				resetForm();
+				return;
+			}
+		}
+	};
+
+	const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter') {
+			handleLogin();
+		}
+	};
+
+	return (
+		<div className={styles.loginBar}>
+			<div className={styles.loginWrapper}>
+				<h1>MSERVICE</h1>
+				<div className={`${styles.formElement} ${styles.formStack}`}>
+					<TextField
+						type="text"
+						variant="standard"
+						id="username"
+						label="Přihlašovací jméno"
+						fullWidth
+						onKeyDown={handleKeyPress}
+						onChange={() => {
+							if (usernameError.hasError) setUsernameError({ hasError: false });
+						}}
+						error={usernameError.hasError}
+						helperText={usernameError.message ? usernameError.message : null}
+						inputRef={usernameRef}
+					/>
+				</div>
+				<div className={`${styles.formElement} ${styles.formStack}`}>
+					<TextField
+						type="password"
+						variant="standard"
+						id="password"
+						label="Heslo"
+						fullWidth
+						onKeyDown={handleKeyPress}
+						onChange={() => {
+							if (passwordError.hasError) setPasswordError({ hasError: false });
+						}}
+						error={passwordError.hasError}
+						helperText={passwordError.message ? passwordError.message : null}
+						inputRef={passwordRef}
+					/>
+				</div>
+				<div className={`${styles.formElement} ${styles.formSubmit}`}>
+					<LoadingButton
+						id="login-button"
+						fullWidth
+						sx={{ marginTop: '1rem' }}
+						loading={isSubmitting}
+						onClick={handleLogin}
+						variant="contained"
+						startIcon={<VpnKeyIcon />}
+					>
+						Přihlásit se
+					</LoadingButton>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default LoginForm;

@@ -1,36 +1,36 @@
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
-  font-weight: bold;
-  font-style: italic;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+	font-weight: bold;
+	font-style: italic;
 }
 
 @font-face {
-  font-family: 'Clinton';
-  src: url('/fonts/Clinton/ClintonBold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+	font-family: 'Clinton';
+	src: url('/fonts/Clinton/ClintonBold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
 }
 
 $primary-color: #31308e;
@@ -51,6 +51,21 @@ $white-4: #fdfcfa;
 
 $alarm-red: #f1b0b7;
 $alarm-green: #b0f1b7;
+// $severity0: #dadada;
+// $severity0: #c0eec4;
+// $severity1: #ede7f6;
+// $severity2: #e1f5fe;
+// $severity3: #fffecd ;
+// $severity4: #fff3cd;
+// $severity5: #ffdde0;
+
+$severity0: #c0eec4;
+$severity1: #c57de4;
+$severity2: #7fbdf8;
+$severity3: #ffff6d;
+$severity4: rgba(253, 166, 33, 0.5);
+// $severity4: #fda621;
+$severity5: #f1b0b7;
 
 $text-color: $black-4;
 

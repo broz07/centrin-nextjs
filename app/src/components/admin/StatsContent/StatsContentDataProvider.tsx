@@ -1,7 +1,7 @@
 import StatsContent from './StatsContent';
 
 const StatsContentDataProvider: React.FC = () => {
-  return <StatsContent />;
+	return <StatsContent />;
 };
 
 export default StatsContentDataProvider;

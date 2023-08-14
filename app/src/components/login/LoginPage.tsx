@@ -4,12 +4,12 @@ import LoginNotes from './LoginNotes';
 import LoginForm from './LoginForm';
 
 const LoginPage: React.FC = () => {
-  return (
-    <div className={styles.pageWrapper}>
-      <LoginNotes />
-      <LoginForm />
-    </div>
-  );
+	return (
+		<div className={styles.pageWrapper}>
+			<LoginNotes />
+			<LoginForm />
+		</div>
+	);
 };
 
 export default LoginPage;

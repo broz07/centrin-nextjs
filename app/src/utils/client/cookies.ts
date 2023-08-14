@@ -9,8 +9,8 @@ const TOKEN_TTL = 60 * 60 * 24; // 1 day
  * @param {string} token
  * */
 export const setToken = (token: string): void => {
-  // console.log('setToken', token)
-  Cookies.set(TOKEN_NAME, token);
+	// console.log('setToken', token)
+	Cookies.set(TOKEN_NAME, token);
 };
 
 /**
@@ -18,14 +18,14 @@ export const setToken = (token: string): void => {
  * @returns {string | undefined} token
  * */
 export const getToken = (): string | undefined => {
-  return Cookies.get(TOKEN_NAME);
+	return Cookies.get(TOKEN_NAME);
 };
 
 /**
  * Function to remove JWT token from cookies
  * */
 export const removeToken = (): void => {
-  Cookies.remove(TOKEN_NAME);
+	Cookies.remove(TOKEN_NAME);
 };
 
 /**
@@ -35,11 +35,11 @@ export const removeToken = (): void => {
  * @param {number} ttl
  * */
 export const setCookie = (key: string, value: any, ttl?: number): void => {
-  if (!ttl) {
-    Cookies.set(key, value);
-    return;
-  }
-  Cookies.set(key, value, { expires: ttl });
+	if (!ttl) {
+		Cookies.set(key, value);
+		return;
+	}
+	Cookies.set(key, value, { expires: ttl });
 };
 
 /**
@@ -48,7 +48,7 @@ export const setCookie = (key: string, value: any, ttl?: number): void => {
  * @returns {any | string | undefined} cookie
  * */
 export const getCookie = (key: string): any | string | undefined => {
-  return Cookies.get(key);
+	return Cookies.get(key);
 };
 
 /**
@@ -56,5 +56,5 @@ export const getCookie = (key: string): any | string | undefined => {
  * @param {string} key
  * */
 export const removeCookie = (key: string): void => {
-  Cookies.remove(key);
+	Cookies.remove(key);
 };

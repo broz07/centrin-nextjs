@@ -1,56 +1,56 @@
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
-  font-weight: bold;
-  font-style: italic;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+	font-weight: bold;
+	font-style: italic;
 }
 @font-face {
-  font-family: 'Clinton';
-  src: url('/fonts/Clinton/ClintonBold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+	font-family: 'Clinton';
+	src: url('/fonts/Clinton/ClintonBold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
 }
 *,
 *:before,
 *:after {
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html,
 body {
-  margin: 0;
-  min-height: 100vh;
-  width: 100%;
-  font-family: 'Poppins', 'Open Sans', sans-serif;
+	margin: 0;
+	min-height: 100vh;
+	width: 100%;
+	font-family: 'Poppins', 'Open Sans', sans-serif;
 }
 
 button {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
 }
 
 a {
-  text-decoration: none;
+	text-decoration: none;
 } /*# sourceMappingURL=global.css.map */
