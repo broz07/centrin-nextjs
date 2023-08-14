@@ -137,3 +137,19 @@ export const resetUserPassword = async (
 
 	return false;
 };
+
+export const getUnavailableUsernames = async (): Promise<string[]> => {
+	try {
+		const client = await pool.connect();
+		const query = 'SELECT username FROM centrin.users;';
+		const result = await client.query<{ username: string }>(query);
+		const data = result.rows;
+		client.release();
+
+		return data.map((user) => user.username);
+	}
+	catch (err) {
+		console.error(err);
+		return [];
+	}
+}
