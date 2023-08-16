@@ -6,7 +6,11 @@ import 'react-contexify/dist/ReactContexify.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RemoveUserDialog from '../Dialogs/RemoveUserDialog';
 
-const BulkMenu: React.FC = () => {
+interface Props {
+	resetSelected: () => void;
+}
+
+const BulkMenu: React.FC<Props> = ({resetSelected}) => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
 	const [specialKey2, setSpecialKey2] = useState<string>('Alt');
 	const [isAppleDevice, setIsAppleDevice] = useState<boolean>(false);
@@ -54,6 +58,7 @@ const BulkMenu: React.FC = () => {
 				open={openRemoveDialog}
 				close={() => setOpenRemoveDialog(false)}
 				userIds={userIds}
+				resetSelected={resetSelected}
 			/>
 			<Menu id="bulk-user-menu" theme="dark">
 			<Item

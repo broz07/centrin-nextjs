@@ -114,7 +114,7 @@ const UserContentTable: React.FC = () => {
 			}}
 		>
 			<SingleMenu />
-			<BulkMenu />
+			<BulkMenu resetSelected={resetSelected} />
 
 			<TableContainer
 				component={Paper}
