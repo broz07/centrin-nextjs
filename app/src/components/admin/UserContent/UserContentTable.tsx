@@ -2,7 +2,6 @@
 
 import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
 import { getUsers } from '@centrin/utils/users';
-import { CheckBox } from '@mui/icons-material';
 import {
 	Checkbox,
 	Paper,
@@ -15,11 +14,19 @@ import {
 	TableRow,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useContextMenu } from 'react-contexify';
+import SingleMenu from '../Menus/SingleMenu';
+import BulkMenu from '../Menus/BulkMenu';
 
 const UserContentTable: React.FC = () => {
 	const { users, setUsers, refresh, refreshFlag } = useUserContentContext();
+	const { show } = useContextMenu();
 
-    const [selected, setSelected] = useState<string[]>([]);
+	const [selected, setSelected] = useState<string[]>([]);
+
+	const resetSelected = () => {
+		setSelected([]);
+	};
 
 	const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
@@ -75,6 +82,27 @@ const UserContentTable: React.FC = () => {
 		fetchUsers();
 	}, [refreshFlag, setUsers]);
 
+	const showMenu = (e: React.MouseEvent) => {
+		e.preventDefault();
+		if (selected.length === 0) {
+			show({
+				id: 'single-user-menu',
+				event: e,
+				props: {
+					userId: parseInt(e.currentTarget.id, 10),
+				},
+			});
+		} else {
+			show({
+				id: 'bulk-user-menu',
+				event: e,
+				props: {
+					userIds: selected.map((id) => parseInt(id, 10)),
+				},
+			});
+		}
+	};
+
 	return (
 		<Paper
 			square
@@ -85,12 +113,15 @@ const UserContentTable: React.FC = () => {
 				overflowY: 'hidden',
 			}}
 		>
+			<SingleMenu />
+			<BulkMenu />
+
 			<TableContainer
 				component={Paper}
 				square
 				sx={{
-					height: 'calc(100vh - 50px - 72px)',
-					maxHeight: 'calc(100vh - 50px - 72px)',
+					height: 'calc(100vh - 50px - 72px - 52px)',
+					maxHeight: 'calc(100vh - 50px - 72px - 52px)',
 				}}
 			>
 				<Table
@@ -120,11 +151,17 @@ const UserContentTable: React.FC = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{users.map((user) => {
-                            const isItemSelected = isSelected(user.id.toString());
+						{users
+						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+						.map((user) => {
+							const isItemSelected = isSelected(user.id.toString());
 
 							return (
-								<TableRow key={user.id}>
+								<TableRow
+									id={`${user.id}`}
+									key={user.id}
+									onContextMenu={showMenu}
+								>
 									<TableCell
 										padding="checkbox"
 										onClick={() => handleClick(user.id.toString())}
@@ -132,14 +169,14 @@ const UserContentTable: React.FC = () => {
 											cursor: 'pointer',
 										}}
 									>
-										<Checkbox checked={isItemSelected}/>
+										<Checkbox checked={isItemSelected} />
 									</TableCell>
-                                    <TableCell align="center">{user.id}</TableCell>
-                                    <TableCell align="center">{user.name}</TableCell>
-                                    <TableCell align="center">{user.surname}</TableCell>
-                                    <TableCell align="center">{user.username}</TableCell>
-                                    <TableCell align="center">{user.email || "- - -"}</TableCell>
-                                    <TableCell align="center">{user.role.description}</TableCell>
+									<TableCell align="center">{user.id}</TableCell>
+									<TableCell align="center">{user.name}</TableCell>
+									<TableCell align="center">{user.surname}</TableCell>
+									<TableCell align="center">{user.username}</TableCell>
+									<TableCell align="center">{user.email || '- - -'}</TableCell>
+									<TableCell align="center">{user.role.description}</TableCell>
 								</TableRow>
 							);
 						})}

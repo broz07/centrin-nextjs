@@ -72,6 +72,21 @@ export const deleteUser = async (id: number): Promise<boolean> => {
 	return false;
 };
 
+export const deleteUsers = async (ids: number[]): Promise<boolean> => {
+	const client = await pool.connect();
+	const query = `DELETE FROM centrin.users WHERE id IN (${ids.join(',')});`;
+
+	try {
+		await client.query(query);
+		client.release();
+		return true;
+	} catch (err) {
+		console.error(err);
+	}
+
+	return false;
+}
+
 export const updateUser = async (
 	id: number,
 	user: IUserUpdate,
@@ -147,9 +162,8 @@ export const getUnavailableUsernames = async (): Promise<string[]> => {
 		client.release();
 
 		return data.map((user) => user.username);
-	}
-	catch (err) {
+	} catch (err) {
 		console.error(err);
 		return [];
 	}
-}
+};
