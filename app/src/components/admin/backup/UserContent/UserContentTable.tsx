@@ -33,7 +33,7 @@ import {
 	deleteUser,
 	resetUserPassword,
 	updateUser,
-} from '@centrin/utils/users';
+} from '@centrin/utils/server/users';
 
 interface Props {
 	data: IUser[];

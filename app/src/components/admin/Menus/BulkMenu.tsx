@@ -10,7 +10,7 @@ interface Props {
 	resetSelected: () => void;
 }
 
-const BulkMenu: React.FC<Props> = ({resetSelected}) => {
+const BulkMenu: React.FC<Props> = ({ resetSelected }) => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
 	const [specialKey2, setSpecialKey2] = useState<string>('Alt');
 	const [isAppleDevice, setIsAppleDevice] = useState<boolean>(false);
@@ -30,7 +30,6 @@ const BulkMenu: React.FC<Props> = ({resetSelected}) => {
 			}
 		}
 	}, []);
-	
 
 	const handleItemClick = ({ id, props }: any) => {
 		// console.log(id, props);
@@ -61,7 +60,7 @@ const BulkMenu: React.FC<Props> = ({resetSelected}) => {
 				resetSelected={resetSelected}
 			/>
 			<Menu id="bulk-user-menu" theme="dark">
-			<Item
+				<Item
 					id="bulk-user-delete"
 					onClick={handleItemClick}
 					keyMatcher={(e) => {
@@ -78,7 +77,6 @@ const BulkMenu: React.FC<Props> = ({resetSelected}) => {
 				</Item>
 			</Menu>
 		</>
-
 	);
 };
 

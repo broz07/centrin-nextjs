@@ -2,7 +2,7 @@
 
 import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
 import { IUserAdd, RoleEnum, roleSelectValues } from '@centrin/types/users';
-import { addUser, getUnavailableUsernames } from '@centrin/utils/users';
+import { addUser, getUnavailableUsernames } from '@centrin/utils/server/users';
 import { LoadingButton } from '@mui/lab';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {
@@ -53,6 +53,13 @@ const AddUserDialog: React.FC<Props> = () => {
 		fetchUnavaliableUsernames();
 	}, []);
 
+	const handleClose = () => {
+		setAddUserOpen(false);
+		setSelectValue(RoleEnum.USER);
+		setUsername('');
+		setButtonLoading(false);
+	};
+
 	const handleAddUser = async () => {
 		setButtonLoading(true);
 		if (
@@ -89,7 +96,7 @@ const AddUserDialog: React.FC<Props> = () => {
 			username.trim() === ''
 		) {
 			notify(
-				'Vyplňte všechna povinná pole!',
+				'Vyplňte všechna povinná pole! 🫡',
 				NotificationType.ERROR,
 				NotificationPosition.BR,
 				2000,
@@ -127,7 +134,7 @@ const AddUserDialog: React.FC<Props> = () => {
 			surname,
 			email,
 			username,
-			password,
+			password: password.trim(),
 		};
 
 		const added = await addUser(user, selectValue);
@@ -209,9 +216,9 @@ const AddUserDialog: React.FC<Props> = () => {
 							required
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
-							error={unavaliableUsernames.includes(username)}
+							error={unavaliableUsernames?.includes(username)}
 							helperText={
-								unavaliableUsernames.includes(username)
+								unavaliableUsernames?.includes(username)
 									? 'Toto uživatelské jméno je již zabrané'
 									: ''
 							}
@@ -261,10 +268,11 @@ const AddUserDialog: React.FC<Props> = () => {
 							label="Role"
 							select
 							fullWidth
-							defaultValue={selectValue}
+							value={selectValue}
 							helperText="Vyberte roli uživatele"
 							required
 							inputRef={roleRef}
+							sx={{ marginTop: '0.5rem' }}
 						>
 							{roleSelectValues.map((option) => (
 								<MenuItem
@@ -288,7 +296,7 @@ const AddUserDialog: React.FC<Props> = () => {
 				>
 					Přidat uživatele
 				</LoadingButton>
-				<Button onClick={() => setAddUserOpen(false)}>Zrušit</Button>
+				<Button onClick={handleClose}>Zrušit</Button>
 			</DialogActions>
 		</Dialog>
 	);

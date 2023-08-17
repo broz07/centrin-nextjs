@@ -1,7 +1,7 @@
 'use client';
 
 import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
-import { getUsers } from '@centrin/utils/users';
+import { getUsers } from '@centrin/utils/server/users';
 import {
 	Checkbox,
 	Paper,
@@ -131,7 +131,14 @@ const UserContentTable: React.FC = () => {
 					sx={{ whiteSpace: 'nowrap' }}
 				>
 					<TableHead>
-						<TableRow>
+						<TableRow
+							sx={{
+								th: {
+									fontWeight: 'bold',
+									textAlign: 'center',
+								},
+							}}
+						>
 							<TableCell padding="checkbox">
 								<Checkbox
 									indeterminate={
@@ -141,45 +148,54 @@ const UserContentTable: React.FC = () => {
 									onChange={handleSelectAllClick}
 								/>
 							</TableCell>
-							<TableCell align="center">ID</TableCell>
-							<TableCell align="center">Jméno</TableCell>
-							<TableCell align="center">Příjmení</TableCell>
-							<TableCell align="center">Uživatelské jméno</TableCell>
-							<TableCell align="center">Email</TableCell>
-							<TableCell align="center">Role</TableCell>
+							<TableCell>ID</TableCell>
+							<TableCell>Jméno</TableCell>
+							<TableCell>Příjmení</TableCell>
+							<TableCell>Uživatelské jméno</TableCell>
+							<TableCell>Email</TableCell>
+							<TableCell>Role</TableCell>
 							{/* <TableCell align="center">Akce</TableCell> */}
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{users
-						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-						.map((user) => {
-							const isItemSelected = isSelected(user.id.toString());
+							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map((user) => {
+								const isItemSelected = isSelected(user.id.toString());
 
-							return (
-								<TableRow
-									id={`${user.id}`}
-									key={user.id}
-									onContextMenu={showMenu}
-								>
-									<TableCell
-										padding="checkbox"
-										onClick={() => handleClick(user.id.toString())}
-										sx={{
-											cursor: 'pointer',
-										}}
+								return (
+									<TableRow
+										id={`${user.id}`}
+										key={user.id}
+										onContextMenu={showMenu}
+										hover
+										selected={isItemSelected}
+										role="checkbox"
+										tabIndex={-1}
+										aria-checked={isItemSelected}
 									>
-										<Checkbox checked={isItemSelected} />
-									</TableCell>
-									<TableCell align="center">{user.id}</TableCell>
-									<TableCell align="center">{user.name}</TableCell>
-									<TableCell align="center">{user.surname}</TableCell>
-									<TableCell align="center">{user.username}</TableCell>
-									<TableCell align="center">{user.email || '- - -'}</TableCell>
-									<TableCell align="center">{user.role.description}</TableCell>
-								</TableRow>
-							);
-						})}
+										<TableCell
+											padding="checkbox"
+											onClick={() => handleClick(user.id.toString())}
+											sx={{
+												cursor: 'pointer',
+											}}
+										>
+											<Checkbox checked={isItemSelected} />
+										</TableCell>
+										<TableCell align="center">{user.id}</TableCell>
+										<TableCell align="center">{user.name}</TableCell>
+										<TableCell align="center">{user.surname}</TableCell>
+										<TableCell align="center">{user.username}</TableCell>
+										<TableCell align="center">
+											{user.email || '- - -'}
+										</TableCell>
+										<TableCell align="center">
+											{user.role.description}
+										</TableCell>
+									</TableRow>
+								);
+							})}
 					</TableBody>
 				</Table>
 			</TableContainer>

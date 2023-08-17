@@ -1,4 +1,5 @@
 'use server';
+
 import pool from './db';
 import {
 	IGetUsersQuery,
@@ -8,12 +9,12 @@ import {
 	IUserUpdate,
 	RoleEnum,
 } from '@centrin/types/users';
-import { hashPassword } from './server/auth';
+import { hashPassword } from './auth';
 
 export const getUsers = async (): Promise<IUser[]> => {
 	const client = await pool.connect();
 	const query =
-		'SELECT users.id as id, users.name, users.surname, users.username, users.email, users.role_id, roles.name as role_name, roles.description as role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id;';
+		'SELECT users.id as id, users.name, users.surname, users.username, users.email, users.role_id, roles.name as role_name, roles.description as role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id ORDER by users.id;';
 	const result = await client.query<IGetUsersQuery>(query);
 	const data = result.rows;
 	client.release();
@@ -85,7 +86,7 @@ export const deleteUsers = async (ids: number[]): Promise<boolean> => {
 	}
 
 	return false;
-}
+};
 
 export const updateUser = async (
 	id: number,
@@ -165,5 +166,39 @@ export const getUnavailableUsernames = async (): Promise<string[]> => {
 	} catch (err) {
 		console.error(err);
 		return [];
+	}
+};
+
+export const findUser = async (id: number): Promise<IUser | false> => {
+	try {
+		const client = await pool.connect();
+		const query = `SELECT users.id AS id, users.name AS name, users.surname AS surname, users.username AS username, users.email AS email, users.role_id AS role_id, roles.name AS role_name, roles.description AS role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id WHERE users.id=${id};`;
+		const result = await client.query<IQueryUser>(query);
+		const data = result.rows[0];
+
+		if (!data) {
+			client.release();
+			return false;
+		}
+
+		const user: IUser = {
+			id: data.id,
+			name: data.name,
+			surname: data.surname,
+			username: data.username,
+			email: data.email,
+			displayName: `${data.name} ${data.surname}`,
+			role: {
+				id: data.role_id,
+				name: data.role_name,
+				description: data.role_desc,
+			},
+		};
+
+		client.release();
+		return user;
+	} catch (err) {
+		console.error(err);
+		return false;
 	}
 };

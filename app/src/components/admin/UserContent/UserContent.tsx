@@ -8,7 +8,7 @@ import UserContentHeader from './UserContentHeader';
 import AddUserDialog from '../Dialogs/AddUserDialog';
 import UserContentTable from './UserContentTable';
 import { useEffect } from 'react';
-import { getUsers } from '@centrin/utils/users';
+import { getUsers } from '@centrin/utils/server/users';
 
 interface Props {}
 

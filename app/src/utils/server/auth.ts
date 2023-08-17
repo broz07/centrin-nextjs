@@ -4,7 +4,7 @@ import { IUser, RoleEnum, IRole, IQueryUser } from '@centrin/types/users';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import pool from '../db';
+import pool from './db';
 
 const TOKEN_NAME = 'jwtToken';
 const SECRET_KEY = 'secretKey';
