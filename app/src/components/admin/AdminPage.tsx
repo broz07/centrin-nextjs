@@ -1,6 +1,6 @@
 'use client';
 
-import { IUser } from '@centrin/types/user';
+import { IUser } from '@centrin/types/users';
 import PlanContentDataProvider from './backup/PlanContent/PlanContentDataProvider';
 import StatsContentDataProvider from './backup/StatsContent/StatsContentDataProvider';
 

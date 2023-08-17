@@ -1,6 +1,6 @@
 'use client';
 
-import { IUser } from '@centrin/types/user';
+import { IUser } from '@centrin/types/users';
 import React, { createContext, useState, useContext } from 'react';
 
 interface UserContentContextType {

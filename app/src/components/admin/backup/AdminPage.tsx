@@ -2,7 +2,7 @@
 
 import PageHeader from '@centrin/components/ui/PageHeader';
 import PageLayout from '@centrin/components/ui/PageLayout';
-import { IUser } from '@centrin/types/user';
+import { IUser } from '@centrin/types/users';
 import { useState } from 'react';
 import AdminHeader from '../AdminHeader';
 import PageContent from '@centrin/components/ui/PageContent';

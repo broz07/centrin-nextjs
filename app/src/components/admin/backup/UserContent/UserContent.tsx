@@ -13,7 +13,7 @@ import {
 	MenuItem,
 	TextField,
 } from '@mui/material';
-import { IUserAdd, RoleEnum, roleSelectValues } from '@centrin/types/user';
+import { IUserAdd, RoleEnum, roleSelectValues } from '@centrin/types/users';
 import { addUser } from '@centrin/utils/users';
 import {
 	NotificationPosition,

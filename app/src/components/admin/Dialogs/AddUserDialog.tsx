@@ -1,7 +1,7 @@
 'use client';
 
 import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
-import { IUserAdd, RoleEnum, roleSelectValues } from '@centrin/types/user';
+import { IUserAdd, RoleEnum, roleSelectValues } from '@centrin/types/users';
 import { addUser, getUnavailableUsernames } from '@centrin/utils/users';
 import { LoadingButton } from '@mui/lab';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';

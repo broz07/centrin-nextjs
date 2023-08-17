@@ -6,7 +6,7 @@ import {
 	IUserUpdate,
 	RoleEnum,
 	roleSelectValues,
-} from '@centrin/types/user';
+} from '@centrin/types/users';
 import {
 	Button,
 	ButtonGroup,
