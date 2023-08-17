@@ -1,8 +1,6 @@
 'use client';
 
 import { IUser } from '@centrin/types/users';
-import PlanContentDataProvider from './backup/PlanContent/PlanContentDataProvider';
-import StatsContentDataProvider from './backup/StatsContent/StatsContentDataProvider';
 
 import { useUserContext } from '@centrin/contexts/UserContext';
 import PageLayout from '@centrin/components/ui/PageLayout';
@@ -30,9 +28,17 @@ const AdminPage: React.FC<Props> = ({ user }) => {
 			case 'users':
 				return <UserContent />;
 			case 'plans':
-				return <PlanContentDataProvider />;
+				return (
+					<div>
+						<h1>Plány</h1>
+					</div>
+				);
 			case 'stats':
-				return <StatsContentDataProvider />;
+				return (
+					<div>
+						<h1>Stats</h1>
+					</div>
+				);
 			default:
 				return <UserContent />;
 		}

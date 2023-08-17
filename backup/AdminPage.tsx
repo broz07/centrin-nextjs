@@ -4,7 +4,7 @@ import PageHeader from '@centrin/components/ui/PageHeader';
 import PageLayout from '@centrin/components/ui/PageLayout';
 import { IUser } from '@centrin/types/users';
 import { useState } from 'react';
-import AdminHeader from '../AdminHeader';
+import AdminHeader from '../src/components/admin/AdminHeader';
 import PageContent from '@centrin/components/ui/PageContent';
 import UserContent from './UserContent/UserContent';
 import PlanContentDataProvider from './PlanContent/PlanContentDataProvider';
