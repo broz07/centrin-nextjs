@@ -118,7 +118,7 @@ export const notifyWithPromise = async (
 
 export const loadToast = (
 	message: string,
-	position: NotificationPosition = NotificationPosition.TR,
+	position: NotificationPosition = NotificationPosition.BR,
 ): Id => {
 	return toast.loading(message, {
 		position: position,
@@ -129,7 +129,7 @@ export const updateToast = (
 	id: Id,
 	message: string,
 	type: NotificationType = NotificationType.SUCCESS,
-	position: NotificationPosition = NotificationPosition.TR,
+	position: NotificationPosition = NotificationPosition.BR,
 	closeTime: number = 5000,
 	isLoading: boolean = false,
 ) => {

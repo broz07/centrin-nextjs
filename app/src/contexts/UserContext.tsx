@@ -1,26 +1,33 @@
 'use client';
 
-import { IUser } from '@centrin/types/user';
-import { createContext, useState } from 'react';
+import { IUser } from '@centrin/types/users';
+import React, { createContext, useState, useContext } from 'react';
 
-export interface IUserContextValue {
-	readonly user: IUser | null;
-	setUser: (user: IUser | null) => void;
+interface UserContextType {
+	user?: IUser;
+	setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
+}
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export function useUserContext(): UserContextType {
+	const context = useContext(UserContext);
+	if (!context) {
+		throw new Error('useUserContext must be used within a UserContextProvider');
+	}
+	return context;
 }
 
-const UserContext = createContext<IUserContextValue>({
-	user: null,
-	setUser: () => {},
-});
+export function UserContextProvider({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	const [user, setUser] = useState<IUser | undefined>(undefined);
 
-export const UserProvider: React.FC = ({ children }: any) => {
-	const [user, setUser] = useState<IUser | null>(null);
+	const value: UserContextType = {
+		user,
+		setUser,
+	};
 
-	return (
-		<UserContext.Provider value={{ user, setUser }}>
-			{children}
-		</UserContext.Provider>
-	);
-};
-
-export default UserContext;
+	return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+}

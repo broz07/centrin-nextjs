@@ -1,10 +1,10 @@
 'use server';
-import { IUser, RoleEnum, IRole, IQueryUser } from '@centrin/types/user';
+import { IUser, RoleEnum, IRole, IQueryUser } from '@centrin/types/users';
 //import Cookies from 'js-cookie';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import pool from '../db';
+import pool from './db';
 
 const TOKEN_NAME = 'jwtToken';
 const SECRET_KEY = 'secretKey';

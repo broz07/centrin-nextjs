@@ -1,8 +1,8 @@
 import styles from '@centrin/styles/admin/admin.module.css';
 import UserContentTable from './UserContentTable';
 import { useEffect, useState } from 'react';
-import { IUser } from '@centrin/types/user';
-import { getUsers } from '@centrin/utils/users';
+import { IUser } from '@centrin/types/users';
+import { getUsers } from '@centrin/utils/server/users';
 
 interface Props {
 	refresh: boolean;

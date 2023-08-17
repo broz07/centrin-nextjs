@@ -2,13 +2,12 @@
 import styles from '@centrin/styles/admin/admin.module.css';
 import { Button } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
 
-interface Props {}
+interface Props {
+	handleClickOpen: () => void;
+}
 
-const UserContentHeader: React.FC<Props> = () => {
-	const { setAddUserOpen } = useUserContentContext();
-
+const UserContentHeader: React.FC<Props> = ({ handleClickOpen }) => {
 	return (
 		<div className={styles.userContentHeader}>
 			<h3>Tabulka uživatelů</h3>
@@ -24,7 +23,7 @@ const UserContentHeader: React.FC<Props> = () => {
 						color: '#303030',
 					},
 				}}
-				onClick={() => setAddUserOpen(true)}
+				onClick={handleClickOpen}
 			>
 				Přidat uživatele
 			</Button>

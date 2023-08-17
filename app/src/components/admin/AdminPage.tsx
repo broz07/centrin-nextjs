@@ -1,52 +1,49 @@
 'use client';
 
-import { IUser } from '@centrin/types/user';
-import PageLayout from '../ui/PageLayout';
-import PageHeader from '../ui/PageHeader';
+import { IUser } from '@centrin/types/users';
+import PlanContentDataProvider from './backup/PlanContent/PlanContentDataProvider';
+import StatsContentDataProvider from './backup/StatsContent/StatsContentDataProvider';
+
+import { useUserContext } from '@centrin/contexts/UserContext';
+import PageLayout from '@centrin/components/ui/PageLayout';
+import { useEffect } from 'react';
+import PageHeader from '@centrin/components/ui/PageHeader';
+import PageContent from '@centrin/components/ui/PageContent';
 import AdminHeader from './AdminHeader';
-import PageContent from '../ui/PageContent';
-import { useState } from 'react';
-import PlanContentDataProvider from './PlanContent/PlanContentDataProvider';
-import StatsContentDataProvider from './StatsContent/StatsContentDataProvider';
-import UserContent from './UserContent/UserContent';
+import { useAdminPageContext } from '@centrin/contexts/AdminPage/AdminPageContext';
+import UserContent from '@centrin/components/admin/UserContent/UserContent';
 
 interface Props {
 	readonly user: IUser;
 }
 
-export interface IAdminContentState {
-	content: string;
-	description: string;
-}
-
-export const userContent: IAdminContentState = {
-	content: 'users',
-	description: 'Správa uživatelů',
-};
-
-export const planContent: IAdminContentState = {
-	content: 'plans',
-	description: 'Správa týdenních plánů',
-};
-
-export const statsContent: IAdminContentState = {
-	content: 'stats',
-	description: 'Uživatelské statistiky',
-};
-
 const AdminPage: React.FC<Props> = ({ user }) => {
-	const [content, setContent] = useState<IAdminContentState>(userContent);
+	const { setUser } = useUserContext();
+	const { contentType } = useAdminPageContext();
+
+	useEffect(() => {
+		setUser(user);
+	}, [setUser, user]);
+
+	const renderContent = () => {
+		switch (contentType.content) {
+			case 'users':
+				return <UserContent />;
+			case 'plans':
+				return <PlanContentDataProvider />;
+			case 'stats':
+				return <StatsContentDataProvider />;
+			default:
+				return <UserContent />;
+		}
+	};
 
 	return (
 		<PageLayout user={user}>
 			<PageHeader>
-				<AdminHeader content={content} setContent={setContent} />
+				<AdminHeader />
 			</PageHeader>
-			<PageContent>
-				{content === userContent && <UserContent />}
-				{content === planContent && <PlanContentDataProvider />}
-				{content === statsContent && <StatsContentDataProvider />}
-			</PageContent>
+			<PageContent>{renderContent()}</PageContent>
 		</PageLayout>
 	);
 };

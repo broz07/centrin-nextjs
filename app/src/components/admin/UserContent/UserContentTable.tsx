@@ -1,446 +1,226 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useUserContentContext } from '@centrin/contexts/AdminPage/UserContentContext';
+import { getUsers } from '@centrin/utils/server/users';
 import {
-	IUser,
-	IUserUpdate,
-	RoleEnum,
-	roleSelectValues,
-} from '@centrin/types/user';
-import {
-	Button,
-	ButtonGroup,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	FormControl,
-	IconButton,
-	MenuItem,
-	TextField,
-	Tooltip,
+	Checkbox,
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TablePagination,
+	TableRow,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PasswordIcon from '@mui/icons-material/Password';
-import {
-	NotificationPosition,
-	NotificationType,
-	notify,
-} from '@centrin/utils/client/notify';
-import {
-	deleteUser,
-	resetUserPassword,
-	updateUser,
-} from '@centrin/utils/users';
+import { useEffect, useState } from 'react';
+import { useContextMenu } from 'react-contexify';
+import SingleMenu from '../Menus/SingleMenu';
+import BulkMenu from '../Menus/BulkMenu';
 
-interface Props {
-	data: IUser[];
-	refreshFlag: boolean;
-	setRefreshFlag: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const UserContentTable: React.FC = () => {
+	const { users, setUsers, refresh, refreshFlag } = useUserContentContext();
+	const { show } = useContextMenu();
 
-const UserContentTable: React.FC<Props> = ({
-	data,
-	refreshFlag,
-	setRefreshFlag,
-}) => {
-	const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
-	const [modalUser, setModalUser] = useState<IUser | null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [editOpen, setEditOpen] = useState<boolean>(false);
-	const [selectValue, setSelectValue] = useState<RoleEnum>(RoleEnum.USER);
-	const [passwordOpen, setPasswordOpen] = useState<boolean>(false);
-	const [passwordError, setPasswordError] = useState<boolean>(false);
-	const [passwordErrorText, setPasswordErrorText] = useState<string>('');
+	const [selected, setSelected] = useState<string[]>([]);
+
+	const resetSelected = () => {
+		setSelected([]);
+	};
+
+	const isSelected = (name: string) => selected.indexOf(name) !== -1;
+
+	const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.checked) {
+			const newSelecteds = users.map((n) => n.id.toString());
+			setSelected(newSelecteds as string[]);
+			return;
+		}
+		setSelected([]);
+	};
+
+	const handleClick = (name: string) => {
+		const selectedIndex = selected.indexOf(name);
+		let newSelected: string[] = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, name);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1),
+			);
+		}
+
+		setSelected(newSelected);
+	};
+
+	const [page, setPage] = useState<number>(0);
+	const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+
+	const handleChangePage = (event: unknown, newPage: number) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 
 	useEffect(() => {
-		setIsLoading(false);
-	}, []);
+		const fetchUsers = async () => {
+			const users = await getUsers();
+			setUsers(users);
+		};
 
-	const handleEditOpen = (user: IUser) => {
-		setModalUser(user);
-		setSelectValue(user.role.id);
-		setEditOpen(true);
-	};
+		fetchUsers();
+	}, [refreshFlag, setUsers]);
 
-	const handleEditClose = () => {
-		setEditOpen(false);
-		setModalUser(null);
-		setSelectValue(RoleEnum.USER);
-	};
-
-	const handlePasswordOpen = (user: IUser) => {
-		setModalUser(user);
-		setPasswordOpen(true);
-	};
-
-	const handlePasswordClose = () => {
-		setPasswordOpen(false);
-		setModalUser(null);
-	};
-
-	const handleDeleteOpen = (user: IUser) => {
-		setModalUser(user);
-		setDeleteOpen(true);
-	};
-
-	const handleDeleteClose = () => {
-		setDeleteOpen(false);
-		setModalUser(null);
-	};
-
-	const handleDelete = async () => {
-		if (modalUser) {
-			const deleted = await deleteUser(modalUser.id);
-
-			if (deleted) {
-				notify(
-					'Uživatel byl úspěšně odstraněn 👍🏻',
-					NotificationType.SUCCESS,
-					NotificationPosition.BR,
-				);
-				setDeleteOpen(false);
-				setModalUser(null);
-				setRefreshFlag(!refreshFlag);
-			} else {
-				notify(
-					'Nastala chyba při odstraňování uživatele 👎🏻',
-					NotificationType.ERROR,
-					NotificationPosition.BR,
-				);
-				setDeleteOpen(false);
-				setModalUser(null);
-			}
+	const showMenu = (e: React.MouseEvent) => {
+		e.preventDefault();
+		if (selected.length === 0) {
+			show({
+				id: 'single-user-menu',
+				event: e,
+				props: {
+					userId: parseInt(e.currentTarget.id, 10),
+				},
+			});
 		} else {
-			notify(
-				'Nepodařilo se odstranit uživatele 👎🏻',
-				NotificationType.ERROR,
-				NotificationPosition.BR,
-			);
-			setDeleteOpen(false);
-			setModalUser(null);
-		}
-	};
-
-	const handleEdit = async () => {
-		const name = (document.getElementById('name') as HTMLInputElement).value;
-		const surname = (document.getElementById('surname') as HTMLInputElement)
-			.value;
-		const username = (document.getElementById('username') as HTMLInputElement)
-			.value;
-		const email = (document.getElementById('email') as HTMLInputElement).value;
-
-		if (
-			name &&
-			surname &&
-			username &&
-			name.trim() !== '' &&
-			surname.trim() !== '' &&
-			username.trim() !== ''
-		) {
-			if (modalUser) {
-				const editedUser: IUserUpdate = {
-					name: name,
-					surname: surname,
-					username: username,
-					email: email,
-					role: selectValue,
-				};
-
-				const edited = await updateUser(modalUser.id, editedUser);
-
-				if (edited) {
-					notify(
-						'Uživatel byl úspěšně upraven 👍🏻',
-						NotificationType.SUCCESS,
-						NotificationPosition.BR,
-					);
-					setEditOpen(false);
-					setModalUser(null);
-					setRefreshFlag(!refreshFlag);
-				} else {
-					notify(
-						'Nastala chyba při úpravě uživatele 👎🏻',
-						NotificationType.ERROR,
-						NotificationPosition.BR,
-					);
-					setEditOpen(false);
-					setModalUser(null);
-				}
-			}
-		}
-	};
-
-	const passwordMatch = () => {
-		const password = (
-			document.getElementById('new-password') as HTMLInputElement
-		).value;
-		const password2 = (
-			document.getElementById('new-password-repeat') as HTMLInputElement
-		).value;
-
-		if (password.trim() === '' || password2.trim() === '') {
-			setPasswordError(true);
-			setPasswordErrorText('Hesla nesmí být prázdná');
-			return false;
-		}
-
-		if (password === password2) {
-			setPasswordError(false);
-			setPasswordErrorText('');
-			return true;
-		} else {
-			setPasswordError(true);
-			setPasswordErrorText('Hesla se neshodují');
-			return false;
-		}
-	};
-
-	const handleResetPassword = async () => {
-		if (modalUser) {
-			passwordMatch();
-			if (!passwordError) {
-				const password = (
-					document.getElementById('new-password') as HTMLInputElement
-				).value;
-
-				const reseted = await resetUserPassword(modalUser.id, password);
-
-				if (reseted) {
-					notify(
-						'Heslo bylo úspěšně změněno 👍🏻',
-						NotificationType.SUCCESS,
-						NotificationPosition.BR,
-					);
-					setPasswordOpen(false);
-					setPasswordError(false);
-					setPasswordErrorText('');
-					setModalUser(null);
-				} else {
-					notify(
-						'Nastala chyba při měnění hesla 👎🏻',
-						NotificationType.ERROR,
-						NotificationPosition.BR,
-					);
-					setPasswordOpen(false);
-					setPasswordError(false);
-					setPasswordErrorText('');
-					setModalUser(null);
-				}
-			}
+			show({
+				id: 'bulk-user-menu',
+				event: e,
+				props: {
+					userIds: selected.map((id) => parseInt(id, 10)),
+				},
+			});
 		}
 	};
 
 	return (
-		<>
-			{isLoading ? (
-				<div>Loading...</div>
-			) : (
-				<>
-					<Dialog open={deleteOpen} onClose={handleDeleteClose}>
-						<DialogTitle>
-							Odstranění uživatele {modalUser?.displayName}
-						</DialogTitle>
-						<DialogContent>
-							<DialogContentText>
-								Opravdu chcete odstranit uživatele {modalUser?.displayName} s
-								oprávněním {modalUser?.role.description}?
-							</DialogContentText>
-							<DialogActions>
-								<Button onClick={handleDeleteClose}>Zrušit</Button>
-								<Button
-									variant="contained"
-									endIcon={<DeleteIcon />}
-									onClick={handleDelete}
-								>
-									Odstranit
-								</Button>
-							</DialogActions>
-						</DialogContent>
-					</Dialog>
+		<Paper
+			square
+			sx={{
+				height: 'calc(100vh - 50px - 72px - 52px)',
+				maxHeight: 'calc(100vh - 50px - 72px - 52px)',
+				overflowX: 'auto',
+				overflowY: 'hidden',
+			}}
+		>
+			<SingleMenu />
+			<BulkMenu resetSelected={resetSelected} />
 
-					<Dialog open={editOpen} onClose={handleEditClose}>
-						<DialogTitle>
-							Upravení uživatele {modalUser?.displayName}
-						</DialogTitle>
-						<DialogContent>
-							<FormControl fullWidth>
-								<TextField
-									autoFocus
-									margin="dense"
-									id="name"
-									label="Jméno"
-									type="text"
-									defaultValue={modalUser?.name}
-									fullWidth
-									required
+			<TableContainer
+				component={Paper}
+				square
+				sx={{
+					height: 'calc(100vh - 50px - 72px - 52px)',
+					maxHeight: 'calc(100vh - 50px - 72px - 52px)',
+				}}
+			>
+				<Table
+					stickyHeader
+					padding="normal"
+					size="medium"
+					sx={{ whiteSpace: 'nowrap' }}
+				>
+					<TableHead>
+						<TableRow
+							sx={{
+								th: {
+									fontWeight: 'bold',
+									textAlign: 'center',
+								},
+							}}
+						>
+							<TableCell padding="checkbox">
+								<Checkbox
+									indeterminate={
+										selected.length > 0 && selected.length < users.length
+									}
+									checked={users.length > 0 && selected.length === users.length}
+									onChange={handleSelectAllClick}
 								/>
-								<TextField
-									margin="dense"
-									id="surname"
-									label="Příjmení"
-									type="text"
-									defaultValue={modalUser?.surname}
-									fullWidth
-									required
-								/>
-								<TextField
-									margin="dense"
-									id="username"
-									label="Přihlašovací jméno"
-									type="text"
-									defaultValue={modalUser?.username}
-									fullWidth
-									required
-								/>
-								<TextField
-									margin="dense"
-									id="email"
-									label="Email"
-									type="email"
-									defaultValue={modalUser?.email}
-									fullWidth
-								/>
-								<TextField
-									margin="dense"
-									id="role"
-									label="Role"
-									select
-									fullWidth
-									defaultValue={selectValue}
-									required
-								>
-									{roleSelectValues.map((option) => (
-										<MenuItem
-											key={option.value}
-											value={option.value}
-											onClick={() => setSelectValue(option.value)}
+							</TableCell>
+							<TableCell>ID</TableCell>
+							<TableCell>Jméno</TableCell>
+							<TableCell>Příjmení</TableCell>
+							<TableCell>Uživatelské jméno</TableCell>
+							<TableCell>Email</TableCell>
+							<TableCell>Role</TableCell>
+							{/* <TableCell align="center">Akce</TableCell> */}
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{users
+							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map((user) => {
+								const isItemSelected = isSelected(user.id.toString());
+
+								return (
+									<TableRow
+										id={`${user.id}`}
+										key={user.id}
+										onContextMenu={showMenu}
+										hover
+										selected={isItemSelected}
+										role="checkbox"
+										tabIndex={-1}
+										aria-checked={isItemSelected}
+									>
+										<TableCell
+											padding="checkbox"
+											onClick={() => handleClick(user.id.toString())}
+											sx={{
+												cursor: 'pointer',
+											}}
 										>
-											{option.label}
-										</MenuItem>
-									))}
-								</TextField>
-							</FormControl>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={handleEditClose}>Zrušit</Button>
-							<Button
-								variant="contained"
-								endIcon={<EditIcon />}
-								onClick={handleEdit}
-							>
-								Upravit
-							</Button>
-						</DialogActions>
-					</Dialog>
-
-					<Dialog open={passwordOpen} onClose={handlePasswordClose}>
-						<DialogTitle>
-							Změna hesla uživatele {modalUser?.displayName}
-						</DialogTitle>
-						<DialogContent>
-							<FormControl fullWidth>
-								<TextField
-									autoFocus
-									margin="dense"
-									id="new-password"
-									label="Nové heslo"
-									type="password"
-									fullWidth
-									required
-									error={passwordError}
-									helperText={passwordErrorText}
-									onChange={passwordMatch}
-								/>
-								<TextField
-									margin="dense"
-									id="new-password-repeat"
-									label="Nové heslo znovu"
-									type="password"
-									fullWidth
-									required
-									error={passwordError}
-									helperText={passwordErrorText}
-									onChange={passwordMatch}
-								/>
-							</FormControl>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={handlePasswordClose}>Zrušit</Button>
-							<Button
-								variant="contained"
-								endIcon={<PasswordIcon />}
-								onClick={handleResetPassword}
-							>
-								Změnit heslo
-							</Button>
-						</DialogActions>
-					</Dialog>
-
-					<table>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Jméno</th>
-								<th>Příjmení</th>
-								<th>Login</th>
-								<th>Email</th>
-								<th>Role</th>
-								<th>Akce</th>
-							</tr>
-						</thead>
-						<tbody>
-							{data.map((user) => (
-								<tr key={user.id}>
-									<td>{user.id}</td>
-									<td>{user.name}</td>
-									<td>{user.surname}</td>
-									<td>{user.username}</td>
-									<td>{user.email}</td>
-									<td>{user.role.description}</td>
-									<td>
-										<ButtonGroup variant="text">
-											<Tooltip
-												title="Změnit heslo"
-												arrow
-												placement="bottom"
-												disableInteractive
-											>
-												<IconButton onClick={() => handlePasswordOpen(user)}>
-													<PasswordIcon />
-												</IconButton>
-											</Tooltip>
-											<Tooltip
-												title="Upravit"
-												arrow
-												placement="bottom"
-												disableInteractive
-											>
-												<IconButton onClick={() => handleEditOpen(user)}>
-													<EditIcon />
-												</IconButton>
-											</Tooltip>
-											<Tooltip
-												title="Odstranit"
-												arrow
-												placement="bottom"
-												disableInteractive
-											>
-												<IconButton onClick={() => handleDeleteOpen(user)}>
-													<DeleteIcon />
-												</IconButton>
-											</Tooltip>
-										</ButtonGroup>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</>
-			)}
-		</>
+											<Checkbox checked={isItemSelected} />
+										</TableCell>
+										<TableCell align="center">{user.id}</TableCell>
+										<TableCell align="center">{user.name}</TableCell>
+										<TableCell align="center">{user.surname}</TableCell>
+										<TableCell align="center">{user.username}</TableCell>
+										<TableCell align="center">
+											{user.email || '- - -'}
+										</TableCell>
+										<TableCell align="center">
+											{user.role.description}
+										</TableCell>
+									</TableRow>
+								);
+							})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+			<TablePagination
+				labelRowsPerPage="Záznamů na stránku:"
+				rowsPerPageOptions={[10, 25, 50, 100]}
+				component="div"
+				sx={{
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'flex-start',
+					height: '52px',
+					position: 'absolute',
+					bottom: 0,
+				}}
+				count={users.length || 0}
+				page={page}
+				rowsPerPage={rowsPerPage}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+				showFirstButton
+				showLastButton
+			/>
+		</Paper>
 	);
 };
 

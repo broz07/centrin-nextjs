@@ -132,7 +132,7 @@ const LoginForm: React.FC = () => {
 	return (
 		<div className={styles.loginBar}>
 			<div className={styles.loginWrapper}>
-				<h1>MSERVICE</h1>
+				<h1>Informační systém - Centrin</h1>
 				<div className={`${styles.formElement} ${styles.formStack}`}>
 					<TextField
 						type="text"

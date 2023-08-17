@@ -1,5 +1,7 @@
 import AdminPage from '@centrin/components/admin/AdminPage';
-import { RoleEnum } from '@centrin/types/user';
+import { AdminPageContextProvider } from '@centrin/contexts/AdminPage/AdminPageContext';
+import { UserContextProvider } from '@centrin/contexts/UserContext';
+import { RoleEnum } from '@centrin/types/users';
 import { authUser } from '@centrin/utils/server/auth';
 import { getUser, isLogged } from '@centrin/utils/server/auth';
 import { redirect } from 'next/navigation';
@@ -25,7 +27,13 @@ const Admin = async () => {
 		redirect('/');
 	}
 
-	return <AdminPage user={user} />;
+	return (
+		<UserContextProvider>
+			<AdminPageContextProvider>
+				<AdminPage user={user} />
+			</AdminPageContextProvider>
+		</UserContextProvider>
+	);
 };
 
 export default Admin;
