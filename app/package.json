@@ -28,7 +28,7 @@
 		"js-cookie": "^3.0.5",
 		"json5": "^2.2.3",
 		"jsonwebtoken": "^9.0.0",
-		"next": "^13.4.16",
+		"next": "^13.4.17",
 		"pg": "^8.11.0",
 		"react": "18.2.0",
 		"react-contexify": "^6.0.0",
