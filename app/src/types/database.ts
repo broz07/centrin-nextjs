@@ -1,3 +1,43 @@
+
+export interface IFullDefect {
+	id: number;
+	description: string;
+	info?: string;
+	start_time: Date
+	end_time?: Date;
+	solved: boolean;
+	outdoor_id?: number;
+	room_id?: number;
+	corridor_id?: number;
+	severity_id: number;
+	created_by: number;
+	assigned_to?: number;
+	solved_by?: number;
+	state_id: number;
+	type_id: number;
+	room_name?: string;
+	corridor_name?: string;
+	outdoor_name?: string;
+	outdoor_description?: string;
+	state_description: string;
+	type_name: string;
+	type_description?: string;
+	floor_id?: number;
+	floor_name?: string;
+	building_id?: number;
+	building_name?: string;
+	created_by_username: string;
+	created_by_name: string;
+	created_by_surname: string;
+	assigned_to_username?: string;
+	assigned_to_name?: string;
+	assigned_to_surname?: string;
+	solved_by_username?: string;
+	solved_by_name?: string;
+	solved_by_surname?: string;
+	severity: string;
+}
+/*
 export interface IBuildingRecord {
 	id: number;
 	name: string;
@@ -143,3 +183,4 @@ export interface ICorridorDefect extends IDefect {
 export interface IOutdoorDefect extends IDefect {
 	outdoor: IOutdoor;
 }
+*/
