@@ -8,13 +8,15 @@ import styles from '@centrin/styles/ui/ui.module.css';
 import Image from 'next/image';
 import { Avatar } from '@mui/material';
 
-import StatIcon from '../../../public/assets/icon-chart-line.svg';
-import DefectIcon from '../../../public/assets/icon-alarm.svg';
+// import StatIcon from '../../../public/assets/icon-chart-line.svg';
+import DefectIcon from '../../../public/assets/report-2.svg';
 //import StatIcon from '../../../public/assets/icon-bar-chart.svg'
 import PageLogo from '../../../public/assets/app-logo.svg';
-import HomeIcon from '../../../public/assets/icon-home.svg';
-//import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
-import AdminIcon from '../../../public/assets/icon-shield.svg';
+// import HomeIcon from '../../../public/assets/icon-home.svg';
+import HomeIcon from '../../../public/assets/home.svg';
+
+import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
+// import AdminIcon from '../../../public/assets/icon-shield.svg';
 // import CustomersIcon from '../../../public/assets/icon-customers.svg'
 // import PanelIcon from '../../../public/assets/icon-search.svg'
 import LogoutIcon from '../../../public/assets/icon-lock.svg';
@@ -92,14 +94,14 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 							<span>Závady</span>
 						</button>
 					</Link>
-					{user.role.id === RoleEnum.ADMIN && (
+					{/* {user.role.id === RoleEnum.ADMIN && (
 						<Link href="/statistics">
 							<button type="button">
 								<Image src={StatIcon} alt="Stat Icon" />
 								<span>Statistiky</span>
 							</button>
 						</Link>
-					)}
+					)} */}
 					{user.role.id === RoleEnum.ADMIN && (
 						<Link href="/admin">
 							<button type="button">
