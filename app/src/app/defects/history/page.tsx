@@ -1,10 +1,10 @@
-import DefectsPage from '@centrin/components/defects/DefectsPage';
+import DefectHistoryPage from '@centrin/components/defects/history/DefectHistoryPage';
 import { DefectContextProvider } from '@centrin/contexts/DefectPage/DefectContext';
 import { UserContextProvider } from '@centrin/contexts/UserContext';
 import { getUser, isLogged } from '@centrin/utils/server/auth';
 import { redirect } from 'next/navigation';
 
-const Defects = async () => {
+const DefectHistory = async () => {
 	const logged = await isLogged();
 	if (!logged) {
 		redirect('/login');
@@ -18,10 +18,10 @@ const Defects = async () => {
 	return (
 		<UserContextProvider>
 			<DefectContextProvider>
-				<DefectsPage user={user} />
+				<DefectHistoryPage user={user} />
 			</DefectContextProvider>
 		</UserContextProvider>
 	);
 };
 
-export default Defects;
+export default DefectHistory;

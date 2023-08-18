@@ -6,16 +6,16 @@ import {
 	NotificationType,
 	notify,
 } from '@centrin/utils/client/notify';
-import { getActiveDefects } from '@centrin/utils/server/defects';
+import { getAllDefects } from '@centrin/utils/server/defects';
 import { useEffect } from 'react';
-import DefectsTable from './DefectsTable';
+import DefectsTable from '@centrin/components/defects/DefectsTable';
 
-const DefectsContent: React.FC = () => {
+const DefectHistoryContent: React.FC = () => {
 	const { defects, setDefects, refresh, refreshFlag } = useDefectContext();
 
 	useEffect(() => {
 		const fetchDefects = async () => {
-			const fetchedDefects = await getActiveDefects();
+			const fetchedDefects = await getAllDefects();
 
 			if (!fetchedDefects) {
 				notify(
@@ -40,4 +40,4 @@ const DefectsContent: React.FC = () => {
 	);
 };
 
-export default DefectsContent;
+export default DefectHistoryContent;

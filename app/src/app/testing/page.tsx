@@ -1,7 +1,7 @@
-import { getDefects } from '@centrin/utils/server/defects';
+import { getAllDefects } from '@centrin/utils/server/defects';
 
 const Testing = async () => {
-	const data = await getDefects();
+	const data = await getAllDefects();
 
 	return (
 		<div>

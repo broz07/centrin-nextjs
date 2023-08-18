@@ -1,9 +1,8 @@
-
 export interface IFullDefect {
 	id: number;
 	description: string;
 	info?: string;
-	start_time: Date
+	start_time: Date;
 	end_time?: Date;
 	solved: boolean;
 	outdoor_id?: number;
