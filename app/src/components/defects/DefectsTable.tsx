@@ -24,7 +24,7 @@ const DefectsTable: React.FC = () => {
 		selectDefect,
 		selectedDefects,
 		isSelected,
-        formatLocation,
+		formatLocation,
 	} = useDefectContext();
 
 	const [page, setPage] = useState<number>(0);
@@ -41,10 +41,12 @@ const DefectsTable: React.FC = () => {
 		setPage(0);
 	};
 
-    const formatDate = (date: Date) => {
-        const d = new Date(date);
-        return `${d.getDate()}. ${d.getMonth() + 1}. ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-    }
+	const formatDate = (date: Date) => {
+		const d = new Date(date);
+		return `${d.getDate()}. ${
+			d.getMonth() + 1
+		}. ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+	};
 
 	return (
 		<Paper
@@ -121,12 +123,12 @@ const DefectsTable: React.FC = () => {
 									/>
 								</TableCell> */}
 								<TableCell>Čas zápisu</TableCell>
-                                <TableCell>Popis závady</TableCell>
-                                <TableCell>Umístění</TableCell>
-                                <TableCell>Stav</TableCell>
-                                <TableCell>Typ závady</TableCell>
-                                <TableCell>Zapsal(a)</TableCell>
-                                <TableCell>Přiděleno</TableCell>
+								<TableCell>Popis závady</TableCell>
+								<TableCell>Umístění</TableCell>
+								<TableCell>Stav</TableCell>
+								<TableCell>Typ závady</TableCell>
+								<TableCell>Zapsal(a)</TableCell>
+								<TableCell>Přiděleno</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -134,20 +136,20 @@ const DefectsTable: React.FC = () => {
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((defect) => {
 									const isItemSelected = isSelected(defect.id.toString());
-                                    const formatedDate = formatDate(defect.start_time);
+									const formatedDate = formatDate(defect.start_time);
 
 									return (
 										<TableRow
-										    // id={`${user.id}`}
-										    key={defect.id}
-										    // onContextMenu={showMenu}
-										    hover
-										    selected={isItemSelected}
-										    role="checkbox"
-										    tabIndex={-1}
-										    aria-checked={isItemSelected}
+											// id={`${user.id}`}
+											key={defect.id}
+											// onContextMenu={showMenu}
+											hover
+											selected={isItemSelected}
+											role="checkbox"
+											tabIndex={-1}
+											aria-checked={isItemSelected}
 										>
-										{/* <TableCell
+											{/* <TableCell
 											padding="checkbox"
 											onClick={() => selectDefect(defect.id.toString())}
 											sx={{
@@ -157,16 +159,20 @@ const DefectsTable: React.FC = () => {
 											<Checkbox checked={isItemSelected} />
 										</TableCell> */}
 											<TableCell>{`${formatedDate}`}</TableCell>
-                                            <TableCell>
-                                                {`${defect.description}`}
-                                                {/* TODO styling */}
-                                                {defect.info && <InfoOutlinedIcon />}
-                                            </TableCell>
-                                            <TableCell>{formatLocation(defect)}</TableCell>
-                                            <TableCell>{`${defect.state_description}`}</TableCell>
-                                            <TableCell>{`${defect.type_name}`}</TableCell>
-                                            <TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
-                                            <TableCell>{`${defect.assigned_to ? `${defect.assigned_to_name} ${defect.assigned_to_surname}` : "Nepřiděleno"}`}</TableCell>
+											<TableCell>
+												{`${defect.description}`}
+												{/* TODO styling */}
+												{defect.info && <InfoOutlinedIcon />}
+											</TableCell>
+											<TableCell>{formatLocation(defect)}</TableCell>
+											<TableCell>{`${defect.state_description}`}</TableCell>
+											<TableCell>{`${defect.type_name}`}</TableCell>
+											<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
+											<TableCell>{`${
+												defect.assigned_to
+													? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
+													: 'Nepřiděleno'
+											}`}</TableCell>
 										</TableRow>
 									);
 								})}

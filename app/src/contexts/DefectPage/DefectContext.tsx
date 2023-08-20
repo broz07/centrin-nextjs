@@ -1,6 +1,6 @@
 'use client';
 
-import { IFullDefect } from '@centrin/types/database';
+import { IFullDefect } from '@centrin/types/defects.dto';
 import React, { createContext, useState, useContext } from 'react';
 
 interface DefectContextType {
@@ -15,7 +15,7 @@ interface DefectContextType {
 	refreshFlag: boolean;
 	setRefreshFlag: React.Dispatch<React.SetStateAction<boolean>>;
 	refresh: () => void;
-    formatLocation: (defect: IFullDefect) => string;
+	formatLocation: (defect: IFullDefect) => string;
 }
 
 const DefectContext = createContext<DefectContextType | undefined>(undefined);
@@ -60,7 +60,7 @@ export function DefectContextProvider({
 			);
 		}
 
-        setSelectedDefects(newSelected);
+		setSelectedDefects(newSelected);
 	};
 
 	const selectAllDefects = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,12 +80,17 @@ export function DefectContextProvider({
 		setRefreshFlag((prev) => !prev);
 	};
 
-    const formatLocation = (defect: IFullDefect): string => {
-        if (defect.outdoor_id) return `${defect.outdoor_name} ${defect.outdoor_description? `(${defect.outdoor_description})` : ''}`
-        if (defect.corridor_id) return `${defect.building_name} - ${defect.floor_name} - ${defect.corridor_name}`
-        if (defect.room_id) return `${defect.building_name} - ${defect.floor_name} - ${defect.room_name}`
-        return ""
-    }
+	const formatLocation = (defect: IFullDefect): string => {
+		if (defect.outdoor_id)
+			return `${defect.outdoor_name} ${
+				defect.outdoor_description ? `(${defect.outdoor_description})` : ''
+			}`;
+		if (defect.corridor_id)
+			return `${defect.building_name} - ${defect.floor_name} - ${defect.corridor_name}`;
+		if (defect.room_id)
+			return `${defect.building_name} - ${defect.floor_name} - ${defect.room_name}`;
+		return '';
+	};
 
 	const value: DefectContextType = {
 		defects,
@@ -99,7 +104,7 @@ export function DefectContextProvider({
 		refreshFlag,
 		setRefreshFlag,
 		refresh,
-        formatLocation,
+		formatLocation,
 	};
 
 	return (

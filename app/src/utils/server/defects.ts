@@ -1,5 +1,5 @@
 'use server';
-import { IFullDefect } from '@centrin/types/database';
+import { IFullDefect } from '@centrin/types/defects.dto';
 import pool from './db';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
@@ -17,6 +17,7 @@ export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 				id: defect.id,
 				description: defect.description,
 				info: defect.info,
+				note: defect.note,
 				start_time: defect.start_time,
 				end_time: defect.end_time,
 				solved: defect.solved,
@@ -75,6 +76,7 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 				id: defect.id,
 				description: defect.description,
 				info: defect.info,
+				note: defect.note,
 				start_time: defect.start_time,
 				end_time: defect.end_time,
 				solved: defect.solved,

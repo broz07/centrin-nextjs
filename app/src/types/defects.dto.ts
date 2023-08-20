@@ -2,6 +2,7 @@ export interface IFullDefect {
 	id: number;
 	description: string;
 	info?: string;
+	note?: string;
 	start_time: Date;
 	end_time?: Date;
 	solved: boolean;

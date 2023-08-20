@@ -6,8 +6,8 @@ import PageLayout from '@centrin/components/ui/PageLayout';
 import PageHeader from '@centrin/components/ui/PageHeader';
 import PageContent from '@centrin/components/ui/PageContent';
 import { useEffect } from 'react';
-import DefectHistoryContent from './DefectHistoryContent';
-import DefectHistoryHeader from './DefectHistoryHeader';
+import DefectAddHeader from './DefectAddHeader';
+import DefectAddContent from './DefectAddContent';
 
 interface Props {
 	readonly user: IUser;
@@ -23,10 +23,10 @@ const DefectsPage: React.FC<Props> = ({ user }) => {
 	return (
 		<PageLayout user={user}>
 			<PageHeader>
-				<DefectHistoryHeader />
+				<DefectAddHeader />
 			</PageHeader>
 			<PageContent>
-				<DefectHistoryContent />
+				<DefectAddContent />
 			</PageContent>
 		</PageLayout>
 	);

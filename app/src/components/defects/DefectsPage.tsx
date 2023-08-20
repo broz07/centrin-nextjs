@@ -1,7 +1,7 @@
 'use client';
 
 import { useUserContext } from '@centrin/contexts/UserContext';
-import { IUser } from '@centrin/types/users';
+import { IUser } from '@centrin/types/users.dto';
 import PageLayout from '@centrin/components/ui/PageLayout';
 import PageHeader from '@centrin/components/ui/PageHeader';
 import PageContent from '@centrin/components/ui/PageContent';

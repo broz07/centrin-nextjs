@@ -4,20 +4,20 @@ import { Button } from '@mui/material';
 
 interface Props {}
 
-const DefectsHeader: React.FC<Props> = () => {
+const DefectAddHeader: React.FC<Props> = () => {
 	return (
 		<header className={styles.headerWrapper}>
 			<div className={styles.headerGroup}>
-				<h1>Panel závad</h1>
-				<span>Seznam aktivních závad</span>
+				<h1>Správa závad</h1>
+				<span>Založení nového záznamu</span>
 			</div>
 			<div>
-				<Button variant="contained" color="primary" href="/defects/add">
+				{/* <Button variant="contained" color="primary">
 					+ Nová závada
-				</Button>
+				</Button> */}
 			</div>
 		</header>
 	);
 };
 
-export default DefectsHeader;
+export default DefectAddHeader;

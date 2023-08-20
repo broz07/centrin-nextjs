@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { IUser, RoleEnum } from '@centrin/types/users';
+import { IUser, RoleEnum } from '@centrin/types/users.dto';
 import { removeToken } from '@centrin/utils/client/cookies';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -90,13 +90,23 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 					</Link>
 					<Link href="/defects">
 						<button type="button">
-							<Image src="/assets/warning-amber.svg" width={30} height={30} alt="Defect Icon" />
+							<Image
+								src="/assets/warning-amber.svg"
+								width={30}
+								height={30}
+								alt="Defect Icon"
+							/>
 							<span>Aktivní závady</span>
 						</button>
 					</Link>
 					<Link href="/defects/history">
 						<button type="button">
-							<Image src="/assets/history.svg" width={30} height={30} alt="Defect Icon" />
+							<Image
+								src="/assets/history.svg"
+								width={30}
+								height={30}
+								alt="Defect Icon"
+							/>
 							<span>Historie závad</span>
 						</button>
 					</Link>
