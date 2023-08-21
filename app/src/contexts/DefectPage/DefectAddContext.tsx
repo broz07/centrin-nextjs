@@ -1,4 +1,5 @@
 'use client';
+import { IDefectAdd, ISeverity } from '@centrin/types/defects.dto';
 import {
 	ICorridor,
 	IOutdoorLocation,
@@ -6,8 +7,8 @@ import {
 } from '@centrin/types/locations.dto';
 import React, { createContext, useState, useContext } from 'react';
 
-type LocalityType = 'indoor' | 'outdoor';
-type IndoorLocationType = 'corridor' | 'room';
+export type LocalityType = 'indoor' | 'outdoor';
+export type IndoorLocationType = 'corridor' | 'room';
 
 interface DefectAddContextType {
 	activeStep: number;
@@ -36,6 +37,20 @@ interface DefectAddContextType {
 	>;
 	selectedFloorId: number | undefined;
 	setSelectedFloorId: React.Dispatch<React.SetStateAction<number | undefined>>;
+	severities: ISeverity[] | undefined;
+	setSeverities: React.Dispatch<React.SetStateAction<ISeverity[] | undefined>>;
+	selectedTypeId: number | undefined;
+	setSelectedTypeId: React.Dispatch<React.SetStateAction<number | undefined>>;
+	selectedSeverityId: number | undefined;
+	setSelectedSeverityId: React.Dispatch<
+		React.SetStateAction<number | undefined>
+	>;
+	description: string | undefined;
+	setDescription: React.Dispatch<React.SetStateAction<string | undefined>>;
+	info: string | undefined;
+	setInfo: React.Dispatch<React.SetStateAction<string | undefined>>;
+	defectToAdd: IDefectAdd | undefined;
+	setDefectToAdd: React.Dispatch<React.SetStateAction<IDefectAdd | undefined>>;
 }
 
 const DefectAddContext = createContext<DefectAddContextType | undefined>(
@@ -63,7 +78,7 @@ export function DefectAddContextProvider({
 		IOutdoorLocation[] | undefined
 	>(undefined);
 	const [selectedLocation, setSelectedLocation] = useState<
-		IOutdoorLocation | undefined
+		IOutdoorLocation | ICorridor | IRoom | undefined
 	>(undefined);
 	const [indoorLocationType, setIndoorLocationType] = useState<
 		IndoorLocationType | undefined
@@ -76,6 +91,21 @@ export function DefectAddContextProvider({
 		number | undefined
 	>(undefined);
 	const [selectedFloorId, setSelectedFloorId] = useState<number | undefined>(
+		undefined,
+	);
+	const [severities, setSeverities] = useState<ISeverity[] | undefined>(
+		undefined,
+	);
+	const [selectedTypeId, setSelectedTypeId] = useState<number | undefined>(
+		undefined,
+	);
+
+	const [selectedSeverityId, setSelectedSeverityId] = useState<
+		number | undefined
+	>(undefined);
+	const [description, setDescription] = useState<string | undefined>(undefined);
+	const [info, setInfo] = useState<string | undefined>(undefined);
+	const [defectToAdd, setDefectToAdd] = useState<IDefectAdd | undefined>(
 		undefined,
 	);
 
@@ -98,6 +128,18 @@ export function DefectAddContextProvider({
 		setSelectedBuildingId,
 		selectedFloorId,
 		setSelectedFloorId,
+		severities,
+		setSeverities,
+		selectedTypeId,
+		setSelectedTypeId,
+		selectedSeverityId,
+		setSelectedSeverityId,
+		description,
+		setDescription,
+		info,
+		setInfo,
+		defectToAdd,
+		setDefectToAdd,
 	};
 
 	return (

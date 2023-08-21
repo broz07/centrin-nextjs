@@ -4,10 +4,15 @@ import { Button, Paper, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DoneIcon from '@mui/icons-material/Done';
-import { useState } from 'react';
 import { useDefectAddContext } from '@centrin/contexts/DefectPage/DefectAddContext';
 import LocalitySelect from './LocalitySelect';
 import LocationSelect from './LocationSelect';
+import InfoSelect from './InfoSelect';
+import DefectSummary from './DefectSummary';
+import { IDefectAdd } from '@centrin/types/defects.dto';
+import { addDefect } from '@centrin/utils/server/defects';
+import { NotificationPosition, NotificationType, loadToast, updateToast } from '@centrin/utils/client/notify';
+import { useRouter } from 'next/navigation';
 
 const steps = [
 	'Vyberte lokalitu',
@@ -17,13 +22,35 @@ const steps = [
 ];
 
 const DefectAddContent: React.FC = () => {
-	const { activeStep, setActiveStep, locality, selectedLocation } =
-		useDefectAddContext();
+	const router = useRouter();
+	const {
+		activeStep,
+		setActiveStep,
+		locality,
+		selectedLocation,
+		description,
+		defectToAdd,
+	} = useDefectAddContext();
+
+	const handleAddDefect = async (defect: IDefectAdd) => {
+		const toast = loadToast("Přidávání závady...", NotificationPosition.BR);
+		const added = await addDefect(defect);
+
+		if (added) {
+			updateToast(toast, "Závada byla úspěšně přidána. 👍🏻", NotificationType.SUCCESS, NotificationPosition.BR, 2000);
+			router.push('/defects');
+
+		} else {
+			updateToast(toast, "Při přidávání závady došlo k chybě. 🤕", NotificationType.ERROR, NotificationPosition.BR, 2000);
+			router.refresh()
+		}
+	}
 
 	const handleNext = () => {
 		if (activeStep === steps.length - 1) {
-			// TODO: submit form
+			if (!defectToAdd) return;
 
+			handleAddDefect(defectToAdd);
 			return;
 		}
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -41,9 +68,9 @@ const DefectAddContent: React.FC = () => {
 			case 1:
 				return <LocationSelect />;
 			case 2:
-				return <div>Step 3</div>;
+				return <InfoSelect />;
 			case 3:
-				return <div>Step 4</div>;
+				return <DefectSummary />;
 			default:
 				return <div>Step 1</div>;
 		}
@@ -115,7 +142,10 @@ const DefectAddContent: React.FC = () => {
 						onClick={handleNext}
 						disabled={
 							(activeStep === 0 && !locality) ||
-							(activeStep === 1 && !selectedLocation)
+							(activeStep === 1 && !selectedLocation) ||
+							(activeStep === 2 &&
+								(!description || description.trim().length === 0)) ||
+							(activeStep === 3 && !defectToAdd)
 						}
 					>
 						{`${activeStep === steps.length - 1 ? 'Dokončit' : 'Další'}`}

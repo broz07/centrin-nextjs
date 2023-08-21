@@ -52,7 +52,7 @@ const LocationSelect: React.FC = () => {
 				const locations = await getOutdoorLocations();
 
 				if (locations) {
-					console.log(locations);
+					// console.log(locations);
 					setOutdoorLocations(locations);
 				} else {
 					setOutdoorLocations(undefined);
@@ -85,7 +85,7 @@ const LocationSelect: React.FC = () => {
 					const fetchedCorridors = await getCorridorLocations();
 
 					if (fetchedCorridors) {
-						console.log(fetchedCorridors);
+						// console.log(fetchedCorridors);
 						setCorridors(fetchedCorridors);
 					} else {
 						setCorridors(undefined);
@@ -103,7 +103,7 @@ const LocationSelect: React.FC = () => {
 					const fetchedRooms = await getRoomLocations();
 
 					if (fetchedRooms) {
-						console.log(fetchedRooms);
+						// console.log(fetchedRooms);
 						setRooms(fetchedRooms);
 					} else {
 						setRooms(undefined);

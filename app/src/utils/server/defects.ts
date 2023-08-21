@@ -1,5 +1,5 @@
 'use server';
-import { IFullDefect } from '@centrin/types/defects.dto';
+import { IDefectAdd, IFullDefect, ISeverity } from '@centrin/types/defects.dto';
 import pool from './db';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
@@ -114,6 +114,59 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 		});
 
 		return defects;
+	} catch (err) {
+		console.log(err);
+		return false;
+	}
+};
+
+export const getSeverities = async (): Promise<ISeverity[] | false> => {
+	try {
+		const client = await pool.connect();
+		const query = `SELECT * FROM centrin.severity;`;
+
+		const result = await client.query<ISeverity>(query);
+
+		const data = result.rows;
+		client.release();
+
+		const severities: ISeverity[] = data.map((severity) => {
+			return {
+				id: severity.id,
+				name: severity.name,
+			};
+		});
+
+		return severities;
+	} catch (err) {
+		console.log(err);
+		return false;
+	}
+};
+
+export const addDefect = async (defect: IDefectAdd): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		let query = "";
+
+		if (defect.location_type === "outdoor") {
+			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, outdoor_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		}
+
+		if (defect.location_type === "corridor") {
+			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, corridor_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		}
+
+		if (defect.location_type === "room") {
+			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, room_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		}
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
 	} catch (err) {
 		console.log(err);
 		return false;
