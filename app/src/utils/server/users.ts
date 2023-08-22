@@ -8,7 +8,7 @@ import {
 	IUserAdd,
 	IUserUpdate,
 	RoleEnum,
-} from '@centrin/types/users';
+} from '@centrin/types/users.dto';
 import { hashPassword } from './auth';
 
 export const getUsers = async (): Promise<IUser[]> => {

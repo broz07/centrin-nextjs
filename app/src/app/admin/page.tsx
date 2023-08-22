@@ -1,7 +1,7 @@
 import AdminPage from '@centrin/components/admin/AdminPage';
 import { AdminPageContextProvider } from '@centrin/contexts/AdminPage/AdminPageContext';
 import { UserContextProvider } from '@centrin/contexts/UserContext';
-import { RoleEnum } from '@centrin/types/users';
+import { RoleEnum } from '@centrin/types/users.dto';
 import { authUser } from '@centrin/utils/server/auth';
 import { getUser, isLogged } from '@centrin/utils/server/auth';
 import { redirect } from 'next/navigation';

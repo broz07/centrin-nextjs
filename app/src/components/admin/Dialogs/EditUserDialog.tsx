@@ -5,7 +5,7 @@ import {
 	IUserUpdate,
 	RoleEnum,
 	roleSelectValues,
-} from '@centrin/types/users';
+} from '@centrin/types/users.dto';
 import {
 	NotificationPosition,
 	NotificationType,

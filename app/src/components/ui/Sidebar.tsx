@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { IUser, RoleEnum } from '@centrin/types/users';
+import { IUser, RoleEnum } from '@centrin/types/users.dto';
 import { removeToken } from '@centrin/utils/client/cookies';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import PageLogo from '../../../public/assets/app-logo.svg';
 // import HomeIcon from '../../../public/assets/icon-home.svg';
 import HomeIcon from '../../../public/assets/home.svg';
 
-import AdminIcon from '../../../public/assets/icon-admin-panel.svg'
+import AdminIcon from '../../../public/assets/icon-admin-panel.svg';
 // import AdminIcon from '../../../public/assets/icon-shield.svg';
 // import CustomersIcon from '../../../public/assets/icon-customers.svg'
 // import PanelIcon from '../../../public/assets/icon-search.svg'
@@ -90,8 +90,24 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 					</Link>
 					<Link href="/defects">
 						<button type="button">
-							<Image src={DefectIcon} alt="Defect Icon" />
-							<span>Závady</span>
+							<Image
+								src="/assets/warning-amber.svg"
+								width={30}
+								height={30}
+								alt="Defect Icon"
+							/>
+							<span>Aktivní závady</span>
+						</button>
+					</Link>
+					<Link href="/defects/history">
+						<button type="button">
+							<Image
+								src="/assets/history.svg"
+								width={30}
+								height={30}
+								alt="Defect Icon"
+							/>
+							<span>Historie závad</span>
 						</button>
 					</Link>
 					{/* {user.role.id === RoleEnum.ADMIN && (
