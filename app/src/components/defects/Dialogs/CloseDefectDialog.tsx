@@ -260,6 +260,7 @@ const CloseDefectDialog: React.FC<Props> = ({ open, close }) => {
 					}
 					onClick={handleCloseDefect}
 					startIcon={<TaskAltIcon />}
+					color="success"
 				>
 					Uzavřít závadu
 				</LoadingButton>

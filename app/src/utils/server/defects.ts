@@ -404,3 +404,18 @@ export const deferDefect = async (
 		return false;
 	}
 };
+
+export const resetDefect = async (defectId: number): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET end_time=NULL, solved=FALSE, assigned_to=NULL, solved_by=NULL, state_id=1, note=NULL WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};

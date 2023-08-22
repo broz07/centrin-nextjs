@@ -7,6 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SpeedIcon from '@mui/icons-material/Speed';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 // import FlagIcon from '@mui/icons-material/Flag';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import UpdateIcon from '@mui/icons-material/Update';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
@@ -35,6 +36,7 @@ import ConfirmMoveInProgressDialog from '../Dialogs/ConfirmMoveInProgressDialog'
 import MoveDownIcon from '@mui/icons-material/MoveDown';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
 import ConfirmMoveDeferredDialog from '../Dialogs/ConfirmMoveDeferredDialog';
+import ConfirmResetDialog from '../Dialogs/ConfirmResetDialog';
 
 const SingleDefectMenu: React.FC = () => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
@@ -78,9 +80,16 @@ const SingleDefectMenu: React.FC = () => {
 
 	const [openConfirmDeferDialog, setOpenConfirmDeferDialog] =
 		useState<boolean>(false);
-		
+
 	const closeConfirmDeferDialog = () => {
 		setOpenConfirmDeferDialog(false);
+	};
+
+	const [openConfirmResetDialog, setOpenConfirmResetDialog] =
+		useState<boolean>(false);
+
+	const closeConfirmResetDialog = () => {
+		setOpenConfirmResetDialog(false);
 	};
 
 	const { selectedDefect, refresh } = useDefectContext();
@@ -171,7 +180,10 @@ const SingleDefectMenu: React.FC = () => {
 				setOpenCloseDefectDialog(true);
 				break;
 			case 'single-defect-move-in-progress':
-				if (!selectedDefect.assigned_to || selectedDefect.assigned_to == user.id) {
+				if (
+					!selectedDefect.assigned_to ||
+					selectedDefect.assigned_to == user.id
+				) {
 					const toast = loadToast(
 						'Přesouvám do řešení...',
 						NotificationPosition.BR,
@@ -202,7 +214,10 @@ const SingleDefectMenu: React.FC = () => {
 				}
 				break;
 			case 'single-defect-defer':
-				if (!selectedDefect.assigned_to || selectedDefect.assigned_to == user.id) {
+				if (
+					!selectedDefect.assigned_to ||
+					selectedDefect.assigned_to == user.id
+				) {
 					const toast = loadToast(
 						'Odkládám závadu...',
 						NotificationPosition.BR,
@@ -228,9 +243,12 @@ const SingleDefectMenu: React.FC = () => {
 						);
 					}
 					refresh();
-				}else{
+				} else {
 					setOpenConfirmDeferDialog(true);
 				}
+				break;
+			case 'single-defect-reset':
+				setOpenConfirmResetDialog(true);
 				break;
 			default:
 				notify(
@@ -268,6 +286,10 @@ const SingleDefectMenu: React.FC = () => {
 			<ConfirmMoveDeferredDialog
 				open={openConfirmDeferDialog}
 				close={closeConfirmDeferDialog}
+			/>
+			<ConfirmResetDialog
+				open={openConfirmResetDialog}
+				close={closeConfirmResetDialog}
 			/>
 			<Menu id="single-defect-menu" theme="dark">
 				{selectedDefect ? (
@@ -367,6 +389,21 @@ const SingleDefectMenu: React.FC = () => {
 											Odebrat přiřazení
 										</span>{' '}
 										<RightSlot>{specialKey} + A</RightSlot>
+									</Item>
+								</>
+							)}
+						{user &&
+							[RoleEnum.ADMIN, RoleEnum.UDRZBA, RoleEnum.MANAGER].includes(
+								user.role.id,
+							) && (
+								<>
+									<Separator />
+									<Item id="single-defect-reset" onClick={handleItemClick}>
+										<RestartAltIcon />
+										<span style={{ padding: '0 0.5rem' }}>
+											Resetovat závadu
+										</span>{' '}
+										<RightSlot>{specialKey} + ?</RightSlot>
 									</Item>
 								</>
 							)}
