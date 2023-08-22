@@ -361,4 +361,46 @@ export const closeDefect = async (
 	}
 };
 
+export const moveDefectInProgress = async (
+	defectId: number,
+	assignTo?: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
 
+		const query = `UPDATE centrin.defects SET state_id=2${
+			assignTo ? `, assigned_to=${assignTo}` : ''
+		} WHERE id=${defectId};`;
+
+		// console.log(query);
+
+		await client.query(query);
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const deferDefect = async (
+	defectId: number,
+	assignTo?: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET state_id=3${
+			assignTo ? `, assigned_to=${assignTo}` : ''
+		} WHERE id=${defectId};`;
+
+		// console.log(query);
+
+		await client.query(query);
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};

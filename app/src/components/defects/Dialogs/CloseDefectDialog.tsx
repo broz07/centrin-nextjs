@@ -47,7 +47,7 @@ const CloseDefectDialog: React.FC<Props> = ({ open, close }) => {
 		setCloseState(undefined);
 		setNote(undefined);
 		setButtonLoading(false);
-        setConfirmDialogOpen(false);
+		setConfirmDialogOpen(false);
 	}, [open]);
 
 	useEffect(() => {
@@ -85,7 +85,7 @@ const CloseDefectDialog: React.FC<Props> = ({ open, close }) => {
 						2000,
 					);
 				}
-                setConfirmDialogOpen(false);
+				setConfirmDialogOpen(false);
 				setButtonLoading(false);
 				refresh();
 				close();

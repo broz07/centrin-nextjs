@@ -7,9 +7,10 @@ const Testing = async () => {
 		<div>
 			<h1>Testing</h1>
 			<div>
-				{data.map((item: any, index: any) => {
-					return <div key={index}>{item.description}</div>;
-				})}
+				{data &&
+					data.map((item: any, index: any) => {
+						return <div key={index}>{item.description}</div>;
+					})}
 			</div>
 		</div>
 	);

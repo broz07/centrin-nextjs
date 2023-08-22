@@ -8,8 +8,10 @@ interface Props {
 	closeParent: () => void;
 }
 
+//TODO: Implement this dialog
+
 const ConfirmCancelDialog: React.FC<Props> = () => {
-	return <Dialog></Dialog>;
+	return <Dialog open={false}></Dialog>;
 };
 
 export default ConfirmCancelDialog;

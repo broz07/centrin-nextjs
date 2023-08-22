@@ -6,7 +6,7 @@ import { useUserContext } from '@centrin/contexts/UserContext';
 import PersonIcon from '@mui/icons-material/Person';
 import SpeedIcon from '@mui/icons-material/Speed';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
-import FlagIcon from '@mui/icons-material/Flag';
+// import FlagIcon from '@mui/icons-material/Flag';
 import UpdateIcon from '@mui/icons-material/Update';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
@@ -18,7 +18,12 @@ import {
 	notify,
 	updateToast,
 } from '@centrin/utils/client/notify';
-import { assignDefect, unassignDefect } from '@centrin/utils/server/defects';
+import {
+	assignDefect,
+	deferDefect,
+	moveDefectInProgress,
+	unassignDefect,
+} from '@centrin/utils/server/defects';
 import { useEffect, useState } from 'react';
 import { Item, Menu, RightSlot, Separator } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';
@@ -26,6 +31,10 @@ import ConfirmAssignDialog from '../Dialogs/ConfirmAssignDialog';
 import SeverityChangeDialog from '../Dialogs/SeverityChangeDialog';
 import CancelDefectDialog from '../Dialogs/CancelDefectDialog';
 import CloseDefectDialog from '../Dialogs/CloseDefectDialog';
+import ConfirmMoveInProgressDialog from '../Dialogs/ConfirmMoveInProgressDialog';
+import MoveDownIcon from '@mui/icons-material/MoveDown';
+import MoveUpIcon from '@mui/icons-material/MoveUp';
+import ConfirmMoveDeferredDialog from '../Dialogs/ConfirmMoveDeferredDialog';
 
 const SingleDefectMenu: React.FC = () => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
@@ -58,6 +67,20 @@ const SingleDefectMenu: React.FC = () => {
 
 	const closeCloseDefectDialog = () => {
 		setOpenCloseDefectDialog(false);
+	};
+
+	const [openConfirmMoveInProgressDialog, setOpenConfirmMoveInProgressDialog] =
+		useState<boolean>(false);
+
+	const closeConfirmMoveInProgressDialog = () => {
+		setOpenConfirmMoveInProgressDialog(false);
+	};
+
+	const [openConfirmDeferDialog, setOpenConfirmDeferDialog] =
+		useState<boolean>(false);
+		
+	const closeConfirmDeferDialog = () => {
+		setOpenConfirmDeferDialog(false);
 	};
 
 	const { selectedDefect, refresh } = useDefectContext();
@@ -147,6 +170,68 @@ const SingleDefectMenu: React.FC = () => {
 			case 'single-defect-close':
 				setOpenCloseDefectDialog(true);
 				break;
+			case 'single-defect-move-in-progress':
+				if (!selectedDefect.assigned_to || selectedDefect.assigned_to == user.id) {
+					const toast = loadToast(
+						'Přesouvám do řešení...',
+						NotificationPosition.BR,
+					);
+
+					const moved = await moveDefectInProgress(selectedDefect.id, user.id);
+
+					if (moved) {
+						updateToast(
+							toast,
+							'Úspěšně přesunuto do řešení!',
+							NotificationType.SUCCESS,
+							NotificationPosition.BR,
+							2000,
+						);
+					} else {
+						updateToast(
+							toast,
+							'Nepodařilo se přesunout do řešení!',
+							NotificationType.ERROR,
+							NotificationPosition.BR,
+							2000,
+						);
+					}
+					refresh();
+				} else {
+					setOpenConfirmMoveInProgressDialog(true);
+				}
+				break;
+			case 'single-defect-defer':
+				if (!selectedDefect.assigned_to || selectedDefect.assigned_to == user.id) {
+					const toast = loadToast(
+						'Odkládám závadu...',
+						NotificationPosition.BR,
+					);
+
+					const moved = await deferDefect(selectedDefect.id);
+
+					if (moved) {
+						updateToast(
+							toast,
+							'Úspěšně odloženo!',
+							NotificationType.SUCCESS,
+							NotificationPosition.BR,
+							2000,
+						);
+					} else {
+						updateToast(
+							toast,
+							'Nepodařilo se odložit!',
+							NotificationType.ERROR,
+							NotificationPosition.BR,
+							2000,
+						);
+					}
+					refresh();
+				}else{
+					setOpenConfirmDeferDialog(true);
+				}
+				break;
 			default:
 				notify(
 					'Work in progress! 🛠️',
@@ -175,6 +260,14 @@ const SingleDefectMenu: React.FC = () => {
 			<CloseDefectDialog
 				open={openCloseDefectDialog}
 				close={closeCloseDefectDialog}
+			/>
+			<ConfirmMoveInProgressDialog
+				open={openConfirmMoveInProgressDialog}
+				close={closeConfirmMoveInProgressDialog}
+			/>
+			<ConfirmMoveDeferredDialog
+				open={openConfirmDeferDialog}
+				close={closeConfirmDeferDialog}
 			/>
 			<Menu id="single-defect-menu" theme="dark">
 				{selectedDefect ? (
@@ -209,8 +302,11 @@ const SingleDefectMenu: React.FC = () => {
 									selectedDefect.type_id == 2 &&
 									![2].includes(selectedDefect.state_id))) &&
 							!selectedDefect.solved && (
-								<Item>
-									<FlagIcon />
+								<Item
+									id="single-defect-move-in-progress"
+									onClick={handleItemClick}
+								>
+									<MoveDownIcon />
 									<span style={{ padding: '0 0.5rem' }}>
 										Přesunout do řešení
 									</span>{' '}
@@ -221,7 +317,7 @@ const SingleDefectMenu: React.FC = () => {
 							[RoleEnum.ADMIN, RoleEnum.UDRZBA].includes(user.role.id) &&
 							![3].includes(selectedDefect.state_id) &&
 							!selectedDefect.solved && (
-								<Item>
+								<Item id="single-defect-defer" onClick={handleItemClick}>
 									<UpdateIcon />
 									<span style={{ padding: '0 0.5rem' }}>Odložit</span>{' '}
 									<RightSlot>{specialKey} + ?</RightSlot>
