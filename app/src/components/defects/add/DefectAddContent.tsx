@@ -11,7 +11,12 @@ import InfoSelect from './InfoSelect';
 import DefectSummary from './DefectSummary';
 import { IDefectAdd } from '@centrin/types/defects.dto';
 import { addDefect } from '@centrin/utils/server/defects';
-import { NotificationPosition, NotificationType, loadToast, updateToast } from '@centrin/utils/client/notify';
+import {
+	NotificationPosition,
+	NotificationType,
+	loadToast,
+	updateToast,
+} from '@centrin/utils/client/notify';
 import { useRouter } from 'next/navigation';
 
 const steps = [
@@ -33,18 +38,29 @@ const DefectAddContent: React.FC = () => {
 	} = useDefectAddContext();
 
 	const handleAddDefect = async (defect: IDefectAdd) => {
-		const toast = loadToast("Přidávání závady...", NotificationPosition.BR);
+		const toast = loadToast('Přidávání závady...', NotificationPosition.BR);
 		const added = await addDefect(defect);
 
 		if (added) {
-			updateToast(toast, "Závada byla úspěšně přidána. 👍🏻", NotificationType.SUCCESS, NotificationPosition.BR, 2000);
+			updateToast(
+				toast,
+				'Závada byla úspěšně přidána. 👍🏻',
+				NotificationType.SUCCESS,
+				NotificationPosition.BR,
+				2000,
+			);
 			router.push('/defects');
-
 		} else {
-			updateToast(toast, "Při přidávání závady došlo k chybě. 🤕", NotificationType.ERROR, NotificationPosition.BR, 2000);
-			router.refresh()
+			updateToast(
+				toast,
+				'Při přidávání závady došlo k chybě. 🤕',
+				NotificationType.ERROR,
+				NotificationPosition.BR,
+				2000,
+			);
+			router.refresh();
 		}
-	}
+	};
 
 	const handleNext = () => {
 		if (activeStep === steps.length - 1) {

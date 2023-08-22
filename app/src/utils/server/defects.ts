@@ -120,6 +120,68 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 	}
 };
 
+export const getDefect = async (id: number): Promise<IFullDefect | false> => {
+	try {
+		const client = await pool.connect();
+		const query = `SELECT id, description, info, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined WHERE id=${id};`;
+
+		const result = await client.query<IFullDefect>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		if (data.length === 0) {
+			return false;
+		}
+
+		const defect: IFullDefect = {
+			id: data[0].id,
+			description: data[0].description,
+			info: data[0].info,
+			note: data[0].note,
+			start_time: data[0].start_time,
+			end_time: data[0].end_time,
+			solved: data[0].solved,
+			outdoor_id: data[0].outdoor_id,
+			room_id: data[0].room_id,
+			corridor_id: data[0].corridor_id,
+			severity_id: data[0].severity_id,
+			created_by: data[0].created_by,
+			assigned_to: data[0].assigned_to,
+			solved_by: data[0].solved_by,
+			state_id: data[0].state_id,
+			type_id: data[0].type_id,
+			room_name: data[0].room_name,
+			corridor_name: data[0].corridor_name,
+			outdoor_name: data[0].outdoor_name,
+			outdoor_description: data[0].outdoor_description,
+			state_description: data[0].state_description,
+			type_name: data[0].type_name,
+			type_description: data[0].type_description,
+			floor_id: data[0].floor_id,
+			floor_name: data[0].floor_name,
+			building_id: data[0].building_id,
+			building_name: data[0].building_name,
+			created_by_username: data[0].created_by_username,
+			created_by_name: data[0].created_by_name,
+			created_by_surname: data[0].created_by_surname,
+			assigned_to_username: data[0].assigned_to_username,
+			assigned_to_name: data[0].assigned_to_name,
+			assigned_to_surname: data[0].assigned_to_surname,
+			solved_by_username: data[0].solved_by_username,
+			solved_by_name: data[0].solved_by_name,
+			solved_by_surname: data[0].solved_by_surname,
+			severity: data[0].severity,
+		};
+
+		return defect;
+	} catch (err) {
+		console.log(err);
+		return false;
+	}
+};
+
 export const getSeverities = async (): Promise<ISeverity[] | false> => {
 	try {
 		const client = await pool.connect();
@@ -148,18 +210,42 @@ export const addDefect = async (defect: IDefectAdd): Promise<boolean> => {
 	try {
 		const client = await pool.connect();
 
-		let query = "";
+		let query = '';
 
-		if (defect.location_type === "outdoor") {
-			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, outdoor_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		if (defect.location_type === 'outdoor') {
+			query = `INSERT INTO centrin.defects (description, ${
+				defect.info ? 'info, ' : ''
+			}${defect.type_id ? 'type_id, ' : ''}${
+				defect.severity_id ? 'severity_id, ' : ''
+			}created_by, outdoor_id) VALUES ('${defect.description}', ${
+				defect.info ? `'${defect.info}', ` : ''
+			}${defect.type_id ? `${defect.type_id}, ` : ''}${
+				defect.severity_id ? `${defect.severity_id}, ` : ''
+			}${defect.created_by}, ${defect.location.id});`;
 		}
 
-		if (defect.location_type === "corridor") {
-			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, corridor_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		if (defect.location_type === 'corridor') {
+			query = `INSERT INTO centrin.defects (description, ${
+				defect.info ? 'info, ' : ''
+			}${defect.type_id ? 'type_id, ' : ''}${
+				defect.severity_id ? 'severity_id, ' : ''
+			}created_by, corridor_id) VALUES ('${defect.description}', ${
+				defect.info ? `'${defect.info}', ` : ''
+			}${defect.type_id ? `${defect.type_id}, ` : ''}${
+				defect.severity_id ? `${defect.severity_id}, ` : ''
+			}${defect.created_by}, ${defect.location.id});`;
 		}
 
-		if (defect.location_type === "room") {
-			query = `INSERT INTO centrin.defects (description, ${defect.info ? "info, ":""}${defect.type_id ? "type_id, ":""}${defect.severity_id ? "severity_id, ":""}created_by, room_id) VALUES ('${defect.description}', ${defect.info ? `'${defect.info}', `:""}${defect.type_id ? `${defect.type_id}, `:""}${defect.severity_id ? `${defect.severity_id}, `:""}${defect.created_by}, ${defect.location.id});`;
+		if (defect.location_type === 'room') {
+			query = `INSERT INTO centrin.defects (description, ${
+				defect.info ? 'info, ' : ''
+			}${defect.type_id ? 'type_id, ' : ''}${
+				defect.severity_id ? 'severity_id, ' : ''
+			}created_by, room_id) VALUES ('${defect.description}', ${
+				defect.info ? `'${defect.info}', ` : ''
+			}${defect.type_id ? `${defect.type_id}, ` : ''}${
+				defect.severity_id ? `${defect.severity_id}, ` : ''
+			}${defect.created_by}, ${defect.location.id});`;
 		}
 
 		await client.query(query);
@@ -169,6 +255,108 @@ export const addDefect = async (defect: IDefectAdd): Promise<boolean> => {
 		return true;
 	} catch (err) {
 		console.log(err);
+		return false;
+	}
+};
+
+export const assignDefect = async (
+	defectId: number,
+	userId: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET assigned_to=${userId} WHERE id=${defectId}`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const unassignDefect = async (defectId: number): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET assigned_to=NULL WHERE id=${defectId}`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const changeSeverity = async (
+	defectId: number,
+	severityId: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET severity_id=${severityId} WHERE id=${defectId}`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const cancelDefect = async (
+	defectId: number,
+	note: string,
+	userId: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET state_id=8, note='${note}', solved=TRUE, end_time=CURRENT_TIMESTAMP, solved_by=${userId} WHERE id=${defectId}`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const closeDefect = async (
+	defectId: number,
+	stateId: number,
+	userId: number,
+	note?: string,
+	assignTo?: number,
+): Promise<boolean> => {
+	try {
+		// console.log(defectId, stateId, userId, note, assignTo);
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET state_id=${stateId}, solved=TRUE, end_time=CURRENT_TIMESTAMP, solved_by=${userId}${
+			assignTo ? `, assigned_to=${assignTo}` : ''
+		}${note ? `, note='${note}'` : ''} WHERE id=${defectId};`;
+
+		// console.log(query);
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
 		return false;
 	}
 };

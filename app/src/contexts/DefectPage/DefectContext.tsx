@@ -16,6 +16,10 @@ interface DefectContextType {
 	setRefreshFlag: React.Dispatch<React.SetStateAction<boolean>>;
 	refresh: () => void;
 	formatLocation: (defect: IFullDefect) => string;
+	selectedDefect: IFullDefect | undefined;
+	setSelectedDefect: React.Dispatch<
+		React.SetStateAction<IFullDefect | undefined>
+	>;
 }
 
 const DefectContext = createContext<DefectContextType | undefined>(undefined);
@@ -38,6 +42,9 @@ export function DefectContextProvider({
 	const [defects, setDefects] = useState<IFullDefect[]>([]);
 	const [selectedDefects, setSelectedDefects] = useState<string[]>([]);
 	const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+	const [selectedDefect, setSelectedDefect] = useState<IFullDefect | undefined>(
+		undefined,
+	);
 
 	const isSelected = (id: string): boolean => {
 		return selectedDefects.includes(id);
@@ -105,6 +112,8 @@ export function DefectContextProvider({
 		setRefreshFlag,
 		refresh,
 		formatLocation,
+		selectedDefect,
+		setSelectedDefect,
 	};
 
 	return (

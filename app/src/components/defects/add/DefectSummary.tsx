@@ -98,7 +98,7 @@ const DefectSummary: React.FC = () => {
 					width="100%"
 					padding={2}
 					justifyContent="center"
-					alignItems='center'
+					alignItems="center"
 				>
 					<h1>Rekapitulace závady</h1>
 					<TextField
@@ -122,7 +122,12 @@ const DefectSummary: React.FC = () => {
 						value={formatLocation(defectToAdd)}
 					/> */}
 					{defectToAdd.location_type === 'outdoor' ? (
-						<TextField fullWidth disabled label="Lokalita" value={defectToAdd.location.name} />
+						<TextField
+							fullWidth
+							disabled
+							label="Lokalita"
+							value={defectToAdd.location.name}
+						/>
 					) : (
 						<Grid
 							container

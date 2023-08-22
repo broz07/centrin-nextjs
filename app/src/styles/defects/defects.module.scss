@@ -24,3 +24,56 @@
 		height: 50%;
 	}
 }
+
+.severity1 {
+	background-color: transparent;
+}
+
+.severity2 {
+	background-color: $severity2;
+}
+
+.severity3 {
+	background-color: $severity3;
+}
+
+.severity4 {
+	background-color: $severity4;
+}
+
+.severity5 {
+	background-color: $severity5;
+}
+
+.state1 {
+	// background-color: $state1;
+	background-color: transparent;
+}
+
+.state2 {
+	background-color: $state2;
+}
+
+.state3 {
+	background-color: $state3;
+}
+
+.state4 {
+	background-color: $state4;
+}
+
+.state5 {
+	background-color: $state5;
+}
+
+.state6 {
+	background-color: $state6;
+}
+
+.state7 {
+	background-color: $state7;
+}
+
+.state8 {
+	background-color: $state8;
+}

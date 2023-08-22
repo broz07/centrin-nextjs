@@ -3,7 +3,6 @@
 import { useDefectContext } from '@centrin/contexts/DefectPage/DefectContext';
 import {
 	Box,
-	Checkbox,
 	Paper,
 	Table,
 	TableBody,
@@ -12,20 +11,44 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
+	Tooltip,
 } from '@mui/material';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useContextMenu } from 'react-contexify';
+import SingleDefectMenu from './Menus/SingleDefectMenu';
+import styles from '@centrin/styles/defects/defects.module.scss';
+import { usePathname } from 'next/navigation';
+import { getDefect } from '@centrin/utils/server/defects';
+import { DateTime } from 'luxon';
 
 const DefectsTable: React.FC = () => {
+	const pathname = usePathname();
+
+	const [isHistory, setIsHistory] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (pathname === '/defects/history') {
+			setIsHistory(true);
+		} else {
+			setIsHistory(false);
+		}
+	}, [pathname]);
+
 	const {
 		defects,
-		selectAllDefects,
-		selectDefect,
-		selectedDefects,
+		// selectAllDefects,
+		// selectDefect,
+		// selectedDefects,
 		isSelected,
 		formatLocation,
+		setSelectedDefect,
 	} = useDefectContext();
+
+	// check if its history page
+
+	const { show } = useContextMenu();
 
 	const [page, setPage] = useState<number>(0);
 	const [rowsPerPage, setRowsPerPage] = useState<number>(25);
@@ -41,11 +64,32 @@ const DefectsTable: React.FC = () => {
 		setPage(0);
 	};
 
-	const formatDate = (date: Date) => {
-		const d = new Date(date);
-		return `${d.getDate()}. ${
-			d.getMonth() + 1
-		}. ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+	const formatDate = (date: Date, targetTimezone: string = 'Europe/Prague') => {
+		const dt = DateTime.fromJSDate(date).setZone(targetTimezone);
+
+		const formattedDate = dt.toFormat('dd.MM.yyyy HH:mm:ss');
+
+		return formattedDate;
+	};
+
+	const showMenu = async (e: React.MouseEvent) => {
+		e.preventDefault();
+
+		const fetchedDefect = await getDefect(parseInt(e.currentTarget.id, 10));
+		if (fetchedDefect) {
+			setSelectedDefect(fetchedDefect);
+		} else {
+			console.log('Error fetching defect');
+			setSelectedDefect(undefined);
+		}
+
+		show({
+			id: 'single-defect-menu',
+			event: e,
+			// props: {
+			// 	defectId: parseInt(e.currentTarget.id, 10),
+			// },
+		});
 	};
 
 	return (
@@ -58,6 +102,7 @@ const DefectsTable: React.FC = () => {
 				overflowY: 'hidden',
 			}}
 		>
+			<SingleDefectMenu />
 			<TableContainer
 				component={Paper}
 				square
@@ -123,6 +168,7 @@ const DefectsTable: React.FC = () => {
 									/>
 								</TableCell> */}
 								<TableCell>Čas zápisu</TableCell>
+								{isHistory && <TableCell>Čas uzavření</TableCell>}
 								<TableCell>Popis závady</TableCell>
 								<TableCell>Umístění</TableCell>
 								<TableCell>Stav</TableCell>
@@ -137,17 +183,25 @@ const DefectsTable: React.FC = () => {
 								.map((defect) => {
 									const isItemSelected = isSelected(defect.id.toString());
 									const formatedDate = formatDate(defect.start_time);
+									const formatedDateEnd = defect.end_time
+										? formatDate(defect.end_time)
+										: '- - -';
 
 									return (
 										<TableRow
-											// id={`${user.id}`}
+											id={`${defect.id}`}
 											key={defect.id}
-											// onContextMenu={showMenu}
+											onContextMenu={showMenu}
 											hover
 											selected={isItemSelected}
 											role="checkbox"
 											tabIndex={-1}
 											aria-checked={isItemSelected}
+											sx={{
+												'td, th': {
+													textAlign: 'center',
+												},
+											}}
 										>
 											{/* <TableCell
 											padding="checkbox"
@@ -159,13 +213,30 @@ const DefectsTable: React.FC = () => {
 											<Checkbox checked={isItemSelected} />
 										</TableCell> */}
 											<TableCell>{`${formatedDate}`}</TableCell>
-											<TableCell>
-												{`${defect.description}`}
-												{/* TODO styling */}
-												{defect.info && <InfoOutlinedIcon />}
-											</TableCell>
+											{isHistory && (
+												<TableCell>{`${formatedDateEnd}`}</TableCell>
+											)}
+											<Tooltip
+												title={`${defect.severity}`}
+												disableInteractive
+												arrow
+												placement="bottom"
+											>
+												<TableCell
+													className={`${
+														styles[`severity${defect.severity_id}`]
+													}`}
+												>
+													{`${defect.description}`}
+													{/* {defect.info && <InfoOutlinedIcon />} */}
+												</TableCell>
+											</Tooltip>
 											<TableCell>{formatLocation(defect)}</TableCell>
-											<TableCell>{`${defect.state_description}`}</TableCell>
+											<TableCell
+												className={`${styles[`state${defect.state_id}`]}`}
+											>
+												{`${defect.state_description}`}
+											</TableCell>
 											<TableCell>{`${defect.type_name}`}</TableCell>
 											<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
 											<TableCell>{`${

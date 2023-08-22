@@ -1,6 +1,14 @@
 import { IndoorLocationType } from '@centrin/contexts/DefectPage/DefectAddContext';
 import { ICorridor, IOutdoorLocation, IRoom } from './locations.dto';
 
+export enum SeverityEnum {
+	UNCLASSIFIED = 1,
+	LOW = 2,
+	MEDIUM = 3,
+	HIGH = 4,
+	CRITICAL = 5,
+}
+
 export interface IFullDefect {
 	id: number;
 	description: string;
