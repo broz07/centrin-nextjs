@@ -102,7 +102,8 @@ const SingleDefectMenu: React.FC = () => {
 		setOpenEditDescDialog(false);
 	};
 
-	const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState<boolean>(false);
+	const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] =
+		useState<boolean>(false);
 
 	const closeConfirmDeleteDialog = () => {
 		setOpenConfirmDeleteDialog(false);
@@ -313,7 +314,7 @@ const SingleDefectMenu: React.FC = () => {
 				open={openConfirmResetDialog}
 				close={closeConfirmResetDialog}
 			/>
-			<ConfirmDeleteDialog 
+			<ConfirmDeleteDialog
 				open={openConfirmDeleteDialog}
 				close={closeConfirmDeleteDialog}
 			/>
@@ -468,9 +469,7 @@ const SingleDefectMenu: React.FC = () => {
 						{user && user.role.id === RoleEnum.ADMIN && (
 							<Item id="single-defect-delete" onClick={handleItemClick}>
 								<DeleteForeverIcon />
-								<span style={{ padding: '0 0.5rem' }}>
-									Smazat závadu
-								</span>{' '}
+								<span style={{ padding: '0 0.5rem' }}>Smazat závadu</span>{' '}
 								<RightSlot>{specialKey} + ⌫</RightSlot>
 							</Item>
 						)}

@@ -13,7 +13,12 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
-import { NotificationPosition, NotificationType, loadToast, updateToast } from '@centrin/utils/client/notify';
+import {
+	NotificationPosition,
+	NotificationType,
+	loadToast,
+	updateToast,
+} from '@centrin/utils/client/notify';
 import { changeDefectDesc } from '@centrin/utils/server/defects';
 
 interface Props {
@@ -35,24 +40,36 @@ const EditDescDialog: React.FC<Props> = ({ open, close }) => {
 		}
 	}, [selectedDefect]);
 
-    const handleEdit = async () => {
-        if (!selectedDefect || !desc) return;
-        setButtonLoading(true);
+	const handleEdit = async () => {
+		if (!selectedDefect || !desc) return;
+		setButtonLoading(true);
 
-        const toast = loadToast('Ukládání změn...', NotificationPosition.BR);
+		const toast = loadToast('Ukládání změn...', NotificationPosition.BR);
 
-        const edited = await changeDefectDesc(selectedDefect.id, desc, detailDesc);
+		const edited = await changeDefectDesc(selectedDefect.id, desc, detailDesc);
 
-        if (edited) {
-            updateToast(toast, 'Změny byly úspěšně uloženy!',NotificationType.SUCCESS, NotificationPosition.BR, 2000);
-        } else {
-            updateToast(toast, 'Něco se nepovedlo! 😓',NotificationType.ERROR, NotificationPosition.BR, 2000);
-        }
-        
-        setButtonLoading(false);
-        refresh();
-        close();
-    }
+		if (edited) {
+			updateToast(
+				toast,
+				'Změny byly úspěšně uloženy!',
+				NotificationType.SUCCESS,
+				NotificationPosition.BR,
+				2000,
+			);
+		} else {
+			updateToast(
+				toast,
+				'Něco se nepovedlo! 😓',
+				NotificationType.ERROR,
+				NotificationPosition.BR,
+				2000,
+			);
+		}
+
+		setButtonLoading(false);
+		refresh();
+		close();
+	};
 
 	return (
 		<Dialog maxWidth="sm" fullWidth open={open}>
@@ -70,7 +87,7 @@ const EditDescDialog: React.FC<Props> = ({ open, close }) => {
 							setDesc(e.target.value);
 						}
 					}}
-					error={desc ? (desc.trim() === '' || desc.length > 40) : true}
+					error={desc ? desc.trim() === '' || desc.length > 40 : true}
 					color={desc ? (desc.length == 40 ? 'warning' : 'success') : 'error'}
 					helperText={
 						desc && desc.trim() !== ''
@@ -89,10 +106,10 @@ const EditDescDialog: React.FC<Props> = ({ open, close }) => {
 					label="Podrobný popis"
 					sx={{ marginTop: '1rem' }}
 					onChange={(e) => {
-                        if (e.target.value.length == 0) {
-                            setDetailDesc(undefined);
-                            return;
-                        }
+						if (e.target.value.length == 0) {
+							setDetailDesc(undefined);
+							return;
+						}
 						setDetailDesc(e.target.value);
 					}}
 				/>
@@ -103,8 +120,8 @@ const EditDescDialog: React.FC<Props> = ({ open, close }) => {
 					variant="contained"
 					color="success"
 					startIcon={<EditIcon />}
-					disabled={desc ? (desc.trim() === '' || desc.length > 40) : true}
-                    onClick={handleEdit}
+					disabled={desc ? desc.trim() === '' || desc.length > 40 : true}
+					onClick={handleEdit}
 				>
 					Potvrdit
 				</LoadingButton>

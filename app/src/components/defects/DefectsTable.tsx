@@ -45,25 +45,27 @@ const DefectsTable: React.FC = () => {
 	const { defects, formatLocation, setSelectedDefect } = useDefectContext();
 
 	const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
-	const [showDefect, setShowDefect] = useState<IFullDefect | undefined>(undefined);
+	const [showDefect, setShowDefect] = useState<IFullDefect | undefined>(
+		undefined,
+	);
 	const [showDialogType, setShowDialogType] = useState<'info' | 'note'>('info');
 
-	const openInfoDialog = (defect: IFullDefect, type: "info" | "note") => {
+	const openInfoDialog = (defect: IFullDefect, type: 'info' | 'note') => {
 		setShowDefect(defect);
 		setShowDialogType(type);
 		setShowInfoDialog(true);
-	}
+	};
 
 	const closeInfoDialog = () => {
 		setShowInfoDialog(false);
 		// setShowDefect(undefined);
 		// setShowDialogType('info');
-	}
+	};
 
 	const resetInfoDialog = () => {
 		setShowDefect(undefined);
 		setShowDialogType('info');
-	}
+	};
 
 	const { show } = useContextMenu();
 
@@ -119,7 +121,7 @@ const DefectsTable: React.FC = () => {
 				overflowY: 'hidden',
 			}}
 		>
-			<ShowInfoDialog 
+			<ShowInfoDialog
 				open={showInfoDialog}
 				close={closeInfoDialog}
 				defect={showDefect}
@@ -163,8 +165,8 @@ const DefectsTable: React.FC = () => {
 						</span>
 					</Box>
 				) : (
-					<Table 
-						stickyHeader 						
+					<Table
+						stickyHeader
 						sx={{
 							// whiteSpace: 'nowrap',
 							td: {
@@ -181,8 +183,7 @@ const DefectsTable: React.FC = () => {
 						}}
 					>
 						<TableHead>
-							<TableRow
-							>
+							<TableRow>
 								<TableCell>Čas zápisu</TableCell>
 								{isHistory && <TableCell>Čas uzavření</TableCell>}
 								<TableCell>Popis závady</TableCell>
@@ -247,7 +248,7 @@ const DefectsTable: React.FC = () => {
 																<IconButton
 																	size="small"
 																	disabled={!defect.info}
-																	onClick={() => openInfoDialog(defect, "info")}
+																	onClick={() => openInfoDialog(defect, 'info')}
 																>
 																	{defect.info ? (
 																		<CommentIcon />
@@ -286,7 +287,7 @@ const DefectsTable: React.FC = () => {
 																<IconButton
 																	size="small"
 																	disabled={!defect.note}
-																	onClick={() => openInfoDialog(defect, "note")}
+																	onClick={() => openInfoDialog(defect, 'note')}
 																>
 																	<SummarizeIcon />
 																</IconButton>

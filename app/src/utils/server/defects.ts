@@ -426,7 +426,7 @@ export const resetDefect = async (defectId: number): Promise<boolean> => {
 	}
 };
 
-export const deleteDefect = async(defectId: number): Promise<boolean> => {
+export const deleteDefect = async (defectId: number): Promise<boolean> => {
 	try {
 		const client = await pool.connect();
 
@@ -441,12 +441,18 @@ export const deleteDefect = async(defectId: number): Promise<boolean> => {
 		console.log(error);
 		return false;
 	}
-}
+};
 
-export const changeDefectDesc = async (defectId:number, desc: string, info?: string): Promise<boolean> => {
+export const changeDefectDesc = async (
+	defectId: number,
+	desc: string,
+	info?: string,
+): Promise<boolean> => {
 	try {
 		const client = await pool.connect();
-		const query = `UPDATE centrin.defects SET description='${desc}', info=${info ? `'${info}'` : 'NULL'} WHERE id=${defectId};`;
+		const query = `UPDATE centrin.defects SET description='${desc}', info=${
+			info ? `'${info}'` : 'NULL'
+		} WHERE id=${defectId};`;
 
 		await client.query(query);
 
@@ -456,5 +462,5 @@ export const changeDefectDesc = async (defectId:number, desc: string, info?: str
 	} catch (error) {
 		console.log(error);
 		return false;
-	} 
-}
+	}
+};
