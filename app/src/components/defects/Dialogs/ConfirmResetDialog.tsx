@@ -2,7 +2,6 @@
 
 import { useDefectContext } from '@centrin/contexts/DefectPage/DefectContext';
 import { LoadingButton } from '@mui/lab';
-import PersonIcon from '@mui/icons-material/Person';
 import {
 	Button,
 	Dialog,
@@ -12,37 +11,36 @@ import {
 	DialogTitle,
 } from '@mui/material';
 import { useState } from 'react';
-import { useUserContext } from '@centrin/contexts/UserContext';
-import { assignDefect } from '@centrin/utils/server/defects';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
 	NotificationPosition,
 	NotificationType,
 	loadToast,
 	updateToast,
 } from '@centrin/utils/client/notify';
+import { resetDefect } from '@centrin/utils/server/defects';
 
 interface Props {
 	open: boolean;
 	close: () => void;
 }
 
-const ConfirmAssignDialog: React.FC<Props> = ({ open, close }) => {
+const ConfirmResetDialog: React.FC<Props> = ({ open, close }) => {
 	const { selectedDefect, refresh } = useDefectContext();
-	const { user } = useUserContext();
-
 	const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
-	const handleAssign = async () => {
-		if (!selectedDefect || !user) return;
+	const handleReset = async () => {
+		if (!selectedDefect) return;
 		setButtonLoading(true);
 
-		const toast = loadToast('Přiřazuji...', NotificationPosition.BR);
-		const assigned = await assignDefect(selectedDefect.id, user.id);
+		const toast = loadToast('Resetuji závadu...', NotificationPosition.BR);
 
-		if (assigned) {
+		const reset = await resetDefect(selectedDefect.id);
+
+		if (reset) {
 			updateToast(
 				toast,
-				'Úspěšně přiřazeno!',
+				'Závada resetována!',
 				NotificationType.SUCCESS,
 				NotificationPosition.BR,
 				2000,
@@ -50,36 +48,37 @@ const ConfirmAssignDialog: React.FC<Props> = ({ open, close }) => {
 		} else {
 			updateToast(
 				toast,
-				'Nepodařilo se přiřadit závadu!',
+				'Nepodařilo se resetovat závadu!',
 				NotificationType.ERROR,
 				NotificationPosition.BR,
 				2000,
 			);
 		}
 
-		setButtonLoading(false);
 		refresh();
 		close();
+		setButtonLoading(false);
 	};
 
 	return (
 		<Dialog open={open}>
 			<DialogTitle>
-				<b>Potvrzení přiřazení závady</b>
+				<b>Potvrzení resetování závady</b>
 			</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
-					{`Chystáte si přiřadit závadu s popisem '${selectedDefect?.description}', která je již přiřazena uživateli '${selectedDefect?.assigned_to_name} ${selectedDefect?.assigned_to_surname}'. Opravdu chcete tuto akci provést? `}
+					{`Opravdu chcete resetovat závadu ${selectedDefect?.description}?`}
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 				<LoadingButton
 					loading={buttonLoading}
 					variant="contained"
-					startIcon={<PersonIcon />}
-					onClick={handleAssign}
+					color="error"
+					startIcon={<RestartAltIcon />}
+					onClick={handleReset}
 				>
-					Přiřadit mně
+					Resetovat
 				</LoadingButton>
 				<Button onClick={close}>Zrušit</Button>
 			</DialogActions>
@@ -87,4 +86,4 @@ const ConfirmAssignDialog: React.FC<Props> = ({ open, close }) => {
 	);
 };
 
-export default ConfirmAssignDialog;
+export default ConfirmResetDialog;

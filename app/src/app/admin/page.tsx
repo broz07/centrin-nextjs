@@ -4,7 +4,13 @@ import { UserContextProvider } from '@centrin/contexts/UserContext';
 import { RoleEnum } from '@centrin/types/users.dto';
 import { authUser } from '@centrin/utils/server/auth';
 import { getUser, isLogged } from '@centrin/utils/server/auth';
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+
+export const metadata: Metadata = {
+	title: 'Admin Panel - Centrin',
+	description: 'Admin Panel - Centrin',
+};
 
 const Admin = async () => {
 	const logged = await isLogged();

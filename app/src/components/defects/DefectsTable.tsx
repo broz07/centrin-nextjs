@@ -3,6 +3,7 @@
 import { useDefectContext } from '@centrin/contexts/DefectPage/DefectContext';
 import {
 	Box,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -15,13 +16,18 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { useContextMenu } from 'react-contexify';
 import SingleDefectMenu from './Menus/SingleDefectMenu';
 import styles from '@centrin/styles/defects/defects.module.scss';
 import { usePathname } from 'next/navigation';
 import { getDefect } from '@centrin/utils/server/defects';
 import { DateTime } from 'luxon';
+import { IFullDefect } from '@centrin/types/defects.dto';
+import ShowInfoDialog from './Dialogs/ShowInfoDialog';
 
 const DefectsTable: React.FC = () => {
 	const pathname = usePathname();
@@ -36,17 +42,30 @@ const DefectsTable: React.FC = () => {
 		}
 	}, [pathname]);
 
-	const {
-		defects,
-		// selectAllDefects,
-		// selectDefect,
-		// selectedDefects,
-		isSelected,
-		formatLocation,
-		setSelectedDefect,
-	} = useDefectContext();
+	const { defects, formatLocation, setSelectedDefect } = useDefectContext();
 
-	// check if its history page
+	const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
+	const [showDefect, setShowDefect] = useState<IFullDefect | undefined>(
+		undefined,
+	);
+	const [showDialogType, setShowDialogType] = useState<'info' | 'note'>('info');
+
+	const openInfoDialog = (defect: IFullDefect, type: 'info' | 'note') => {
+		setShowDefect(defect);
+		setShowDialogType(type);
+		setShowInfoDialog(true);
+	};
+
+	const closeInfoDialog = () => {
+		setShowInfoDialog(false);
+		// setShowDefect(undefined);
+		// setShowDialogType('info');
+	};
+
+	const resetInfoDialog = () => {
+		setShowDefect(undefined);
+		setShowDialogType('info');
+	};
 
 	const { show } = useContextMenu();
 
@@ -102,6 +121,13 @@ const DefectsTable: React.FC = () => {
 				overflowY: 'hidden',
 			}}
 		>
+			<ShowInfoDialog
+				open={showInfoDialog}
+				close={closeInfoDialog}
+				defect={showDefect}
+				type={showDialogType}
+				reset={resetInfoDialog}
+			/>
 			<SingleDefectMenu />
 			<TableContainer
 				component={Paper}
@@ -141,47 +167,38 @@ const DefectsTable: React.FC = () => {
 				) : (
 					<Table
 						stickyHeader
-						padding="normal"
-						size="medium"
-						sx={{ whiteSpace: 'nowrap' }}
+						sx={{
+							// whiteSpace: 'nowrap',
+							td: {
+								textAlign: 'center',
+								overflow: 'hidden',
+								fontFamily: 'inherit',
+								padding: '0.4rem 0.8rem',
+							},
+							th: {
+								fontWeight: 'bold',
+								textAlign: 'center',
+								fontFamily: 'inherit',
+							},
+						}}
 					>
 						<TableHead>
-							<TableRow
-								sx={{
-									th: {
-										fontWeight: 'bold',
-										textAlign: 'center',
-									},
-								}}
-							>
-								{/* <TableCell padding="checkbox">
-									<Checkbox
-										indeterminate={
-											selectedDefects.length > 0 &&
-											selectedDefects.length < defects.length
-										}
-										checked={
-											defects.length > 0 &&
-											selectedDefects.length === defects.length
-										}
-										onChange={selectAllDefects}
-									/>
-								</TableCell> */}
+							<TableRow>
 								<TableCell>Čas zápisu</TableCell>
 								{isHistory && <TableCell>Čas uzavření</TableCell>}
 								<TableCell>Popis závady</TableCell>
 								<TableCell>Umístění</TableCell>
 								<TableCell>Stav</TableCell>
-								<TableCell>Typ závady</TableCell>
+								<TableCell>Typ</TableCell>
 								<TableCell>Zapsal(a)</TableCell>
-								<TableCell>Přiděleno</TableCell>
+								<TableCell>Přiděleno k</TableCell>
+								{isHistory && <TableCell>Uzavřel(a)</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{defects
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((defect) => {
-									const isItemSelected = isSelected(defect.id.toString());
 									const formatedDate = formatDate(defect.start_time);
 									const formatedDateEnd = defect.end_time
 										? formatDate(defect.end_time)
@@ -193,25 +210,8 @@ const DefectsTable: React.FC = () => {
 											key={defect.id}
 											onContextMenu={showMenu}
 											hover
-											selected={isItemSelected}
-											role="checkbox"
 											tabIndex={-1}
-											aria-checked={isItemSelected}
-											sx={{
-												'td, th': {
-													textAlign: 'center',
-												},
-											}}
 										>
-											{/* <TableCell
-											padding="checkbox"
-											onClick={() => selectDefect(defect.id.toString())}
-											sx={{
-												cursor: 'pointer',
-											}}
-										>
-											<Checkbox checked={isItemSelected} />
-										</TableCell> */}
 											<TableCell>{`${formatedDate}`}</TableCell>
 											{isHistory && (
 												<TableCell>{`${formatedDateEnd}`}</TableCell>
@@ -227,23 +227,98 @@ const DefectsTable: React.FC = () => {
 														styles[`severity${defect.severity_id}`]
 													}`}
 												>
-													{`${defect.description}`}
-													{/* {defect.info && <InfoOutlinedIcon />} */}
+													<Box
+														sx={{
+															display: 'flex',
+															flexDirection: 'row',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															height: '100%',
+															width: '100%',
+														}}
+													>
+														{`${defect.description}`}
+														<Tooltip
+															title="Zobrazit detailní popis závady"
+															disableInteractive
+															arrow
+															placement="right"
+														>
+															<span>
+																<IconButton
+																	size="small"
+																	disabled={!defect.info}
+																	onClick={() => openInfoDialog(defect, 'info')}
+																>
+																	{defect.info ? (
+																		<CommentIcon />
+																	) : (
+																		<CommentsDisabledIcon />
+																	)}
+																</IconButton>
+															</span>
+														</Tooltip>
+													</Box>
 												</TableCell>
 											</Tooltip>
 											<TableCell>{formatLocation(defect)}</TableCell>
-											<TableCell
-												className={`${styles[`state${defect.state_id}`]}`}
-											>
-												{`${defect.state_description}`}
-											</TableCell>
+											{isHistory ? (
+												<TableCell
+													className={`${styles[`state${defect.state_id}`]}`}
+												>
+													<Box
+														sx={{
+															display: 'flex',
+															flexDirection: 'row',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															height: '100%',
+															width: '100%',
+														}}
+													>
+														{`${defect.state_description}`}
+														<Tooltip
+															title="Zobrazit závěrečnou zprávu"
+															disableInteractive
+															arrow
+															placement="right"
+														>
+															<span>
+																<IconButton
+																	size="small"
+																	disabled={!defect.note}
+																	onClick={() => openInfoDialog(defect, 'note')}
+																>
+																	<SummarizeIcon />
+																</IconButton>
+															</span>
+														</Tooltip>
+													</Box>
+												</TableCell>
+											) : (
+												<TableCell
+													className={`${styles[`state${defect.state_id}`]}`}
+												>
+													{`${defect.state_description}`}
+												</TableCell>
+											)}
+
 											<TableCell>{`${defect.type_name}`}</TableCell>
 											<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
 											<TableCell>{`${
 												defect.assigned_to
 													? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
-													: 'Nepřiděleno'
+													: '-'
 											}`}</TableCell>
+											{isHistory && (
+												<TableCell>
+													{`${
+														defect.solved_by
+															? `${defect.solved_by_name} ${defect.solved_by_surname}`
+															: '-'
+													}`}
+												</TableCell>
+											)}
 										</TableRow>
 									);
 								})}

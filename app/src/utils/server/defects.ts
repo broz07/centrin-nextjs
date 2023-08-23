@@ -5,7 +5,7 @@ import pool from './db';
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT id, description, info, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined ORDER BY start_time DESC;`;
+		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined ORDER BY start_time DESC;`;
 
 		const result = await client.query<IFullDefect>(query);
 
@@ -64,7 +64,7 @@ export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT id, description, info, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined WHERE solved=FALSE ORDER BY start_time DESC;`;
+		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined WHERE solved=FALSE ORDER BY start_time DESC;`;
 
 		const result = await client.query<IFullDefect>(query);
 
@@ -361,4 +361,106 @@ export const closeDefect = async (
 	}
 };
 
+export const moveDefectInProgress = async (
+	defectId: number,
+	assignTo?: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
 
+		const query = `UPDATE centrin.defects SET state_id=2${
+			assignTo ? `, assigned_to=${assignTo}` : ''
+		} WHERE id=${defectId};`;
+
+		// console.log(query);
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const deferDefect = async (
+	defectId: number,
+	assignTo?: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET state_id=3${
+			assignTo ? `, assigned_to=${assignTo}` : ''
+		} WHERE id=${defectId};`;
+
+		// console.log(query);
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const resetDefect = async (defectId: number): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET start_time=CURRENT_TIMESTAMP, end_time=NULL, solved=FALSE, assigned_to=NULL, solved_by=NULL, state_id=1, note=NULL WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const deleteDefect = async (defectId: number): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `DELETE FROM centrin.defects WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const changeDefectDesc = async (
+	defectId: number,
+	desc: string,
+	info?: string,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET description='${desc}', info=${
+			info ? `'${info}'` : 'NULL'
+		} WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
