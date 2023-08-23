@@ -163,37 +163,32 @@ const DefectsTable: React.FC = () => {
 						</span>
 					</Box>
 				) : (
-					<Table stickyHeader sx={{ whiteSpace: 'nowrap' }}>
+					<Table 
+						stickyHeader 						
+						sx={{
+							// whiteSpace: 'nowrap',
+							td: {
+								textAlign: 'center',
+								overflow: 'hidden',
+								fontFamily: 'inherit',
+								padding: '0.4rem 0.8rem',
+							},
+							th: {
+								fontWeight: 'bold',
+								textAlign: 'center',
+								fontFamily: 'inherit',
+							},
+						}}
+					>
 						<TableHead>
 							<TableRow
-								sx={{
-									th: {
-										fontWeight: 'bold',
-										textAlign: 'center',
-										fontFamily: 'inherit',
-									},
-								}}
 							>
-								{/* <TableCell padding="checkbox">
-									<Checkbox
-										indeterminate={
-											selectedDefects.length > 0 &&
-											selectedDefects.length < defects.length
-										}
-										checked={
-											defects.length > 0 &&
-											selectedDefects.length === defects.length
-										}
-										onChange={selectAllDefects}
-									/>
-								</TableCell> */}
 								<TableCell>Čas zápisu</TableCell>
 								{isHistory && <TableCell>Čas uzavření</TableCell>}
 								<TableCell>Popis závady</TableCell>
-								{/* <TableCell>Detail</TableCell> */}
 								<TableCell>Umístění</TableCell>
 								<TableCell>Stav</TableCell>
-								<TableCell>Typ závady</TableCell>
+								<TableCell>Typ</TableCell>
 								<TableCell>Zapsal(a)</TableCell>
 								<TableCell>Přiděleno k</TableCell>
 								{isHistory && <TableCell>Uzavřel(a)</TableCell>}
@@ -203,7 +198,6 @@ const DefectsTable: React.FC = () => {
 							{defects
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((defect) => {
-									// const isItemSelected = isSelected(defect.id.toString());
 									const formatedDate = formatDate(defect.start_time);
 									const formatedDateEnd = defect.end_time
 										? formatDate(defect.end_time)
@@ -215,28 +209,8 @@ const DefectsTable: React.FC = () => {
 											key={defect.id}
 											onContextMenu={showMenu}
 											hover
-											// selected={isItemSelected}
-											// role="checkbox"
 											tabIndex={-1}
-											// aria-checked={isItemSelected}
-											sx={{
-												'td, th': {
-													textAlign: 'center',
-													overflow: 'hidden',
-													fontFamily: 'inherit',
-													padding: '1rem',
-												},
-											}}
 										>
-											{/* <TableCell
-											padding="checkbox"
-											onClick={() => selectDefect(defect.id.toString())}
-											sx={{
-												cursor: 'pointer',
-											}}
-										>
-											<Checkbox checked={isItemSelected} />
-										</TableCell> */}
 											<TableCell>{`${formatedDate}`}</TableCell>
 											{isHistory && (
 												<TableCell>{`${formatedDateEnd}`}</TableCell>
