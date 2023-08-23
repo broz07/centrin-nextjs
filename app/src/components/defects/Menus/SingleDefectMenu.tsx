@@ -39,6 +39,8 @@ import MoveUpIcon from '@mui/icons-material/MoveUp';
 import ConfirmMoveDeferredDialog from '../Dialogs/ConfirmMoveDeferredDialog';
 import ConfirmResetDialog from '../Dialogs/ConfirmResetDialog';
 import EditDescDialog from '../Dialogs/EditDescDialog';
+import ConfirmDeleteDialog from '../Dialogs/ConfirmDeleteDialog';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const SingleDefectMenu: React.FC = () => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
@@ -98,6 +100,12 @@ const SingleDefectMenu: React.FC = () => {
 
 	const closeEditDescDialog = () => {
 		setOpenEditDescDialog(false);
+	};
+
+	const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState<boolean>(false);
+
+	const closeConfirmDeleteDialog = () => {
+		setOpenConfirmDeleteDialog(false);
 	};
 
 	const { selectedDefect, refresh } = useDefectContext();
@@ -261,6 +269,9 @@ const SingleDefectMenu: React.FC = () => {
 			case 'single-defect-edit-desc':
 				setOpenEditDescDialog(true);
 				break;
+			case 'single-defect-delete':
+				setOpenConfirmDeleteDialog(true);
+				break;
 			default:
 				notify(
 					'Work in progress! 🛠️',
@@ -301,6 +312,10 @@ const SingleDefectMenu: React.FC = () => {
 			<ConfirmResetDialog
 				open={openConfirmResetDialog}
 				close={closeConfirmResetDialog}
+			/>
+			<ConfirmDeleteDialog 
+				open={openConfirmDeleteDialog}
+				close={closeConfirmDeleteDialog}
 			/>
 			<EditDescDialog open={openEditDescDialog} close={closeEditDescDialog} />
 			<Menu id="single-defect-menu" theme="dark">
@@ -450,6 +465,15 @@ const SingleDefectMenu: React.FC = () => {
 									</Item>
 								</>
 							)}
+						{user && user.role.id === RoleEnum.ADMIN && (
+							<Item id="single-defect-delete" onClick={handleItemClick}>
+								<DeleteForeverIcon />
+								<span style={{ padding: '0 0.5rem' }}>
+									Smazat závadu
+								</span>{' '}
+								<RightSlot>{specialKey} + ⌫</RightSlot>
+							</Item>
+						)}
 					</>
 				) : (
 					<Item disabled>Loading...</Item>

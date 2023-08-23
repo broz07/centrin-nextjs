@@ -426,6 +426,23 @@ export const resetDefect = async (defectId: number): Promise<boolean> => {
 	}
 };
 
+export const deleteDefect = async(defectId: number): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `DELETE FROM centrin.defects WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
 export const changeDefectDesc = async (defectId:number, desc: string, info?: string): Promise<boolean> => {
 	try {
 		const client = await pool.connect();
