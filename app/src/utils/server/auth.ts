@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import pool from './db';
+import { logLogin } from './logging';
 
 const TOKEN_NAME = 'jwtToken';
 const SECRET_KEY = 'secretKey';
@@ -55,6 +56,8 @@ export const login = async (
 	};
 
 	client.release();
+
+	await logLogin(user.id);
 
 	return user;
 };

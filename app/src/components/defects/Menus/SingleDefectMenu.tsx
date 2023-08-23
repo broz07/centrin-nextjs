@@ -35,7 +35,7 @@ import CancelDefectDialog from '../Dialogs/CancelDefectDialog';
 import CloseDefectDialog from '../Dialogs/CloseDefectDialog';
 import ConfirmMoveInProgressDialog from '../Dialogs/ConfirmMoveInProgressDialog';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
-import MoveUpIcon from '@mui/icons-material/MoveUp';
+// import MoveUpIcon from '@mui/icons-material/MoveUp';
 import ConfirmMoveDeferredDialog from '../Dialogs/ConfirmMoveDeferredDialog';
 import ConfirmResetDialog from '../Dialogs/ConfirmResetDialog';
 import EditDescDialog from '../Dialogs/EditDescDialog';
@@ -462,7 +462,7 @@ const SingleDefectMenu: React.FC = () => {
 										<span style={{ padding: '0 0.5rem' }}>
 											Zrušit závadu
 										</span>{' '}
-										<RightSlot>{specialKey} + ⌫</RightSlot>
+										<RightSlot>{specialKey} + ?</RightSlot>
 									</Item>
 								</>
 							)}
