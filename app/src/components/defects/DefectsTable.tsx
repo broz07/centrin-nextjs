@@ -26,6 +26,8 @@ import styles from '@centrin/styles/defects/defects.module.scss';
 import { usePathname } from 'next/navigation';
 import { getDefect } from '@centrin/utils/server/defects';
 import { DateTime } from 'luxon';
+import { IFullDefect } from '@centrin/types/defects.dto';
+import ShowInfoDialog from './Dialogs/ShowInfoDialog';
 
 const DefectsTable: React.FC = () => {
 	const pathname = usePathname();
@@ -42,7 +44,26 @@ const DefectsTable: React.FC = () => {
 
 	const { defects, formatLocation, setSelectedDefect } = useDefectContext();
 
-	// TODO: Add display defect info
+	const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
+	const [showDefect, setShowDefect] = useState<IFullDefect | undefined>(undefined);
+	const [showDialogType, setShowDialogType] = useState<'info' | 'note'>('info');
+
+	const openInfoDialog = (defect: IFullDefect, type: "info" | "note") => {
+		setShowDefect(defect);
+		setShowDialogType(type);
+		setShowInfoDialog(true);
+	}
+
+	const closeInfoDialog = () => {
+		setShowInfoDialog(false);
+		// setShowDefect(undefined);
+		// setShowDialogType('info');
+	}
+
+	const resetInfoDialog = () => {
+		setShowDefect(undefined);
+		setShowDialogType('info');
+	}
 
 	const { show } = useContextMenu();
 
@@ -98,6 +119,13 @@ const DefectsTable: React.FC = () => {
 				overflowY: 'hidden',
 			}}
 		>
+			<ShowInfoDialog 
+				open={showInfoDialog}
+				close={closeInfoDialog}
+				defect={showDefect}
+				type={showDialogType}
+				reset={resetInfoDialog}
+			/>
 			<SingleDefectMenu />
 			<TableContainer
 				component={Paper}
@@ -245,6 +273,7 @@ const DefectsTable: React.FC = () => {
 																<IconButton
 																	size="small"
 																	disabled={!defect.info}
+																	onClick={() => openInfoDialog(defect, "info")}
 																>
 																	{defect.info ? (
 																		<CommentIcon />
@@ -283,7 +312,7 @@ const DefectsTable: React.FC = () => {
 																<IconButton
 																	size="small"
 																	disabled={!defect.note}
-																	onClick={() => console.log(defect)}
+																	onClick={() => openInfoDialog(defect, "note")}
 																>
 																	<SummarizeIcon />
 																</IconButton>
