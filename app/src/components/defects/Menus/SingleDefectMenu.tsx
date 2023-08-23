@@ -7,6 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SpeedIcon from '@mui/icons-material/Speed';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 // import FlagIcon from '@mui/icons-material/Flag';
+import EditIcon from '@mui/icons-material/Edit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import UpdateIcon from '@mui/icons-material/Update';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -37,6 +38,7 @@ import MoveDownIcon from '@mui/icons-material/MoveDown';
 import MoveUpIcon from '@mui/icons-material/MoveUp';
 import ConfirmMoveDeferredDialog from '../Dialogs/ConfirmMoveDeferredDialog';
 import ConfirmResetDialog from '../Dialogs/ConfirmResetDialog';
+import EditDescDialog from '../Dialogs/EditDescDialog';
 
 const SingleDefectMenu: React.FC = () => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
@@ -90,6 +92,12 @@ const SingleDefectMenu: React.FC = () => {
 
 	const closeConfirmResetDialog = () => {
 		setOpenConfirmResetDialog(false);
+	};
+
+	const [openEditDescDialog, setOpenEditDescDialog] = useState<boolean>(false);
+
+	const closeEditDescDialog = () => {
+		setOpenEditDescDialog(false);
 	};
 
 	const { selectedDefect, refresh } = useDefectContext();
@@ -250,6 +258,9 @@ const SingleDefectMenu: React.FC = () => {
 			case 'single-defect-reset':
 				setOpenConfirmResetDialog(true);
 				break;
+			case 'single-defect-edit-desc':
+				setOpenEditDescDialog(true);
+				break;
 			default:
 				notify(
 					'Work in progress! 🛠️',
@@ -291,6 +302,7 @@ const SingleDefectMenu: React.FC = () => {
 				open={openConfirmResetDialog}
 				close={closeConfirmResetDialog}
 			/>
+			<EditDescDialog open={openEditDescDialog} close={closeEditDescDialog} />
 			<Menu id="single-defect-menu" theme="dark">
 				{selectedDefect ? (
 					<>
@@ -312,7 +324,9 @@ const SingleDefectMenu: React.FC = () => {
 								<>
 									<Item id="single-defect-close" onClick={handleItemClick}>
 										<TaskAltIcon />
-										<span style={{ padding: '0 0.5rem' }}>Uzavřít</span>{' '}
+										<span style={{ padding: '0 0.5rem' }}>
+											Uzavřít závadu
+										</span>{' '}
 										<RightSlot>{specialKey} + ?</RightSlot>
 									</Item>
 								</>
@@ -342,6 +356,18 @@ const SingleDefectMenu: React.FC = () => {
 								<Item id="single-defect-defer" onClick={handleItemClick}>
 									<UpdateIcon />
 									<span style={{ padding: '0 0.5rem' }}>Odložit</span>{' '}
+									<RightSlot>{specialKey} + ?</RightSlot>
+								</Item>
+							)}
+						{user &&
+							([RoleEnum.ADMIN].includes(user.role.id) ||
+								selectedDefect.created_by == user.id) &&
+							!selectedDefect.solved && (
+								<Item id="single-defect-edit-desc" onClick={handleItemClick}>
+									<EditIcon />
+									<span style={{ padding: '0 0.5rem' }}>
+										Upravit popisy
+									</span>{' '}
 									<RightSlot>{specialKey} + ?</RightSlot>
 								</Item>
 							)}

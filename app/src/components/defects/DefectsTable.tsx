@@ -32,7 +32,6 @@ const DefectsTable: React.FC = () => {
 
 	const [isHistory, setIsHistory] = useState<boolean>(false);
 
-
 	useEffect(() => {
 		if (pathname === '/defects/history') {
 			setIsHistory(true);
@@ -41,11 +40,7 @@ const DefectsTable: React.FC = () => {
 		}
 	}, [pathname]);
 
-	const {
-		defects,
-		formatLocation,
-		setSelectedDefect,
-	} = useDefectContext();
+	const { defects, formatLocation, setSelectedDefect } = useDefectContext();
 
 	// TODO: Add display defect info
 

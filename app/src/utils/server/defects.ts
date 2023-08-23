@@ -376,6 +376,8 @@ export const moveDefectInProgress = async (
 
 		await client.query(query);
 
+		client.release();
+
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -398,6 +400,8 @@ export const deferDefect = async (
 
 		await client.query(query);
 
+		client.release();
+
 		return true;
 	} catch (error) {
 		console.log(error);
@@ -413,9 +417,27 @@ export const resetDefect = async (defectId: number): Promise<boolean> => {
 
 		await client.query(query);
 
+		client.release();
+
 		return true;
 	} catch (error) {
 		console.log(error);
 		return false;
 	}
 };
+
+export const changeDefectDesc = async (defectId:number, desc: string, info?: string): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+		const query = `UPDATE centrin.defects SET description='${desc}', info=${info ? `'${info}'` : 'NULL'} WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	} 
+}
