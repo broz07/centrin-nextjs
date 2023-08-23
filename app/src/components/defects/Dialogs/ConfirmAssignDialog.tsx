@@ -65,7 +65,7 @@ const ConfirmAssignDialog: React.FC<Props> = ({ open, close }) => {
 	return (
 		<Dialog open={open}>
 			<DialogTitle>
-				<b>Potvrzení přižazení závady</b>
+				<b>Potvrzení přiřazení závady</b>
 			</DialogTitle>
 			<DialogContent>
 				<DialogContentText>

@@ -8,10 +8,10 @@ interface DefectContextType {
 	setDefects: React.Dispatch<React.SetStateAction<IFullDefect[]>>;
 	selectedDefects: string[];
 	setSelectedDefects: React.Dispatch<React.SetStateAction<string[]>>;
-	isSelected: (id: string) => boolean;
-	selectDefect: (id: string) => void;
-	selectAllDefects: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	resetSelected: () => void;
+	// isSelected: (id: string) => boolean;
+	// selectDefect: (id: string) => void;
+	// selectAllDefects: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	// resetSelected: () => void;
 	refreshFlag: boolean;
 	setRefreshFlag: React.Dispatch<React.SetStateAction<boolean>>;
 	refresh: () => void;
@@ -46,42 +46,42 @@ export function DefectContextProvider({
 		undefined,
 	);
 
-	const isSelected = (id: string): boolean => {
-		return selectedDefects.includes(id);
-	};
+	// const isSelected = (id: string): boolean => {
+	// 	return selectedDefects.includes(id);
+	// };
 
-	const selectDefect = (id: string) => {
-		const selectedIndex = selectedDefects.indexOf(id);
-		let newSelected: string[] = [];
+	// const selectDefect = (id: string) => {
+	// 	const selectedIndex = selectedDefects.indexOf(id);
+	// 	let newSelected: string[] = [];
 
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selectedDefects, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selectedDefects.slice(1));
-		} else if (selectedIndex === selectedDefects.length - 1) {
-			newSelected = newSelected.concat(selectedDefects.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selectedDefects.slice(0, selectedIndex),
-				selectedDefects.slice(selectedIndex + 1),
-			);
-		}
+	// 	if (selectedIndex === -1) {
+	// 		newSelected = newSelected.concat(selectedDefects, id);
+	// 	} else if (selectedIndex === 0) {
+	// 		newSelected = newSelected.concat(selectedDefects.slice(1));
+	// 	} else if (selectedIndex === selectedDefects.length - 1) {
+	// 		newSelected = newSelected.concat(selectedDefects.slice(0, -1));
+	// 	} else if (selectedIndex > 0) {
+	// 		newSelected = newSelected.concat(
+	// 			selectedDefects.slice(0, selectedIndex),
+	// 			selectedDefects.slice(selectedIndex + 1),
+	// 		);
+	// 	}
 
-		setSelectedDefects(newSelected);
-	};
+	// 	setSelectedDefects(newSelected);
+	// };
 
-	const selectAllDefects = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (event.target.checked) {
-			const newSelecteds = defects.map((n) => n.id.toString());
-			setSelectedDefects(newSelecteds as string[]);
-			return;
-		}
-		setSelectedDefects([]);
-	};
+	// const selectAllDefects = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	if (event.target.checked) {
+	// 		const newSelecteds = defects.map((n) => n.id.toString());
+	// 		setSelectedDefects(newSelecteds as string[]);
+	// 		return;
+	// 	}
+	// 	setSelectedDefects([]);
+	// };
 
-	const resetSelected = () => {
-		setSelectedDefects([]);
-	};
+	// const resetSelected = () => {
+	// 	setSelectedDefects([]);
+	// };
 
 	const refresh = () => {
 		setRefreshFlag((prev) => !prev);
@@ -104,10 +104,10 @@ export function DefectContextProvider({
 		setDefects,
 		selectedDefects: selectedDefects,
 		setSelectedDefects: setSelectedDefects,
-		isSelected,
-		selectDefect,
-		selectAllDefects,
-		resetSelected,
+		// isSelected,
+		// selectDefect,
+		// selectAllDefects,
+		// resetSelected,
 		refreshFlag,
 		setRefreshFlag,
 		refresh,

@@ -3,6 +3,7 @@
 import { useDefectContext } from '@centrin/contexts/DefectPage/DefectContext';
 import {
 	Box,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -15,7 +16,10 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import { useContextMenu } from 'react-contexify';
 import SingleDefectMenu from './Menus/SingleDefectMenu';
 import styles from '@centrin/styles/defects/defects.module.scss';
@@ -28,6 +32,7 @@ const DefectsTable: React.FC = () => {
 
 	const [isHistory, setIsHistory] = useState<boolean>(false);
 
+
 	useEffect(() => {
 		if (pathname === '/defects/history') {
 			setIsHistory(true);
@@ -38,15 +43,11 @@ const DefectsTable: React.FC = () => {
 
 	const {
 		defects,
-		// selectAllDefects,
-		// selectDefect,
-		// selectedDefects,
-		isSelected,
 		formatLocation,
 		setSelectedDefect,
 	} = useDefectContext();
 
-	// check if its history page
+	// TODO: Add display defect info
 
 	const { show } = useContextMenu();
 
@@ -139,18 +140,14 @@ const DefectsTable: React.FC = () => {
 						</span>
 					</Box>
 				) : (
-					<Table
-						stickyHeader
-						padding="normal"
-						size="medium"
-						sx={{ whiteSpace: 'nowrap' }}
-					>
+					<Table stickyHeader sx={{ whiteSpace: 'nowrap' }}>
 						<TableHead>
 							<TableRow
 								sx={{
 									th: {
 										fontWeight: 'bold',
 										textAlign: 'center',
+										fontFamily: 'inherit',
 									},
 								}}
 							>
@@ -170,18 +167,20 @@ const DefectsTable: React.FC = () => {
 								<TableCell>Čas zápisu</TableCell>
 								{isHistory && <TableCell>Čas uzavření</TableCell>}
 								<TableCell>Popis závady</TableCell>
+								{/* <TableCell>Detail</TableCell> */}
 								<TableCell>Umístění</TableCell>
 								<TableCell>Stav</TableCell>
 								<TableCell>Typ závady</TableCell>
 								<TableCell>Zapsal(a)</TableCell>
-								<TableCell>Přiděleno</TableCell>
+								<TableCell>Přiděleno k</TableCell>
+								{isHistory && <TableCell>Uzavřel(a)</TableCell>}
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{defects
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((defect) => {
-									const isItemSelected = isSelected(defect.id.toString());
+									// const isItemSelected = isSelected(defect.id.toString());
 									const formatedDate = formatDate(defect.start_time);
 									const formatedDateEnd = defect.end_time
 										? formatDate(defect.end_time)
@@ -193,13 +192,16 @@ const DefectsTable: React.FC = () => {
 											key={defect.id}
 											onContextMenu={showMenu}
 											hover
-											selected={isItemSelected}
-											role="checkbox"
+											// selected={isItemSelected}
+											// role="checkbox"
 											tabIndex={-1}
-											aria-checked={isItemSelected}
+											// aria-checked={isItemSelected}
 											sx={{
 												'td, th': {
 													textAlign: 'center',
+													overflow: 'hidden',
+													fontFamily: 'inherit',
+													padding: '1rem',
 												},
 											}}
 										>
@@ -227,23 +229,97 @@ const DefectsTable: React.FC = () => {
 														styles[`severity${defect.severity_id}`]
 													}`}
 												>
-													{`${defect.description}`}
-													{/* {defect.info && <InfoOutlinedIcon />} */}
+													<Box
+														sx={{
+															display: 'flex',
+															flexDirection: 'row',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															height: '100%',
+															width: '100%',
+														}}
+													>
+														{`${defect.description}`}
+														<Tooltip
+															title="Zobrazit detailní popis závady"
+															disableInteractive
+															arrow
+															placement="right"
+														>
+															<span>
+																<IconButton
+																	size="small"
+																	disabled={!defect.info}
+																>
+																	{defect.info ? (
+																		<CommentIcon />
+																	) : (
+																		<CommentsDisabledIcon />
+																	)}
+																</IconButton>
+															</span>
+														</Tooltip>
+													</Box>
 												</TableCell>
 											</Tooltip>
 											<TableCell>{formatLocation(defect)}</TableCell>
-											<TableCell
-												className={`${styles[`state${defect.state_id}`]}`}
-											>
-												{`${defect.state_description}`}
-											</TableCell>
+											{isHistory ? (
+												<TableCell
+													className={`${styles[`state${defect.state_id}`]}`}
+												>
+													<Box
+														sx={{
+															display: 'flex',
+															flexDirection: 'row',
+															alignItems: 'center',
+															justifyContent: 'space-between',
+															height: '100%',
+															width: '100%',
+														}}
+													>
+														{`${defect.state_description}`}
+														<Tooltip
+															title="Zobrazit závěrečnou zprávu"
+															disableInteractive
+															arrow
+															placement="right"
+														>
+															<span>
+																<IconButton
+																	size="small"
+																	disabled={!defect.note}
+																	onClick={() => console.log(defect)}
+																>
+																	<SummarizeIcon />
+																</IconButton>
+															</span>
+														</Tooltip>
+													</Box>
+												</TableCell>
+											) : (
+												<TableCell
+													className={`${styles[`state${defect.state_id}`]}`}
+												>
+													{`${defect.state_description}`}
+												</TableCell>
+											)}
+
 											<TableCell>{`${defect.type_name}`}</TableCell>
 											<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
 											<TableCell>{`${
 												defect.assigned_to
 													? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
-													: 'Nepřiděleno'
+													: '-'
 											}`}</TableCell>
+											{isHistory && (
+												<TableCell>
+													{`${
+														defect.solved_by
+															? `${defect.solved_by_name} ${defect.solved_by_surname}`
+															: '-'
+													}`}
+												</TableCell>
+											)}
 										</TableRow>
 									);
 								})}

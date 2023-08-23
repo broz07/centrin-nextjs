@@ -50,7 +50,6 @@ const InfoSelect: React.FC = () => {
 		fetchSeverities();
 	}, [setSeverities]);
 
-	//TODO
 	return (
 		<Stack
 			spacing={2}
@@ -62,14 +61,32 @@ const InfoSelect: React.FC = () => {
 			<TextField
 				fullWidth
 				required
-				label="Stručný popis"
+				label="Stručný popis (max. 40 znaků)"
+				placeholder='Např. "Rozbité okno"'
 				value={description || ''}
 				onChange={(e) => {
-					setDescription(e.target.value);
+					if (e.target.value.length <= 40) {
+						setDescription(e.target.value);
+					}
 				}}
-				error={description?.trim() === ''}
+				error={
+					description
+						? description.trim() === '' || description.length > 40
+						: false
+				}
+				color={
+					description
+						? description.length == 40
+							? 'warning'
+							: 'success'
+						: 'error'
+				}
 				helperText={
-					description?.trim() === '' ? 'Stručný popis je povinný' : ''
+					description && description.trim() !== ''
+						? description.length == 40
+							? 'Dosáhli jste maximální délky! (40/40)'
+							: `${description.length}/40`
+						: 'Stručný popis je povinný!'
 				}
 			/>
 			<TextField
