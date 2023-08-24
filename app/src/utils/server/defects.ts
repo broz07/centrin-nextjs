@@ -1,5 +1,10 @@
 'use server';
-import { IDefectAdd, IFullDefect, ISeverity } from '@centrin/types/defects.dto';
+import {
+	IDefectAdd,
+	IDefectsPerBuilding,
+	IFullDefect,
+	ISeverity,
+} from '@centrin/types/defects.dto';
 import pool from './db';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
@@ -459,6 +464,34 @@ export const changeDefectDesc = async (
 		client.release();
 
 		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const getDefectCountPerBuilding = async (): Promise<
+	IDefectsPerBuilding[] | false
+> => {
+	try {
+		const client = await pool.connect();
+		const query = `SELECT COUNT(id) as defect_count, building_id, building_name FROM centrin.all_defects_joined GROUP BY building_id, building_name ORDER BY building_name`;
+
+		const result = await client.query<any>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const defects: IDefectsPerBuilding[] = data.map((defect: any) => {
+			return {
+				defect_count: parseInt(defect.defect_count as string),
+				building_id: defect.building_id,
+				building_name: defect.building_name,
+			};
+		});
+
+		return defects;
 	} catch (error) {
 		console.log(error);
 		return false;

@@ -63,3 +63,9 @@ export interface IDefectAdd {
 	location: IOutdoorLocation | ICorridor | IRoom;
 	location_type: 'outdoor' | IndoorLocationType;
 }
+
+export interface IDefectsPerBuilding {
+	defect_count: number ;
+	building_id?: number;
+	building_name?: string;
+}
