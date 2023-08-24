@@ -27,16 +27,10 @@ const AdminPage: React.FC<Props> = ({ user }) => {
 		switch (contentType.content) {
 			case 'users':
 				return <UserContent />;
-			case 'plans':
-				return (
-					<div>
-						<h1>Plány</h1>
-					</div>
-				);
 			case 'stats':
 				return (
 					<div>
-						<h1>Stats</h1>
+						<h1>Statistiky</h1>
 					</div>
 				);
 			default:

@@ -2,10 +2,8 @@
 import styles from '@centrin/styles/admin/admin.module.css';
 import { Button, ButtonGroup } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import {
-	planContent,
 	statsContent,
 	useAdminPageContext,
 	userContent,
@@ -29,12 +27,6 @@ const AdminHeader: React.FC<Props> = () => {
 						onClick={() => setContentType(userContent)}
 					>
 						Uživatelé
-					</Button>
-					<Button
-						startIcon={<EditCalendarIcon />}
-						onClick={() => setContentType(planContent)}
-					>
-						Plány
 					</Button>
 					<Button
 						startIcon={<LeaderboardIcon />}
