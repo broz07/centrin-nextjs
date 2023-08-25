@@ -114,7 +114,7 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 				solved_by_username: defect.solved_by_username,
 				solved_by_name: defect.solved_by_name,
 				solved_by_surname: defect.solved_by_surname,
-				severity: defect.severity
+				severity: defect.severity,
 			};
 		});
 
@@ -177,7 +177,7 @@ export const getDefect = async (id: number): Promise<IFullDefect | false> => {
 			solved_by_username: data[0].solved_by_username,
 			solved_by_name: data[0].solved_by_name,
 			solved_by_surname: data[0].solved_by_surname,
-			severity: data[0].severity
+			severity: data[0].severity,
 		};
 
 		return defect;
@@ -492,6 +492,26 @@ export const getDefectCountPerBuilding = async (): Promise<
 		});
 
 		return defects;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const assignDefectToUser = async (
+	defectId: number,
+	userId: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET assigned_to=${userId} WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
 	} catch (error) {
 		console.log(error);
 		return false;

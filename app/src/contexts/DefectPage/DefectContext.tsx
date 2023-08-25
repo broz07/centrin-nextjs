@@ -6,8 +6,8 @@ import React, { createContext, useState, useContext } from 'react';
 interface DefectContextType {
 	defects: IFullDefect[];
 	setDefects: React.Dispatch<React.SetStateAction<IFullDefect[]>>;
-	selectedDefects: string[];
-	setSelectedDefects: React.Dispatch<React.SetStateAction<string[]>>;
+	// selectedDefects: string[];
+	// setSelectedDefects: React.Dispatch<React.SetStateAction<string[]>>;
 	// isSelected: (id: string) => boolean;
 	// selectDefect: (id: string) => void;
 	// selectAllDefects: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -42,7 +42,7 @@ export function DefectContextProvider({
 	children: React.ReactNode;
 }) {
 	const [defects, setDefects] = useState<IFullDefect[]>([]);
-	const [selectedDefects, setSelectedDefects] = useState<string[]>([]);
+	// const [selectedDefects, setSelectedDefects] = useState<string[]>([]);
 	const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
 	const [selectedDefect, setSelectedDefect] = useState<IFullDefect | undefined>(
 		undefined,
@@ -104,8 +104,8 @@ export function DefectContextProvider({
 	const value: DefectContextType = {
 		defects,
 		setDefects,
-		selectedDefects: selectedDefects,
-		setSelectedDefects: setSelectedDefects,
+		// selectedDefects: selectedDefects,
+		// setSelectedDefects: setSelectedDefects,
 		// isSelected,
 		// selectDefect,
 		// selectAllDefects,

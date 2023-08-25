@@ -8,7 +8,9 @@ import {
 	notify,
 } from '@centrin/utils/client/notify';
 import { getWorkplanDefects } from '@centrin/utils/server/workplan';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import AddToWorkplanDialog from './Dialogs/AddToWorkplanDialog';
+import { Button } from '@mui/material';
 
 interface Props {}
 
@@ -19,7 +21,11 @@ const WorkPlanContent: React.FC<Props> = () => {
 		setLoadingData,
 		setWorkplanDefects,
 		workplanDefects,
+		refreshFlag,
 	} = useWorkplanContext();
+
+	const [openAddToWorkplanDialog, setOpenAddToWorkplanDialog] =
+		useState<boolean>(false);
 
 	useEffect(() => {
 		const fetchWorkplanDefects = async (workplan: IWorkplanSelect) => {
@@ -44,8 +50,9 @@ const WorkPlanContent: React.FC<Props> = () => {
 
 		if (selectedWorkplan) {
 			fetchWorkplanDefects(selectedWorkplan);
+			// console.log('fetching workplan defects');
 		}
-	}, [selectedWorkplan, setLoadingData, setWorkplanDefects]);
+	}, [selectedWorkplan, setLoadingData, setWorkplanDefects, refreshFlag]);
 
 	return (
 		<>
@@ -53,11 +60,21 @@ const WorkPlanContent: React.FC<Props> = () => {
 			{loadingData ? (
 				'Loading...'
 			) : (
-				<>{selectedWorkplan && workplanDefects
-                    // .filter((defect) => (defect.workplan_year === selectedWorkplan.year && defect.workplan_week === selectedWorkplan.week))
-                    .map((defect) => defect.description)
-                    }</>
+				<>
+					{selectedWorkplan &&
+						workplanDefects
+							// .filter((defect) => (defect.workplan_year === selectedWorkplan.year && defect.workplan_week === selectedWorkplan.week))
+							.map((defect) => defect.description) +
+							' - ' +
+							workplanDefects.length}
+				</>
 			)}
+			<Button onClick={() => setOpenAddToWorkplanDialog(true)}>Otevřít</Button>
+
+			<AddToWorkplanDialog
+				open={openAddToWorkplanDialog}
+				close={() => setOpenAddToWorkplanDialog(false)}
+			/>
 		</>
 	);
 };

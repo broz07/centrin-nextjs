@@ -1,4 +1,5 @@
 'use client';
+import { IFullDefect } from '@centrin/types/defects.dto';
 import { IWorkplanDefect, IWorkplanSelect } from '@centrin/types/workplans.dto';
 import React, { createContext, useState, useContext } from 'react';
 
@@ -11,6 +12,9 @@ interface WorkplanContextType {
 	setLoadingData: React.Dispatch<React.SetStateAction<boolean>>;
 	workplanDefects: IWorkplanDefect[];
 	setWorkplanDefects: React.Dispatch<React.SetStateAction<IWorkplanDefect[]>>;
+	refreshFlag: boolean;
+	setRefreshFlag: React.Dispatch<React.SetStateAction<boolean>>;
+	refresh: () => void;
 }
 
 const WorkplanContext = createContext<WorkplanContextType | undefined>(
@@ -37,6 +41,11 @@ export function WorkplanContextProvider({
 	>(undefined);
 	const [loadingData, setLoadingData] = useState<boolean>(false);
 	const [workplanDefects, setWorkplanDefects] = useState<IWorkplanDefect[]>([]);
+	const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+
+	const refresh = () => {
+		setRefreshFlag((prev) => !prev);
+	};
 
 	const value: WorkplanContextType = {
 		selectedWorkplan,
@@ -45,6 +54,9 @@ export function WorkplanContextProvider({
 		setLoadingData,
 		workplanDefects,
 		setWorkplanDefects,
+		refreshFlag,
+		setRefreshFlag,
+		refresh,
 	};
 
 	return (

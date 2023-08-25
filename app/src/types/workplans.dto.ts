@@ -1,4 +1,4 @@
-import { IFullDefect } from "./defects.dto";
+import { IFullDefect } from './defects.dto';
 
 export interface IWorkplanSelect {
 	year: number;

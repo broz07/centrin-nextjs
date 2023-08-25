@@ -3,6 +3,7 @@ import { UserContextProvider } from '@centrin/contexts/UserContext';
 import { WorkplanContextProvider } from '@centrin/contexts/WorkplanPage/WorkplanContext';
 import { RoleEnum } from '@centrin/types/users.dto';
 import { authUser, getUser, isLogged } from '@centrin/utils/server/auth';
+// import { getAvailableDefects } from '@centrin/utils/server/workplan';
 import { redirect } from 'next/navigation';
 
 const Workplans = async () => {
@@ -19,12 +20,16 @@ const Workplans = async () => {
 	const verified = await authUser([
 		RoleEnum.ADMIN,
 		RoleEnum.MANAGER,
+		RoleEnum.UDRZBA,
 		// RoleEnum.REDITEL,
 	]);
 
 	if (!verified) {
 		redirect('/');
 	}
+
+	// const test = await getAvailableDefects();
+	// console.log(test);
 
 	return (
 		<UserContextProvider>

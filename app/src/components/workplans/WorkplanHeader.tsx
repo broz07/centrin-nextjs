@@ -1,7 +1,6 @@
 'use client';
 import { useWorkplanContext } from '@centrin/contexts/WorkplanPage/WorkplanContext';
 import styles from '@centrin/styles/workplans/workplans.module.scss';
-import { IWorkplanSelect } from '@centrin/types/workplans.dto';
 import { formatWeekPick, getWorkplanSelect } from '@centrin/utils/workplan';
 import { useEffect, useState } from 'react';
 import {
