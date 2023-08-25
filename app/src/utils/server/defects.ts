@@ -10,7 +10,7 @@ import pool from './db';
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined ORDER BY start_time DESC;`;
+		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity, workplan_year, workplan_week FROM centrin.all_defects_joined ORDER BY start_time DESC;`;
 
 		const result = await client.query<IFullDefect>(query);
 
@@ -56,6 +56,8 @@ export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 				solved_by_name: defect.solved_by_name,
 				solved_by_surname: defect.solved_by_surname,
 				severity: defect.severity,
+				workplan_year: defect.workplan_year,
+				workplan_week: defect.workplan_week,
 			};
 		});
 
@@ -69,7 +71,7 @@ export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined WHERE solved=FALSE ORDER BY start_time DESC;`;
+		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity, workplan_year, workplan_week FROM centrin.all_defects_joined WHERE solved=FALSE ORDER BY start_time DESC;`;
 
 		const result = await client.query<IFullDefect>(query);
 
@@ -115,6 +117,8 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 				solved_by_name: defect.solved_by_name,
 				solved_by_surname: defect.solved_by_surname,
 				severity: defect.severity,
+				workplan_year: defect.workplan_year,
+				workplan_week: defect.workplan_week,
 			};
 		});
 
@@ -128,7 +132,7 @@ export const getActiveDefects = async (): Promise<IFullDefect[] | false> => {
 export const getDefect = async (id: number): Promise<IFullDefect | false> => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT id, description, info, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity FROM centrin.all_defects_joined WHERE id=${id};`;
+		const query = `SELECT id, description, info, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity, workplan_year, workplan_week FROM centrin.all_defects_joined WHERE id=${id};`;
 
 		const result = await client.query<IFullDefect>(query);
 
@@ -178,6 +182,8 @@ export const getDefect = async (id: number): Promise<IFullDefect | false> => {
 			solved_by_name: data[0].solved_by_name,
 			solved_by_surname: data[0].solved_by_surname,
 			severity: data[0].severity,
+			workplan_year: data[0].workplan_year,
+			workplan_week: data[0].workplan_week,
 		};
 
 		return defect;

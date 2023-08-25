@@ -20,6 +20,8 @@ interface DefectContextType {
 	setSelectedDefect: React.Dispatch<
 		React.SetStateAction<IFullDefect | undefined>
 	>;
+	loadingData: boolean;
+	setLoadingData: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DefectContext = createContext<DefectContextType | undefined>(undefined);
@@ -45,7 +47,7 @@ export function DefectContextProvider({
 	const [selectedDefect, setSelectedDefect] = useState<IFullDefect | undefined>(
 		undefined,
 	);
-
+	const [loadingData, setLoadingData] = useState<boolean>(false);
 	// const isSelected = (id: string): boolean => {
 	// 	return selectedDefects.includes(id);
 	// };
@@ -114,6 +116,8 @@ export function DefectContextProvider({
 		formatLocation,
 		selectedDefect,
 		setSelectedDefect,
+		loadingData,
+		setLoadingData,
 	};
 
 	return (

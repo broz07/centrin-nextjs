@@ -1,6 +1,8 @@
 'use client';
 
 import { useDefectAddContext } from '@centrin/contexts/DefectPage/DefectAddContext';
+import { useUserContext } from '@centrin/contexts/UserContext';
+import { RoleEnum } from '@centrin/types/users.dto';
 import {
 	NotificationPosition,
 	NotificationType,
@@ -31,6 +33,9 @@ const InfoSelect: React.FC = () => {
 		selectedSeverityId,
 		setSelectedSeverityId,
 	} = useDefectAddContext();
+
+	const { user } = useUserContext();
+
 	useEffect(() => {
 		const fetchSeverities = async () => {
 			const fetchedSeverities = await getSeverities();
@@ -109,8 +114,10 @@ const InfoSelect: React.FC = () => {
 						setSelectedTypeId(e.target.value as number);
 					}}
 				>
-					<MenuItem value={2}>Úklid</MenuItem>
 					<MenuItem value={3}>Závada</MenuItem>
+					<MenuItem value={2}>Úklid</MenuItem>
+					{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && <MenuItem value={1}>Pravidelná údržba</MenuItem>}
+					{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && <MenuItem value={4}>Plánovaná práce</MenuItem>}
 				</Select>
 			</FormControl>
 			<FormControl fullWidth>

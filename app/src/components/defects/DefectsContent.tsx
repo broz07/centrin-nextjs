@@ -11,10 +11,12 @@ import { useEffect } from 'react';
 import DefectsTable from './DefectsTable';
 
 const DefectsContent: React.FC = () => {
-	const { defects, setDefects, refresh, refreshFlag } = useDefectContext();
+	const { defects, setDefects, refreshFlag, setLoadingData } =
+		useDefectContext();
 
 	useEffect(() => {
 		const fetchDefects = async () => {
+			setLoadingData(true);
 			const fetchedDefects = await getActiveDefects();
 
 			if (!fetchedDefects) {
@@ -28,10 +30,11 @@ const DefectsContent: React.FC = () => {
 			}
 
 			setDefects(fetchedDefects);
+			setLoadingData(false);
 		};
 
 		fetchDefects();
-	}, [refreshFlag, setDefects]);
+	}, [refreshFlag, setDefects, setLoadingData]);
 
 	return (
 		<>

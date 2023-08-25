@@ -14,7 +14,7 @@ const ChartPage = async () => {
 
 	return (
 		<div>
-			<PieChart data={defectCounts} />		
+			<PieChart data={defectCounts} />
 		</div>
 	);
 };

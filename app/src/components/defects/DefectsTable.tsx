@@ -28,6 +28,7 @@ import { getDefect } from '@centrin/utils/server/defects';
 import { DateTime } from 'luxon';
 import { IFullDefect } from '@centrin/types/defects.dto';
 import ShowInfoDialog from './Dialogs/ShowInfoDialog';
+import PongLoader from '../loaders/PongLoader';
 
 const DefectsTable: React.FC = () => {
 	const pathname = usePathname();
@@ -42,7 +43,8 @@ const DefectsTable: React.FC = () => {
 		}
 	}, [pathname]);
 
-	const { defects, formatLocation, setSelectedDefect } = useDefectContext();
+	const { defects, formatLocation, setSelectedDefect, loadingData } =
+		useDefectContext();
 
 	const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
 	const [showDefect, setShowDefect] = useState<IFullDefect | undefined>(
@@ -137,7 +139,7 @@ const DefectsTable: React.FC = () => {
 					maxHeight: 'calc(100vh - 72px - 52px)',
 				}}
 			>
-				{defects.length === 0 ? (
+				{loadingData ? (
 					<Box
 						sx={{
 							display: 'flex',
@@ -146,184 +148,206 @@ const DefectsTable: React.FC = () => {
 							justifyContent: 'center',
 							height: '100%',
 							width: '100%',
+							backgroundColor: 'rgba(0, 0, 0, 0.5)',
 						}}
 					>
-						<Image
-							src="/assets/undraw_empty.svg"
-							width={500}
-							height={500}
-							alt="Picture of the author"
-						/>
-						<span
-							style={{
-								fontSize: '1.5rem',
-								fontWeight: 500,
-								color: '#9e9e9e',
-							}}
-						>
-							Žádné záznamy
-						</span>
+						<PongLoader />
 					</Box>
 				) : (
-					<Table
-						stickyHeader
-						sx={{
-							// whiteSpace: 'nowrap',
-							td: {
-								textAlign: 'center',
-								overflow: 'hidden',
-								fontFamily: 'inherit',
-								padding: '0.4rem 0.8rem',
-							},
-							th: {
-								fontWeight: 'bold',
-								textAlign: 'center',
-								fontFamily: 'inherit',
-							},
-						}}
-					>
-						<TableHead>
-							<TableRow>
-								<TableCell>Čas zápisu</TableCell>
-								{isHistory && <TableCell>Čas uzavření</TableCell>}
-								<TableCell>Popis závady</TableCell>
-								<TableCell>Umístění</TableCell>
-								<TableCell>Stav</TableCell>
-								<TableCell>Typ</TableCell>
-								<TableCell>Zapsal(a)</TableCell>
-								<TableCell>Přiděleno k</TableCell>
-								{isHistory && <TableCell>Uzavřel(a)</TableCell>}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{defects
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((defect) => {
-									const formatedDate = formatDate(defect.start_time);
-									const formatedDateEnd = defect.end_time
-										? formatDate(defect.end_time)
-										: '- - -';
+					<>
+						{defects.length === 0 ? (
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									justifyContent: 'center',
+									height: '100%',
+									width: '100%',
+								}}
+							>
+								<Image
+									src="/assets/undraw_empty.svg"
+									width={500}
+									height={500}
+									alt="Picture of the author"
+								/>
+								<span
+									style={{
+										fontSize: '1.5rem',
+										fontWeight: 500,
+										color: '#9e9e9e',
+									}}
+								>
+									Žádné záznamy
+								</span>
+							</Box>
+						) : (
+							<Table
+								stickyHeader
+								sx={{
+									// whiteSpace: 'nowrap',
+									td: {
+										textAlign: 'center',
+										overflow: 'hidden',
+										fontFamily: 'inherit',
+										padding: '0.4rem 0.8rem',
+									},
+									th: {
+										fontWeight: 'bold',
+										textAlign: 'center',
+										fontFamily: 'inherit',
+									},
+								}}
+							>
+								<TableHead>
+									<TableRow>
+										<TableCell>Čas zápisu</TableCell>
+										{isHistory && <TableCell>Čas uzavření</TableCell>}
+										<TableCell>Popis závady</TableCell>
+										<TableCell>Umístění</TableCell>
+										<TableCell>Stav</TableCell>
+										<TableCell>Typ</TableCell>
+										<TableCell>Zapsal(a)</TableCell>
+										<TableCell>Přiděleno k</TableCell>
+										{isHistory && <TableCell>Uzavřel(a)</TableCell>}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{defects
+										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+										.map((defect) => {
+											const formatedDate = formatDate(defect.start_time);
+											const formatedDateEnd = defect.end_time
+												? formatDate(defect.end_time)
+												: '- - -';
 
-									return (
-										<TableRow
-											id={`${defect.id}`}
-											key={defect.id}
-											onContextMenu={showMenu}
-											hover
-											tabIndex={-1}
-										>
-											<TableCell>{`${formatedDate}`}</TableCell>
-											{isHistory && (
-												<TableCell>{`${formatedDateEnd}`}</TableCell>
-											)}
-											<Tooltip
-												title={`${defect.severity}`}
-												disableInteractive
-												arrow
-												placement="bottom"
-											>
-												<TableCell
-													className={`${
-														styles[`severity${defect.severity_id}`]
-													}`}
+											return (
+												<TableRow
+													id={`${defect.id}`}
+													key={defect.id}
+													onContextMenu={showMenu}
+													hover
+													tabIndex={-1}
 												>
-													<Box
-														sx={{
-															display: 'flex',
-															flexDirection: 'row',
-															alignItems: 'center',
-															justifyContent: 'space-between',
-															height: '100%',
-															width: '100%',
-														}}
+													<TableCell>{`${formatedDate}`}</TableCell>
+													{isHistory && (
+														<TableCell>{`${formatedDateEnd}`}</TableCell>
+													)}
+													<Tooltip
+														title={`${defect.severity}`}
+														disableInteractive
+														arrow
+														placement="bottom"
 													>
-														{`${defect.description}`}
-														<Tooltip
-															title="Zobrazit detailní popis závady"
-															disableInteractive
-															arrow
-															placement="right"
+														<TableCell
+															className={`${
+																styles[`severity${defect.severity_id}`]
+															}`}
 														>
-															<span>
-																<IconButton
-																	size="small"
-																	disabled={!defect.info}
-																	onClick={() => openInfoDialog(defect, 'info')}
+															<Box
+																sx={{
+																	display: 'flex',
+																	flexDirection: 'row',
+																	alignItems: 'center',
+																	justifyContent: 'space-between',
+																	height: '100%',
+																	width: '100%',
+																}}
+															>
+																{`${defect.description}`}
+																<Tooltip
+																	title="Zobrazit detailní popis závady"
+																	disableInteractive
+																	arrow
+																	placement="right"
 																>
-																	{defect.info ? (
-																		<CommentIcon />
-																	) : (
-																		<CommentsDisabledIcon />
-																	)}
-																</IconButton>
-															</span>
-														</Tooltip>
-													</Box>
-												</TableCell>
-											</Tooltip>
-											<TableCell>{formatLocation(defect)}</TableCell>
-											{isHistory ? (
-												<TableCell
-													className={`${styles[`state${defect.state_id}`]}`}
-												>
-													<Box
-														sx={{
-															display: 'flex',
-															flexDirection: 'row',
-															alignItems: 'center',
-															justifyContent: 'space-between',
-															height: '100%',
-															width: '100%',
-														}}
-													>
-														{`${defect.state_description}`}
-														<Tooltip
-															title="Zobrazit závěrečnou zprávu"
-															disableInteractive
-															arrow
-															placement="right"
+																	<span>
+																		<IconButton
+																			size="small"
+																			disabled={!defect.info}
+																			onClick={() =>
+																				openInfoDialog(defect, 'info')
+																			}
+																		>
+																			{defect.info ? (
+																				<CommentIcon />
+																			) : (
+																				<CommentsDisabledIcon />
+																			)}
+																		</IconButton>
+																	</span>
+																</Tooltip>
+															</Box>
+														</TableCell>
+													</Tooltip>
+													<TableCell>{formatLocation(defect)}</TableCell>
+													{isHistory ? (
+														<TableCell
+															className={`${styles[`state${defect.state_id}`]}`}
 														>
-															<span>
-																<IconButton
-																	size="small"
-																	disabled={!defect.note}
-																	onClick={() => openInfoDialog(defect, 'note')}
+															<Box
+																sx={{
+																	display: 'flex',
+																	flexDirection: 'row',
+																	alignItems: 'center',
+																	justifyContent: 'space-between',
+																	height: '100%',
+																	width: '100%',
+																}}
+															>
+																{`${defect.state_description}`}
+																<Tooltip
+																	title="Zobrazit závěrečnou zprávu"
+																	disableInteractive
+																	arrow
+																	placement="right"
 																>
-																	<SummarizeIcon />
-																</IconButton>
-															</span>
-														</Tooltip>
-													</Box>
-												</TableCell>
-											) : (
-												<TableCell
-													className={`${styles[`state${defect.state_id}`]}`}
-												>
-													{`${defect.state_description}`}
-												</TableCell>
-											)}
+																	<span>
+																		<IconButton
+																			size="small"
+																			disabled={!defect.note}
+																			onClick={() =>
+																				openInfoDialog(defect, 'note')
+																			}
+																		>
+																			<SummarizeIcon />
+																		</IconButton>
+																	</span>
+																</Tooltip>
+															</Box>
+														</TableCell>
+													) : (
+														<TableCell
+															className={`${styles[`state${defect.state_id}`]}`}
+														>
+															{`${defect.state_description}`}
+														</TableCell>
+													)}
 
-											<TableCell>{`${defect.type_name}`}</TableCell>
-											<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
-											<TableCell>{`${
-												defect.assigned_to
-													? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
-													: '-'
-											}`}</TableCell>
-											{isHistory && (
-												<TableCell>
-													{`${
-														defect.solved_by
-															? `${defect.solved_by_name} ${defect.solved_by_surname}`
+													<TableCell>{`${defect.type_name}`}</TableCell>
+													<TableCell>{`${defect.created_by_name} ${defect.created_by_surname}`}</TableCell>
+													<TableCell>{`${
+														defect.assigned_to
+															? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
 															: '-'
-													}`}
-												</TableCell>
-											)}
-										</TableRow>
-									);
-								})}
-						</TableBody>
-					</Table>
+													}`}</TableCell>
+													{isHistory && (
+														<TableCell>
+															{`${
+																defect.solved_by
+																	? `${defect.solved_by_name} ${defect.solved_by_surname}`
+																	: '-'
+															}`}
+														</TableCell>
+													)}
+												</TableRow>
+											);
+										})}
+								</TableBody>
+							</Table>
+						)}
+					</>
 				)}
 			</TableContainer>
 			<TablePagination

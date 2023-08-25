@@ -7,7 +7,7 @@ export enum RoleEnum {
 	SESTRA = 6,
 	PECOVATEL = 7,
 	UKLIZEC = 8,
-	REDITEL = 9,
+	// REDITEL = 9,
 	MANAGER = 10,
 	KUCHAR = 11,
 }
@@ -41,10 +41,10 @@ export const roleSelectValues = [
 		value: RoleEnum.UKLIZEC,
 		label: 'Uklízeč',
 	},
-	{
-		value: RoleEnum.REDITEL,
-		label: 'Ředitel',
-	},
+	// {
+	// 	value: RoleEnum.REDITEL,
+	// 	label: 'Ředitel',
+	// },
 	{
 		value: RoleEnum.MANAGER,
 		label: 'Manažer',
