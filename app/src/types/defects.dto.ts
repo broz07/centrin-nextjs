@@ -47,8 +47,6 @@ export interface IFullDefect {
 	solved_by_name?: string;
 	solved_by_surname?: string;
 	severity: string;
-	workplan_year?: number;
-	workplan_week?: number;
 }
 
 export interface ISeverity {

@@ -1,7 +1,7 @@
 'use client';
 
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	DateTimePicker,
 	DateTimePickerSelectedType,
@@ -9,17 +9,22 @@ import {
 } from 'react-datetime-pickers';
 import 'react-datetime-pickers/dist/index.css';
 import styles from '@centrin/styles/testing/testing.module.scss';
-import { formatWeekPick, getWeekNumber } from '@centrin/utils/functions';
+import { formatWeekPick, getWorkplanSelect } from '@centrin/utils/workplan';
+import { IWorkplanSelect } from '@centrin/types/workplans.dto';
 
 const DatePick = () => {
-	const [selected, setSelected] = useState<DateTimePickerSelectedType>()
+	const [selected, setSelected] = useState<DateTimePickerSelectedType>();
+	const [selectedWorkplanSelect, setWorkplanSelect] =
+		useState<IWorkplanSelect>();
 
+	useEffect(() => {
+		const date = new Date();
+		setSelected(date);
+		setWorkplanSelect(getWorkplanSelect(date));
+	}, []);
 
 	const handleDateChange = (date?: DateTimePickerSelectedType) => {
-		console.debug('RangeDateTimePicker', 'onChange', date);
-		const luxonDate = DateTime.fromJSDate(date as Date);
-		const weekNumber = luxonDate.weekNumber;
-		console.log(weekNumber);
+		setWorkplanSelect(getWorkplanSelect(date as Date));
 		setSelected(date);
 	};
 
@@ -33,16 +38,16 @@ const DatePick = () => {
 					onChange={handleDateChange}
 					formatter={(date) => {
 						if (date instanceof Date) {
-							return `${formatWeekPick(date)}`;
-						};
-						if (date instanceof Array) return "";
-						return "";
+							return `${formatWeekPick(date)}. týden`;
+						}
+						if (date instanceof Array) return '';
+						return '';
 					}}
-
 				/>
 			</div>
 
-			<pre>{JSON.stringify(selected)}</pre>
+			{/* <pre>{JSON.stringify(selected)}</pre> */}
+			{`${selectedWorkplanSelect?.year} - ${selectedWorkplanSelect?.week}`}
 		</div>
 	);
 };

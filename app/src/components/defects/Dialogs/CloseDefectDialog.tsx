@@ -223,8 +223,8 @@ const CloseDefectDialog: React.FC<Props> = ({ open, close }) => {
 						value={closeState || ''}
 						onChange={(e) => setCloseState(e.target.value as number)}
 					>
-						<MenuItem value={6}>Opraveno</MenuItem>
-						<MenuItem value={4}>Nelze opravit</MenuItem>
+						<MenuItem value={6}>Vyřešeno</MenuItem>
+						<MenuItem value={4}>Nelze vyřešit</MenuItem>
 						<MenuItem value={5}>Výměna za nové</MenuItem>
 						<MenuItem value={7}>Zařízen servis</MenuItem>
 					</Select>

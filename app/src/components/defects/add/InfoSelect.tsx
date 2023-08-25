@@ -116,8 +116,14 @@ const InfoSelect: React.FC = () => {
 				>
 					<MenuItem value={3}>Závada</MenuItem>
 					<MenuItem value={2}>Úklid</MenuItem>
-					{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && <MenuItem value={1}>Pravidelná údržba</MenuItem>}
-					{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && <MenuItem value={4}>Plánovaná práce</MenuItem>}
+					{user &&
+						[RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && (
+							<MenuItem value={1}>Pravidelná údržba</MenuItem>
+						)}
+					{user &&
+						[RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && (
+							<MenuItem value={4}>Plánovaná práce</MenuItem>
+						)}
 				</Select>
 			</FormControl>
 			<FormControl fullWidth>

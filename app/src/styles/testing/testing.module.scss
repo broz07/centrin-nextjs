@@ -8,27 +8,26 @@
 
 	input {
 		width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+		padding: 10px;
+		font-size: 16px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
 
-    &::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-    }
+		&::-webkit-calendar-picker-indicator {
+			filter: invert(1);
+		}
 
-    &::placeholder {
-      color: #999;
-    }
+		&::placeholder {
+			color: #999;
+		}
 
-    &:focus {
-      border-color: #3498db;
-      outline: none;
-    }
+		&:focus {
+			border-color: #3498db;
+			outline: none;
+		}
 
-    &:hover {
-      border-color: #aaa;
-    }
-  }
-	
+		&:hover {
+			border-color: #aaa;
+		}
+	}
 }
