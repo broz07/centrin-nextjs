@@ -6,6 +6,7 @@ import {
 	ISeverity,
 } from '@centrin/types/defects.dto';
 import pool from './db';
+import { IUser } from '@centrin/types/users.dto';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
@@ -517,3 +518,13 @@ export const assignDefectToUser = async (
 		return false;
 	}
 };
+
+export const getAvailableUsers = async (): Promise<IUser[]| false> => {
+	try {
+		// TODO najít všechny uživatele, ke kterým se může přiřadit alarm
+		return []
+	} catch (error){
+		console.log(error)
+		return false
+	}
+}

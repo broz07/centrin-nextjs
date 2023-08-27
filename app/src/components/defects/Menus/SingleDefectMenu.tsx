@@ -41,6 +41,7 @@ import ConfirmResetDialog from '../Dialogs/ConfirmResetDialog';
 import EditDescDialog from '../Dialogs/EditDescDialog';
 import ConfirmDeleteDialog from '../Dialogs/ConfirmDeleteDialog';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AssignDialog from '../Dialogs/AssignDialog';
 
 const SingleDefectMenu: React.FC = () => {
 	const [specialKey, setSpecialKey] = useState<string>('Ctrl');
@@ -108,6 +109,12 @@ const SingleDefectMenu: React.FC = () => {
 	const closeConfirmDeleteDialog = () => {
 		setOpenConfirmDeleteDialog(false);
 	};
+
+	const [openAssignDialog, setOpenAssignDialog] = useState<boolean>(false)
+
+	const closeAssignDialog = () => {
+		setOpenAssignDialog(false)
+	}
 
 	const { selectedDefect, refresh } = useDefectContext();
 
@@ -318,6 +325,10 @@ const SingleDefectMenu: React.FC = () => {
 				open={openConfirmDeleteDialog}
 				close={closeConfirmDeleteDialog}
 			/>
+			<AssignDialog
+				open={openAssignDialog}
+				close={closeAssignDialog}
+			/>
 			<EditDescDialog open={openEditDescDialog} close={closeEditDescDialog} />
 			<Menu id="single-defect-menu" theme="dark">
 				{selectedDefect ? (
@@ -433,6 +444,15 @@ const SingleDefectMenu: React.FC = () => {
 										<RightSlot>{specialKey} + A</RightSlot>
 									</Item>
 								</>
+							)}
+						{user &&
+							[RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) &&
+							!selectedDefect.solved && (
+								<Item id="single-defect-assign-to-user" onClick={handleItemClick}>
+									<PersonIcon />
+									<span style={{ padding: '0 0.5rem' }}>Přiřadit</span>{' '}
+									<RightSlot>{specialKey} + A</RightSlot>
+								</Item>
 							)}
 						{user &&
 							[RoleEnum.ADMIN, RoleEnum.UDRZBA, RoleEnum.MANAGER].includes(
