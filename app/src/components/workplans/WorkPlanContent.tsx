@@ -10,7 +10,9 @@ import {
 import { getWorkplanDefects } from '@centrin/utils/server/workplan';
 import { useEffect, useState } from 'react';
 import AddToWorkplanDialog from './Dialogs/AddToWorkplanDialog';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import PongLoader from '../loaders/PongLoader';
+import WorkplanTable from './WorkplanTable';
 
 interface Props {}
 
@@ -56,21 +58,7 @@ const WorkPlanContent: React.FC<Props> = () => {
 
 	return (
 		<>
-			{/* {`Selected workplan: ${selectedWorkplan?.year} - ${selectedWorkplan?.week} - loading? - ${loadingData}`} */}
-			{loadingData ? (
-				'Loading...'
-			) : (
-				<>
-					{selectedWorkplan &&
-						workplanDefects
-							// .filter((defect) => (defect.workplan_year === selectedWorkplan.year && defect.workplan_week === selectedWorkplan.week))
-							.map((defect) => defect.description) +
-							' - ' +
-							workplanDefects.length}
-				</>
-			)}
-			<Button onClick={() => setOpenAddToWorkplanDialog(true)}>Otevřít</Button>
-
+			<WorkplanTable openAddDialog={() => setOpenAddToWorkplanDialog(true)} />
 			<AddToWorkplanDialog
 				open={openAddToWorkplanDialog}
 				close={() => setOpenAddToWorkplanDialog(false)}

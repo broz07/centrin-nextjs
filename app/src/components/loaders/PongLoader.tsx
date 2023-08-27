@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import styled, { keyframes } from 'styled-components';
 
 const playAnimation = keyframes`
@@ -165,11 +166,23 @@ const PongContainer = styled.div`
 // Usage
 const PongLoader = () => {
 	return (
-		<PongContainer>
-			<div />
-			<div />
-			<div />
-		</PongContainer>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: '100%',
+				width: '100%',
+				backgroundColor: 'rgba(0, 0, 0, 0.5)',
+			}}
+		>
+			<PongContainer>
+				<div />
+				<div />
+				<div />
+			</PongContainer>
+		</Box>
 	);
 };
 

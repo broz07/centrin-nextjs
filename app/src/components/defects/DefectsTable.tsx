@@ -140,19 +140,7 @@ const DefectsTable: React.FC = () => {
 				}}
 			>
 				{loadingData ? (
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							justifyContent: 'center',
-							height: '100%',
-							width: '100%',
-							backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						}}
-					>
-						<PongLoader />
-					</Box>
+					<PongLoader />
 				) : (
 					<>
 						{defects.length === 0 ? (
@@ -209,7 +197,7 @@ const DefectsTable: React.FC = () => {
 										<TableCell>Stav</TableCell>
 										<TableCell>Typ</TableCell>
 										<TableCell>Zapsal(a)</TableCell>
-										<TableCell>Přiděleno k</TableCell>
+										<TableCell>Řeší</TableCell>
 										{isHistory && <TableCell>Uzavřel(a)</TableCell>}
 									</TableRow>
 								</TableHead>

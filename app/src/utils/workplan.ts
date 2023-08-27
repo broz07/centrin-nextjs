@@ -53,11 +53,9 @@ export function getDateRangeFromWorkplan(
 	workplan: IWorkplanSelect,
 ): [Date, Date] {
 	const weekStart = DateTime.fromObject({
-		year: workplan.year,
-		month: 1,
-		day: 1,
-	}).set({
+		weekYear: workplan.year,
 		weekNumber: workplan.week,
+		weekday: 1, // Monday
 	});
 	const weekEnd = weekStart.plus({ days: 6 });
 

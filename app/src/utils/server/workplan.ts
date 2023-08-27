@@ -16,8 +16,6 @@ export const getWorkplanDefects = async (
 
 		query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity, workplan_year, workplan_week FROM centrin.all_workplans_joined WHERE workplan_year=${workplan.year} AND workplan_week=${workplan.week} ORDER BY start_time DESC;`;
 
-		// console.log(query);
-
 		const result = await client.query<IWorkplanDefect>(query);
 
 		const data = result.rows;
@@ -66,8 +64,6 @@ export const getWorkplanDefects = async (
 				workplan_week: defect.workplan_week,
 			};
 		});
-
-		// console.log(defects);
 
 		return defects;
 	} catch (error) {
@@ -129,7 +125,7 @@ export const getAvailableDefects = async (): Promise<IFullDefect[] | false> => {
 			};
 		});
 
-		console.log(defects);
+		// console.log(defects);
 
 		return defects;
 	} catch (error) {
@@ -144,8 +140,6 @@ export const addDefectsToWorkplan = async (
 ): Promise<boolean> => {
 	try {
 		const client = await pool.connect();
-
-		//insert many defect ids into workplan
 
 		let query = `INSERT INTO centrin.defects_workplans_association (defect_id, workplan_year, workplan_week) VALUES `;
 

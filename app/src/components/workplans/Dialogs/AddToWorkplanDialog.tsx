@@ -48,6 +48,7 @@ import {
 } from '@centrin/utils/client/notify';
 import { LoadingButton } from '@mui/lab';
 import PongLoader from '@centrin/components/loaders/PongLoader';
+import styles from '@centrin/styles/workplans/workplans.module.scss';
 
 interface Props {
 	open: boolean;
@@ -222,19 +223,7 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 				}}
 			>
 				{loadingData ? (
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							justifyContent: 'center',
-							height: '100%',
-							width: '100%',
-							backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						}}
-					>
-						<PongLoader />
-					</Box>
+					<PongLoader />
 				) : (
 					<>
 						{availableDefects.filter(
@@ -312,7 +301,13 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 												<TableCell>{`${formatDate(
 													defect.start_time,
 												)}`}</TableCell>
-												<TableCell>{defect.description}</TableCell>
+												<TableCell
+													className={`${
+														styles[`severity${defect.severity_id}`]
+													}`}
+												>
+													{defect.description}
+												</TableCell>
 												<TableCell>{formatLocation(defect)}</TableCell>
 												<TableCell>{defect.state_description}</TableCell>
 												<TableCell>{defect.type_name}</TableCell>
