@@ -28,6 +28,7 @@ import { getDefect } from '@centrin/utils/server/defects';
 import { DateTime } from 'luxon';
 import { IFullDefect } from '@centrin/types/defects.dto';
 import ShowInfoDialog from './Dialogs/ShowInfoDialog';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PongLoader from '../loaders/PongLoader';
 
 const DefectsTable: React.FC = () => {
@@ -199,6 +200,7 @@ const DefectsTable: React.FC = () => {
 										<TableCell>Zapsal(a)</TableCell>
 										<TableCell>Řeší</TableCell>
 										{isHistory && <TableCell>Uzavřel(a)</TableCell>}
+										<TableCell></TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -329,6 +331,18 @@ const DefectsTable: React.FC = () => {
 															}`}
 														</TableCell>
 													)}
+													<TableCell>
+														<Tooltip
+															title="Zobrazit detail závady"
+															disableInteractive
+															arrow
+															placement="left"
+														>
+															<IconButton>
+																<ArrowForwardIosIcon />
+															</IconButton>
+														</Tooltip>
+													</TableCell>
 												</TableRow>
 											);
 										})}

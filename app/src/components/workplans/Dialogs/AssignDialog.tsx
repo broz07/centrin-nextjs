@@ -1,6 +1,5 @@
 'use client';
 
-import { useDefectContext } from '@centrin/contexts/DefectPage/DefectContext';
 import { IUser, RoleEnum } from '@centrin/types/users.dto';
 import {
 	NotificationPosition,
@@ -24,6 +23,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
+import { useWorkplanContext } from '@centrin/contexts/WorkplanPage/WorkplanContext';
 
 interface Props {
 	open: boolean;
@@ -31,7 +31,7 @@ interface Props {
 }
 
 const AssignDialog: React.FC<Props> = ({ open, close }) => {
-	const { selectedDefect, refresh } = useDefectContext();
+	const { selectedDefect, refresh } = useWorkplanContext();
 	const [loadingButton, setLoadingButton] = useState(false);
 	const [loadingUsers, setLoadingUsers] = useState(false);
 	const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);

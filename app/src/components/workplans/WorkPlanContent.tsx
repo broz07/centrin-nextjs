@@ -10,8 +10,6 @@ import {
 import { getWorkplanDefects } from '@centrin/utils/server/workplan';
 import { useEffect, useState } from 'react';
 import AddToWorkplanDialog from './Dialogs/AddToWorkplanDialog';
-import { Box, Button } from '@mui/material';
-import PongLoader from '../loaders/PongLoader';
 import WorkplanTable from './WorkplanTable';
 
 interface Props {}
@@ -19,17 +17,17 @@ interface Props {}
 const WorkPlanContent: React.FC<Props> = () => {
 	const {
 		selectedWorkplan,
-		loadingData,
 		setLoadingData,
 		setWorkplanDefects,
-		workplanDefects,
 		refreshFlag,
+		setSelectedDefect,
 	} = useWorkplanContext();
 
 	const [openAddToWorkplanDialog, setOpenAddToWorkplanDialog] =
 		useState<boolean>(false);
 
 	useEffect(() => {
+		setSelectedDefect(undefined);
 		const fetchWorkplanDefects = async (workplan: IWorkplanSelect) => {
 			setLoadingData(true);
 
@@ -54,7 +52,13 @@ const WorkPlanContent: React.FC<Props> = () => {
 			fetchWorkplanDefects(selectedWorkplan);
 			// console.log('fetching workplan defects');
 		}
-	}, [selectedWorkplan, setLoadingData, setWorkplanDefects, refreshFlag]);
+	}, [
+		selectedWorkplan,
+		setLoadingData,
+		setWorkplanDefects,
+		refreshFlag,
+		setSelectedDefect,
+	]);
 
 	return (
 		<>

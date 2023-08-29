@@ -110,11 +110,11 @@ const SingleDefectMenu: React.FC = () => {
 		setOpenConfirmDeleteDialog(false);
 	};
 
-	const [openAssignDialog, setOpenAssignDialog] = useState<boolean>(false)
+	const [openAssignDialog, setOpenAssignDialog] = useState<boolean>(false);
 
 	const closeAssignDialog = () => {
-		setOpenAssignDialog(false)
-	}
+		setOpenAssignDialog(false);
+	};
 
 	const { selectedDefect, refresh } = useDefectContext();
 
@@ -280,6 +280,9 @@ const SingleDefectMenu: React.FC = () => {
 			case 'single-defect-delete':
 				setOpenConfirmDeleteDialog(true);
 				break;
+			case 'single-defect-assign-to-user':
+				setOpenAssignDialog(true);
+				break;
 			default:
 				notify(
 					'Work in progress! 🛠️',
@@ -325,10 +328,7 @@ const SingleDefectMenu: React.FC = () => {
 				open={openConfirmDeleteDialog}
 				close={closeConfirmDeleteDialog}
 			/>
-			<AssignDialog
-				open={openAssignDialog}
-				close={closeAssignDialog}
-			/>
+			<AssignDialog open={openAssignDialog} close={closeAssignDialog} />
 			<EditDescDialog open={openEditDescDialog} close={closeEditDescDialog} />
 			<Menu id="single-defect-menu" theme="dark">
 				{selectedDefect ? (
@@ -448,9 +448,14 @@ const SingleDefectMenu: React.FC = () => {
 						{user &&
 							[RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) &&
 							!selectedDefect.solved && (
-								<Item id="single-defect-assign-to-user" onClick={handleItemClick}>
+								<Item
+									id="single-defect-assign-to-user"
+									onClick={handleItemClick}
+								>
 									<PersonIcon />
-									<span style={{ padding: '0 0.5rem' }}>Přiřadit</span>{' '}
+									<span style={{ padding: '0 0.5rem' }}>
+										Přiřadit uživatele
+									</span>{' '}
 									<RightSlot>{specialKey} + A</RightSlot>
 								</Item>
 							)}

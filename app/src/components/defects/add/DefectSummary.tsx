@@ -95,6 +95,7 @@ const DefectSummary: React.FC = () => {
 				<Stack
 					spacing={2}
 					height="100%"
+					maxWidth="600px"
 					width="100%"
 					padding={2}
 					justifyContent="center"

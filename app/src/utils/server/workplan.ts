@@ -72,6 +72,29 @@ export const getWorkplanDefects = async (
 	}
 };
 
+export const getWorkplanDefect = async (
+	id: number,
+): Promise<IWorkplanDefect | false> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `SELECT id, description, info, note, start_time, end_time, solved, outdoor_id, room_id, corridor_id, severity_id, created_by, assigned_to, solved_by, state_id, type_id, room_name, corridor_name, outdoor_name, outdoor_description, state_description, type_name, type_description, floor_id, floor_name, building_id, building_name, created_by_username, created_by_name, created_by_surname, assigned_to_username, assigned_to_name, assigned_to_surname, solved_by_username, solved_by_name, solved_by_surname, severity, workplan_year, workplan_week FROM centrin.all_workplans_joined WHERE id=${id};`;
+
+		const result = await client.query<IWorkplanDefect>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const defect: IWorkplanDefect = data[0];
+
+		return defect;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
 export const getAvailableDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
 		const client = await pool.connect();

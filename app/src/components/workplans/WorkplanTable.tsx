@@ -4,6 +4,7 @@ import { useWorkplanContext } from '@centrin/contexts/WorkplanPage/WorkplanConte
 import {
 	Box,
 	Button,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -13,11 +14,11 @@ import {
 	TableRow,
 	Toolbar,
 	Tooltip,
-	Typography,
 } from '@mui/material';
 import PongLoader from '../loaders/PongLoader';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Image from 'next/image';
 
 import styles from '@centrin/styles/workplans/workplans.module.scss';
@@ -26,14 +27,47 @@ import {
 	formatLocation,
 	getformatedDateRange,
 } from '@centrin/utils/workplan';
+import { getWorkplanDefect } from '@centrin/utils/server/workplan';
+import { useContextMenu } from 'react-contexify';
+import WorkplanMenu from './Menus/WorkplanMenu';
 
 interface Props {
 	openAddDialog: () => void;
 }
-
+// TODO udělat menu, které bude mít možnost odebrat závadu - kontextové menu
 const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
-	const { selectedWorkplan, loadingData, workplanDefects, refreshFlag } =
-		useWorkplanContext();
+	const {
+		selectedWorkplan,
+		loadingData,
+		workplanDefects,
+		refreshFlag,
+		setSelectedDefect,
+	} = useWorkplanContext();
+
+	const { show } = useContextMenu();
+
+	const showMenu = async (e: React.MouseEvent) => {
+		e.preventDefault();
+
+		const fetchedDefect = await getWorkplanDefect(
+			parseInt(e.currentTarget.id, 10),
+		);
+		if (fetchedDefect) {
+			// console.log(fetchedDefect);
+			setSelectedDefect(fetchedDefect);
+		} else {
+			console.log('Error fetching defect');
+			setSelectedDefect(undefined);
+		}
+
+		show({
+			id: 'workplan-menu',
+			event: e,
+			// props: {
+			// 	defectId: parseInt(e.currentTarget.id, 10),
+			// },
+		});
+	};
 
 	return (
 		<Paper
@@ -78,6 +112,7 @@ const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
 					Přidat závady do plánu
 				</Button>
 			</Toolbar>
+			<WorkplanMenu />
 			<TableContainer
 				component={Paper}
 				square
@@ -99,7 +134,7 @@ const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
 										textAlign: 'center',
 										overflow: 'hidden',
 										fontFamily: 'inherit',
-										// padding: '0.4rem 0.8rem',
+										padding: '0.4rem 0.8rem',
 									},
 									th: {
 										fontWeight: 'bold',
@@ -117,11 +152,18 @@ const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
 										<TableCell>Typ</TableCell>
 										<TableCell>Zapsal(a)</TableCell>
 										<TableCell>Řeší</TableCell>
+										<TableCell></TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{workplanDefects.map((defect) => (
-										<TableRow key={defect.id} hover tabIndex={-1}>
+										<TableRow
+											key={defect.id}
+											id={`${defect.id}`}
+											hover
+											tabIndex={-1}
+											onContextMenu={showMenu}
+										>
 											<TableCell>
 												{`${formatDate(defect.start_time)}`}
 											</TableCell>
@@ -152,6 +194,18 @@ const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
 													? `${defect.assigned_to_name} ${defect.assigned_to_surname}`
 													: '-'
 											}`}</TableCell>
+											<TableCell>
+												<Tooltip
+													title="Zobrazit detail závady"
+													disableInteractive
+													arrow
+													placement="left"
+												>
+													<IconButton>
+														<ArrowForwardIosIcon />
+													</IconButton>
+												</Tooltip>
+											</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
