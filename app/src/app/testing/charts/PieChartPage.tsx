@@ -13,12 +13,9 @@ const PieChartPage: React.FC<PieChartProps> = ({ data }) => {
 
 	useEffect(() => {
 		setChartData(data);
-	}
-	, [data]);
+	}, [data]);
 
-	return (
-		<PieChart data={chartData} />
-	);
+	return <PieChart data={chartData} />;
 };
 
 export default PieChartPage;

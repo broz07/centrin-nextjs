@@ -6,6 +6,7 @@ import {
 	ISeverity,
 } from '@centrin/types/defects.dto';
 import pool from './db';
+import { IGetUsersQuery, IUser } from '@centrin/types/users.dto';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
@@ -492,6 +493,61 @@ export const getDefectCountPerBuilding = async (): Promise<
 		});
 
 		return defects;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const assignDefectToUser = async (
+	defectId: number,
+	userId: number,
+): Promise<boolean> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `UPDATE centrin.defects SET assigned_to=${userId} WHERE id=${defectId};`;
+
+		await client.query(query);
+
+		client.release();
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const getAvailableUsers = async (): Promise<IUser[] | false> => {
+	try {
+		const client = await pool.connect();
+
+		const query = `SELECT users.id AS id, users.name, users.surname, users.username, users.email, users.role_id, roles.name as role_name, roles.description as role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id WHERE users.role_id in (4,8) ORDER by users.id;`;
+
+		const result = await client.query<IGetUsersQuery>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const users: IUser[] = data.map((user) => {
+			return {
+				id: user.id,
+				name: user.name,
+				surname: user.surname,
+				username: user.username,
+				email: user.email,
+				displayName: `${user.name} ${user.surname}`,
+				role: {
+					id: user.role_id,
+					name: user.role_name,
+					description: user.role_desc,
+				},
+			};
+		});
+
+		return users;
 	} catch (error) {
 		console.log(error);
 		return false;

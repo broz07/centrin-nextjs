@@ -8,20 +8,6 @@ import styles from '@centrin/styles/ui/ui.module.css';
 import Image from 'next/image';
 import { Avatar } from '@mui/material';
 
-// import StatIcon from '../../../public/assets/icon-chart-line.svg';
-import DefectIcon from '../../../public/assets/report-2.svg';
-//import StatIcon from '../../../public/assets/icon-bar-chart.svg'
-import PageLogo from '../../../public/assets/app-logo.svg';
-// import HomeIcon from '../../../public/assets/icon-home.svg';
-import HomeIcon from '../../../public/assets/home.svg';
-
-import AdminIcon from '../../../public/assets/icon-admin-panel.svg';
-// import AdminIcon from '../../../public/assets/icon-shield.svg';
-// import CustomersIcon from '../../../public/assets/icon-customers.svg'
-// import PanelIcon from '../../../public/assets/icon-search.svg'
-import LogoutIcon from '../../../public/assets/icon-lock.svg';
-//const defaultAvatar = '../../../public/assets/default-user-avatar.svg';
-
 interface Props {
 	readonly user: IUser;
 }
@@ -75,16 +61,22 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 				<header className={`${styles.sidebarHeader}`}>
 					<button className={`${styles.sidebarBurger}`} onClick={toggleOpen} />
 					<Image
-						src={PageLogo}
+						src="/assets/app-logo.svg"
 						alt="Cetrin Logo"
 						className={`${styles.sidebarLogo}`}
 						height={20}
+						width={20}
 					/>
 				</header>
 				<nav className={`${styles.sidebarNav}`}>
 					<Link href="/">
 						<button type="button">
-							<Image src={HomeIcon} alt="Home Icon" />
+							<Image
+								src="/assets/home.svg"
+								alt="Home Icon"
+								width={30}
+								height={30}
+							/>
 							<span>Hlavní stránka</span>
 						</button>
 					</Link>
@@ -118,17 +110,37 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 							</button>
 						</Link>
 					)} */}
+					{[RoleEnum.ADMIN, RoleEnum.MANAGER, RoleEnum.UDRZBA].includes(
+						user.role.id,
+					) && (
+						<Link href="/workplans">
+							<button type="button">
+								<Image
+									src="/assets/event-note.svg"
+									alt="Workplan Icon"
+									width={30}
+									height={30}
+								/>
+								<span>Pracovní plány</span>
+							</button>
+						</Link>
+					)}
 					{user.role.id === RoleEnum.ADMIN && (
 						<Link href="/admin">
 							<button type="button">
-								<Image src={AdminIcon} alt="Admin Icon" />
+								<Image
+									src="/assets/icon-admin-panel.svg"
+									alt="Admin Icon"
+									width={30}
+									height={30}
+								/>
 								<span>Administrace</span>
 							</button>
 						</Link>
 					)}
 				</nav>
 				<footer>
-					<Link href="/profile">
+					<Link href="/">
 						<button className={`${styles.userAvatar}`}>
 							<Avatar {...stringAvatar(user.displayName)} />
 							<span>
@@ -139,7 +151,12 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 						</button>
 					</Link>
 					<button type="button" onClick={handleLogout}>
-						<Image src={LogoutIcon} alt="Logout Icon" />
+						<Image
+							src="/assets/icon-lock.svg"
+							alt="Logout Icon"
+							width={30}
+							height={30}
+						/>
 						<span>Logout</span>
 					</button>
 				</footer>

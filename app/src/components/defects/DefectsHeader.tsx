@@ -1,6 +1,7 @@
 'use client';
 import styles from '@centrin/styles/defects/defects.module.scss';
 import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 interface Props {}
 
@@ -12,8 +13,13 @@ const DefectsHeader: React.FC<Props> = () => {
 				<span>Seznam aktivních závad</span>
 			</div>
 			<div>
-				<Button variant="contained" color="primary" href="/defects/add">
-					+ Nová závada
+				<Button
+					variant="contained"
+					color="primary"
+					href="/defects/add"
+					startIcon={<AddIcon />}
+				>
+					Nová závada
 				</Button>
 			</div>
 		</header>

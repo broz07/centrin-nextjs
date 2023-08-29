@@ -6,8 +6,8 @@ import React, { createContext, useState, useContext } from 'react';
 interface DefectContextType {
 	defects: IFullDefect[];
 	setDefects: React.Dispatch<React.SetStateAction<IFullDefect[]>>;
-	selectedDefects: string[];
-	setSelectedDefects: React.Dispatch<React.SetStateAction<string[]>>;
+	// selectedDefects: string[];
+	// setSelectedDefects: React.Dispatch<React.SetStateAction<string[]>>;
 	// isSelected: (id: string) => boolean;
 	// selectDefect: (id: string) => void;
 	// selectAllDefects: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,6 +20,8 @@ interface DefectContextType {
 	setSelectedDefect: React.Dispatch<
 		React.SetStateAction<IFullDefect | undefined>
 	>;
+	loadingData: boolean;
+	setLoadingData: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DefectContext = createContext<DefectContextType | undefined>(undefined);
@@ -40,12 +42,12 @@ export function DefectContextProvider({
 	children: React.ReactNode;
 }) {
 	const [defects, setDefects] = useState<IFullDefect[]>([]);
-	const [selectedDefects, setSelectedDefects] = useState<string[]>([]);
+	// const [selectedDefects, setSelectedDefects] = useState<string[]>([]);
 	const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
 	const [selectedDefect, setSelectedDefect] = useState<IFullDefect | undefined>(
 		undefined,
 	);
-
+	const [loadingData, setLoadingData] = useState<boolean>(false);
 	// const isSelected = (id: string): boolean => {
 	// 	return selectedDefects.includes(id);
 	// };
@@ -102,8 +104,8 @@ export function DefectContextProvider({
 	const value: DefectContextType = {
 		defects,
 		setDefects,
-		selectedDefects: selectedDefects,
-		setSelectedDefects: setSelectedDefects,
+		// selectedDefects: selectedDefects,
+		// setSelectedDefects: setSelectedDefects,
 		// isSelected,
 		// selectDefect,
 		// selectAllDefects,
@@ -114,6 +116,8 @@ export function DefectContextProvider({
 		formatLocation,
 		selectedDefect,
 		setSelectedDefect,
+		loadingData,
+		setLoadingData,
 	};
 
 	return (

@@ -65,7 +65,7 @@ export interface IDefectAdd {
 }
 
 export interface IDefectsPerBuilding {
-	defect_count: number ;
+	defect_count: number;
 	building_id?: number;
 	building_name?: string;
 }

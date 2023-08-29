@@ -27,7 +27,7 @@ const Admin = async () => {
 	const verified = await authUser([
 		RoleEnum.ADMIN,
 		RoleEnum.MANAGER,
-		RoleEnum.REDITEL,
+		// RoleEnum.REDITEL,
 	]);
 	if (!verified) {
 		redirect('/');
