@@ -22,11 +22,11 @@ const Defects = async () => {
 	}
 
 	return (
-		<UserContextProvider>
+		// <UserContextProvider>
 			<DefectContextProvider>
 				<DefectsPage user={user} />
 			</DefectContextProvider>
-		</UserContextProvider>
+		// </UserContextProvider>
 	);
 };
 

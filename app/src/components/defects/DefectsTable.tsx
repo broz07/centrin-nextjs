@@ -338,7 +338,9 @@ const DefectsTable: React.FC = () => {
 															arrow
 															placement="left"
 														>
-															<IconButton>
+															<IconButton
+																href={`/defect?id=${defect.id}`}
+															>
 																<ArrowForwardIosIcon />
 															</IconButton>
 														</Tooltip>

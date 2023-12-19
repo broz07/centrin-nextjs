@@ -22,11 +22,11 @@ const DefectHistory = async () => {
 	}
 
 	return (
-		<UserContextProvider>
+		// <UserContextProvider>
 			<DefectContextProvider>
 				<DefectHistoryPage user={user} />
 			</DefectContextProvider>
-		</UserContextProvider>
+		// </UserContextProvider>
 	);
 };
 
