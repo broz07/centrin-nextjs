@@ -50,6 +50,7 @@ import { LoadingButton } from '@mui/lab';
 import PongLoader from '@centrin/components/loaders/PongLoader';
 import styles from '@centrin/styles/workplans/workplans.module.scss';
 
+
 interface Props {
 	open: boolean;
 	close: () => void;
@@ -109,14 +110,13 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 		setSelectedDefects([]);
 	};
 
-	const closeDialog = () => {
+	const resetDialog = () => {
 		refresh();
 		setLoadingButton(false);
 		setLoadingData(false);
 		resetSelected();
 		setAvailableDefects([]);
-		close();
-	};
+	}
 
 	useEffect(() => {
 		if (!open) return;
@@ -131,7 +131,8 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 					NotificationPosition.BR,
 					3000,
 				);
-				closeDialog();
+				resetDialog();
+				close();
 			} else {
 				setAvailableDefects(fetchedDefects);
 			}
@@ -172,16 +173,17 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 				3000,
 			);
 		}
-
-		closeDialog();
+		resetDialog();
+		close();
 	};
 
 	return (
 		<Dialog
 			open={open}
-			onClose={closeDialog}
+			onClose={resetDialog}
 			fullScreen
 			TransitionComponent={Transition}
+			closeAfterTransition
 		>
 			<AppBar
 				sx={{
@@ -193,7 +195,7 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 					<IconButton
 						edge="start"
 						color="inherit"
-						onClick={closeDialog}
+						onClick={close}
 						aria-label="close"
 					>
 						<CloseIcon />
