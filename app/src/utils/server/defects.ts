@@ -1,6 +1,7 @@
 'use server';
 import {
 	IDefectAdd,
+	IDefectCount,
 	IDefectsPerBuilding,
 	IFullDefect,
 	ISeverity,
@@ -553,3 +554,65 @@ export const getAvailableUsers = async (): Promise<IUser[] | false> => {
 		return false;
 	}
 };
+
+export const getDefectCounts = async (): Promise<IDefectCount[] | false> => {
+	try {
+		const counts:IDefectCount[] = []
+		const client = await pool.connect();
+
+		let query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 1`
+
+		let result = await client.query(query);
+
+		let data = result.rows;
+
+		counts.push({
+			state: 'Nové',
+			count: parseInt(data[0].count),
+			color: 'rgba(75, 192, 192, 1)'
+		})
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id IN (3,7)`
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'Odložené',
+			count: parseInt(data[0].count),
+			color: 'rgba(54, 162, 235, 1)'
+		})
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id IN (4,5,6,8)`
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'Uzavřené',
+			count: parseInt(data[0].count),
+			color: 'rgba(255, 99, 132, 1)'
+		})
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 2`
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'V řešení',
+			count: parseInt(data[0].count),
+			color: 'rgba(255, 206, 86, 1)'
+		})
+
+		client.release();
+
+		return counts
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}

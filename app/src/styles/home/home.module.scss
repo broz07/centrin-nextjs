@@ -1,0 +1,28 @@
+@import '../variables';
+
+.header {
+	display: flex;
+	align-items: center;
+
+	h1 {
+		margin: 0;
+	}
+}
+
+.defaultContent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.adminContent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}

@@ -21,6 +21,8 @@ const LocalitySelect: React.FC = () => {
 					width: '30%',
 					height: '100%',
 					border: locality === 'outdoor' ? '3px solid #211B6C' : '',
+					userSelect: 'none',
+					cursor: 'pointer',
 				}}
 				onClick={() => setLocality('outdoor')}
 				// variant='outlined'
@@ -44,6 +46,8 @@ const LocalitySelect: React.FC = () => {
 					width: '30%',
 					height: '100%',
 					border: locality === 'indoor' ? '3px solid #211B6C' : '',
+					userSelect: 'none',
+					cursor: 'pointer',
 				}}
 				onClick={() => setLocality('indoor')}
 			>

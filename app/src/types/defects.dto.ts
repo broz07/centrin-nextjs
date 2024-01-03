@@ -69,3 +69,9 @@ export interface IDefectsPerBuilding {
 	building_id?: number;
 	building_name?: string;
 }
+
+export interface IDefectCount {
+	state: string;
+	count: number;
+	color: string;
+}
