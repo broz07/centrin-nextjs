@@ -15,7 +15,7 @@ const AdminHeader: React.FC<Props> = () => {
 	const { contentType, setContentType } = useAdminPageContext();
 
 	return (
-		<header className={styles.headerWrapper}>
+		<div className={styles.headerWrapper}>
 			<div className={styles.headerGroup}>
 				<h1>Admin Panel</h1>
 				<span>{contentType.description}</span>
@@ -36,7 +36,7 @@ const AdminHeader: React.FC<Props> = () => {
 					</Button>
 				</ButtonGroup>
 			</div>
-		</header>
+		</div>
 	);
 };
 
