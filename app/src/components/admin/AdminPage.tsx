@@ -16,12 +16,12 @@ interface Props {
 }
 
 const AdminPage: React.FC<Props> = ({ user }) => {
-	const { setUser } = useUserContext();
+	// const { setUser } = useUserContext();
 	const { contentType } = useAdminPageContext();
 
-	useEffect(() => {
-		setUser(user);
-	}, [setUser, user]);
+	// useEffect(() => {
+	// 	setUser(user);
+	// }, [setUser, user]);
 
 	const renderContent = () => {
 		switch (contentType.content) {

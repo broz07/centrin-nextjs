@@ -6,7 +6,7 @@ interface Props {}
 
 const DefectAddHeader: React.FC<Props> = () => {
 	return (
-		<header className={styles.headerWrapper}>
+		<div className={styles.headerWrapper}>
 			<div className={styles.headerGroup}>
 				<h1>Správa závad</h1>
 				<span>Založení nového záznamu</span>
@@ -16,7 +16,7 @@ const DefectAddHeader: React.FC<Props> = () => {
 					+ Nová závada
 				</Button> */}
 			</div>
-		</header>
+		</div>
 	);
 };
 
