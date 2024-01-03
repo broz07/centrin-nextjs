@@ -33,9 +33,9 @@ const Workplans = async () => {
 
 	return (
 		// <UserContextProvider>
-			<WorkplanContextProvider>
-				<WorkplanPage user={user} />
-			</WorkplanContextProvider>
+		<WorkplanContextProvider>
+			<WorkplanPage user={user} />
+		</WorkplanContextProvider>
 		// </UserContextProvider>
 	);
 };

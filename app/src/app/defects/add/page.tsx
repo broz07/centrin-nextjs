@@ -23,9 +23,9 @@ const DefectAdd = async () => {
 
 	return (
 		// <UserContextProvider>
-			<DefectAddContextProvider>
-				<DefectAddPage user={user} />
-			</DefectAddContextProvider>
+		<DefectAddContextProvider>
+			<DefectAddPage user={user} />
+		</DefectAddContextProvider>
 		// </UserContextProvider>
 	);
 };

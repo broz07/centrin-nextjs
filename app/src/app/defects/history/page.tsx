@@ -23,9 +23,9 @@ const DefectHistory = async () => {
 
 	return (
 		// <UserContextProvider>
-			<DefectContextProvider>
-				<DefectHistoryPage user={user} />
-			</DefectContextProvider>
+		<DefectContextProvider>
+			<DefectHistoryPage user={user} />
+		</DefectContextProvider>
 		// </UserContextProvider>
 	);
 };

@@ -50,7 +50,6 @@ import { LoadingButton } from '@mui/lab';
 import PongLoader from '@centrin/components/loaders/PongLoader';
 import styles from '@centrin/styles/workplans/workplans.module.scss';
 
-
 interface Props {
 	open: boolean;
 	close: () => void;
@@ -116,7 +115,7 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 		setLoadingData(false);
 		resetSelected();
 		setAvailableDefects([]);
-	}
+	};
 
 	useEffect(() => {
 		if (!open) return;

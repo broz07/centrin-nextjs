@@ -22,9 +22,7 @@ export default function RootLayout({
 		// <html lang="cs" className={poppins.className}>
 		<html lang="cs">
 			<body>
-				<UserContextProvider>
-					{children}
-				</UserContextProvider>
+				<UserContextProvider>{children}</UserContextProvider>
 				<ToastContainer />
 			</body>
 		</html>
