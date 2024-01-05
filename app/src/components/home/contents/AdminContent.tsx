@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import DefectChart from './panels/DefectChart';
 import BuildingsChart from './panels/BuildingsChart';
 import WeeksChart from './panels/WeeksChart';
+import MaintainersChart from './panels/MaintainersChart';
 
 const AdminContent: React.FC = () => {
 	return (
@@ -56,7 +57,7 @@ const AdminContent: React.FC = () => {
 						// border:"1px solid red"
 					}}
 				>
-					naplneni tydenniho planu
+					<MaintainersChart />
 				</Box>
 				<Box
 					sx={{

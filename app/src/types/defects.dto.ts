@@ -1,5 +1,6 @@
 import { IndoorLocationType } from '@centrin/contexts/DefectPage/DefectAddContext';
 import { ICorridor, IOutdoorLocation, IRoom } from './locations.dto';
+import { IUser } from './users.dto';
 
 export enum SeverityEnum {
 	UNCLASSIFIED = 1,
@@ -81,4 +82,12 @@ export interface IDefectsPerWeek {
 	year: number;
 	count: number;
 	severity: SeverityEnum;
+}
+
+export interface IDefectsPerMaintainer {
+	maintainer: IUser;
+	solved: number;
+	assigned: number;
+	irreparable: number;
+	deferred: number;
 }

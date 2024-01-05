@@ -1,4 +1,4 @@
-import { SeverityEnum } from "@centrin/types/defects.dto";
+import { SeverityEnum } from '@centrin/types/defects.dto';
 
 export const randomRGB = (): string => {
 	const r = Math.floor(Math.random() * 256);
@@ -7,6 +7,14 @@ export const randomRGB = (): string => {
 
 	return `rgb(${r}, ${g}, ${b})`;
 };
+
+export const makeRGBTransparent = (rgb: string, opacity: number): string => {
+	return rgb.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
+}
+
+export const makeRGBATransparent = (rgba: string, opacity: number): string => {
+	return rgba.replace(/[^,]+(?=\))/, opacity.toString());
+}
 
 export const chartPallette = [
 	'rgb(255, 99, 132)',
@@ -33,4 +41,4 @@ export const getSeverityColor = (severity: SeverityEnum): string => {
 		default:
 			return 'rgb(201, 203, 207)';
 	}
-}
+};

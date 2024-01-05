@@ -202,3 +202,35 @@ export const findUser = async (id: number): Promise<IUser | false> => {
 		return false;
 	}
 };
+
+export const getMaintenanceUsers = async (): Promise<IUser[] | false> => {
+	try {
+		const client = await pool.connect();
+		const query = `SELECT users.id AS id, users.name AS name, users.surname AS surname, users.username AS username, users.email AS email, users.role_id AS role_id, roles.name AS role_name, roles.description AS role_desc FROM centrin.users AS users JOIN centrin.roles AS roles ON users.role_id=roles.id WHERE users.role_id in (4,8)`;
+
+		const result = await client.query<IQueryUser>(query);
+		const data = result.rows;
+		client.release();
+
+		const users: IUser[] = data.map((user) => {
+			return {
+				id: user.id,
+				name: user.name,
+				surname: user.surname,
+				username: user.username,
+				email: user.email,
+				displayName: `${user.name} ${user.surname}`,
+				role: {
+					id: user.role_id,
+					name: user.role_name,
+					description: user.role_desc,
+				},
+			};
+		});
+
+		return users;
+	} catch (error) {
+		console.error(error);
+		return false;
+	}
+};

@@ -33,7 +33,7 @@ export const getWeekNumber = (date: Date) => {
 export const getYear = (date: Date) => {
 	const luxonDate = DateTime.fromJSDate(date);
 	return luxonDate.year;
-}
+};
 
 export const formatWeekPick = (date: Date) => {
 	const weekEnd = new Date(date);

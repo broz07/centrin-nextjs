@@ -17,6 +17,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title);
 import { Pie } from 'react-chartjs-2';
 import { IDefectsPerState } from '@centrin/types/defects.dto';
 import { getDefectCounts } from '@centrin/utils/server/defects';
+import { makeRGBATransparent } from '@centrin/utils/colors';
 
 const DefectChart: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +41,7 @@ const DefectChart: React.FC = () => {
 			{
 				label: 'Počet závad',
 				data: chartData.map((item) => item.count),
-				backgroundColor: chartData.map((item) => item.color),
+				backgroundColor: chartData.map((item) => makeRGBATransparent(item.color, 0.7)),
 				borderColor: chartData.map((item) => item.color),
 				borderWidth: 1,
 			},

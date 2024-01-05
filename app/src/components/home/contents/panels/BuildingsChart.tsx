@@ -29,6 +29,7 @@ ChartJS.register(
 );
 
 import { Bar } from 'react-chartjs-2';
+import { makeRGBTransparent } from '@centrin/utils/colors';
 
 const BuildingsChart: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +53,7 @@ const BuildingsChart: React.FC = () => {
 			{
 				label: 'Počet závad',
 				data: chartData.map((item) => item.count),
-				backgroundColor: chartData.map((item) => item.color),
+				backgroundColor: chartData.map((item) => makeRGBTransparent(item.color, 0.7)),
 				borderColor: chartData.map((item) => item.color),
 				borderWidth: 1,
 			},
