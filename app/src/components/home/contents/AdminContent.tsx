@@ -4,6 +4,7 @@ import DefectChart from './panels/DefectChart';
 import BuildingsChart from './panels/BuildingsChart';
 import WeeksChart from './panels/WeeksChart';
 import MaintainersChart from './panels/MaintainersChart';
+import WorkplanChart from './panels/WorkplanChart';
 
 const AdminContent: React.FC = () => {
 	return (
@@ -67,7 +68,7 @@ const AdminContent: React.FC = () => {
 						// border:"1px solid red"
 					}}
 				>
-					vykon zamestnancu
+                    <WorkplanChart />
 				</Box>
 				<Box
 					sx={{

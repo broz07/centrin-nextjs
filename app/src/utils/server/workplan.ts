@@ -1,8 +1,9 @@
 'use server';
 
-import { IWorkplanDefect, IWorkplanSelect } from '@centrin/types/workplans.dto';
+import { IWorkplanDefect, IWorkplanSelect, IWorkplanStats } from '@centrin/types/workplans.dto';
 import pool from './db';
 import { IFullDefect } from '@centrin/types/defects.dto';
+import { getWorkplanSelect } from '../workplan';
 
 export const getWorkplanDefects = async (
 	workplan: IWorkplanSelect,
@@ -207,3 +208,33 @@ export const removeDefectFromWorkplan = async (
 		return false;
 	}
 };
+
+export const getWorkplanStats = async (year?: number, week?: number): Promise<IWorkplanStats | false> => {
+	if(!year || !week) {
+		const currentWorkplan = getWorkplanSelect(new Date());
+		if(!currentWorkplan) return false;
+		year = currentWorkplan.year;
+		week = currentWorkplan.week;
+	}
+	try {
+		const client = await pool.connect();
+
+		const query = `SELECT COUNT(*) FILTER (WHERE solved=true) AS solved, COUNT(*) FILTER (WHERE solved=false) AS unsolved FROM centrin.all_workplans_joined WHERE workplan_year=${year} AND workplan_week=${week};`;
+
+		const result = await client.query<IWorkplanStats>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const stats: IWorkplanStats = {
+			solved: data[0].solved,
+			unsolved: data[0].unsolved,
+		};
+
+		return stats;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
