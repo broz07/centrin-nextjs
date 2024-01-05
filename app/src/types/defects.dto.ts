@@ -75,3 +75,10 @@ export interface IDefectsPerState {
 	count: number;
 	color: string;
 }
+
+export interface IDefectsPerWeek {
+	week: number;
+	year: number;
+	count: number;
+	severity: SeverityEnum;
+}

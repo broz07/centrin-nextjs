@@ -30,6 +30,11 @@ export const getWeekNumber = (date: Date) => {
 	return luxonDate.weekNumber;
 };
 
+export const getYear = (date: Date) => {
+	const luxonDate = DateTime.fromJSDate(date);
+	return luxonDate.year;
+}
+
 export const formatWeekPick = (date: Date) => {
 	const weekEnd = new Date(date);
 	weekEnd.setDate(weekEnd.getDate() + 6);
