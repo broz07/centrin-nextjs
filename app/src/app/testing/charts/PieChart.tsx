@@ -20,12 +20,12 @@ interface PieChartProps {
 
 const PieChart: React.FC<PieChartProps> = ({ data }) => {
 	const categories = data.map((item) => {
-		if (item.building_name) return item.building_name;
+		if (item.building) return item.building;
 		return 'Venkovní prostory';
 	});
 
 	const chartData = data.map((item) => {
-		return item.defect_count;
+		return item.count;
 	});
 	const pieChartData: ChartData<'pie'> = {
 		labels: categories,

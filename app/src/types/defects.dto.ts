@@ -65,12 +65,12 @@ export interface IDefectAdd {
 }
 
 export interface IDefectsPerBuilding {
-	defect_count: number;
-	building_id?: number;
-	building_name?: string;
+	count: number;
+	building: string;
+	color: string;
 }
 
-export interface IDefectCount {
+export interface IDefectsPerState {
 	state: string;
 	count: number;
 	color: string;

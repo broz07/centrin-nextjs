@@ -1,6 +1,7 @@
 import styles from '@centrin/styles/home/home.module.scss';
 import { Box, Grid } from '@mui/material';
 import DefectChart from './panels/DefectChart';
+import BuildingsChart from './panels/BuildingsChart';
 
 
 const AdminContent: React.FC = () => {
@@ -35,7 +36,7 @@ const AdminContent: React.FC = () => {
                         // border:"1px solid red"
                     }}
                 >
-                    user login log
+                    Závady v čase
                 </Box>
                 <Box
                     sx={{
@@ -45,7 +46,7 @@ const AdminContent: React.FC = () => {
                         // border:"1px solid red"
                     }}
                 >
-                    poruchovost budov
+                    <BuildingsChart />
                 </Box>
                 <Box
                     sx={{

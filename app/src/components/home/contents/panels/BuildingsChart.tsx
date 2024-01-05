@@ -1,7 +1,10 @@
 'use client'
 
+import { IDefectsPerBuilding } from "@centrin/types/defects.dto";
+import { getDefectCountPerBuilding } from "@centrin/utils/server/defects";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
+
 import {
 	Chart as ChartJS,
 	ArcElement,
@@ -9,22 +12,23 @@ import {
 	Legend,
 	ChartData,
 	ChartOptions,
-    Title
+    Title,
+    CategoryScale,
+    LinearScale,
+    BarElement
 } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
+ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, BarElement);
 
-import { Pie } from 'react-chartjs-2';
-import { IDefectsPerState} from "@centrin/types/defects.dto";
-import { getDefectCounts } from "@centrin/utils/server/defects";
+import { Bar } from 'react-chartjs-2';
 
-const DefectChart: React.FC = () => {
+const BuildingsChart: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true)
-    const [chartData, setChartData] = useState<IDefectsPerState[]>([])
+    const [chartData, setChartData] = useState<IDefectsPerBuilding[]>([])
 
     useEffect(() => {
         const fetchCounts = async () => {
-            const result = await getDefectCounts()
+            const result = await getDefectCountPerBuilding()
 
             if (result) {
                 setChartData(result)
@@ -34,8 +38,8 @@ const DefectChart: React.FC = () => {
         fetchCounts()
     }, [])
 
-    const pieChartData: ChartData<'pie'> = {
-        labels: chartData.map((item) => item.state),
+    const barChartData: ChartData<'bar'> = {
+        labels: chartData.map((item) => item.building),
         datasets: [
             {
                 label: 'Počet závad',
@@ -47,7 +51,7 @@ const DefectChart: React.FC = () => {
         ],
     }
 
-    const options: ChartOptions<'pie'> = {
+    const options: ChartOptions<'bar'> = {
         responsive: true,
         plugins: {
             legend: {
@@ -57,12 +61,18 @@ const DefectChart: React.FC = () => {
             title: {
                 display: true,
                 position: 'top',
-                text: 'Celkový počet závad',
+                text: 'Počet závad podle budov',
                 font: {
                     size: 20,
                     weight: 'bold'
-                },
+                }
             },
+            
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
         },
 		maintainAspectRatio: false,
     }
@@ -76,9 +86,9 @@ const DefectChart: React.FC = () => {
                 // backgroundColor: 'green'
             }}
         >
-			<Pie options={options} data={pieChartData} redraw />
+			<Bar options={options} data={barChartData} redraw />
         </Box>
     );
 };
 
-export default DefectChart;
+export default BuildingsChart;

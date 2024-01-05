@@ -1,13 +1,14 @@
 'use server';
 import {
 	IDefectAdd,
-	IDefectCount,
+	IDefectsPerState,
 	IDefectsPerBuilding,
 	IFullDefect,
 	ISeverity,
 } from '@centrin/types/defects.dto';
 import pool from './db';
 import { IGetUsersQuery, IUser } from '@centrin/types/users.dto';
+import { chartPallette, randomRGB } from '../utils';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
@@ -477,7 +478,7 @@ export const getDefectCountPerBuilding = async (): Promise<
 > => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT COUNT(id) as defect_count, building_id, building_name FROM centrin.all_defects_joined GROUP BY building_id, building_name ORDER BY building_name`;
+		const query = `SELECT COUNT(id) as defect_count, building_name FROM centrin.all_defects_joined GROUP BY building_name ORDER BY building_name`;
 
 		const result = await client.query<any>(query);
 
@@ -485,11 +486,24 @@ export const getDefectCountPerBuilding = async (): Promise<
 
 		client.release();
 
+		let palletteIndex = 0;
+
 		const defects: IDefectsPerBuilding[] = data.map((defect: any) => {
+
+			if (defect.building_name === null) {
+				return {
+					count: parseInt(defect.defect_count as string),
+					building: 'Venkovní prostory',
+					// color: randomRGB(),
+					color: chartPallette[palletteIndex++],
+				};
+			}
+
 			return {
-				defect_count: parseInt(defect.defect_count as string),
-				building_id: defect.building_id,
-				building_name: defect.building_name,
+				count: parseInt(defect.defect_count as string),
+				building: defect.building_name,
+				// color: randomRGB(),
+				color: chartPallette[palletteIndex++],
 			};
 		});
 
@@ -555,9 +569,9 @@ export const getAvailableUsers = async (): Promise<IUser[] | false> => {
 	}
 };
 
-export const getDefectCounts = async (): Promise<IDefectCount[] | false> => {
+export const getDefectCounts = async (): Promise<IDefectsPerState[] | false> => {
 	try {
-		const counts:IDefectCount[] = []
+		const counts:IDefectsPerState[] = []
 		const client = await pool.connect();
 
 		let query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 1`
