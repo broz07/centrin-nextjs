@@ -41,7 +41,9 @@ const DefectChart: React.FC = () => {
 			{
 				label: 'Počet závad',
 				data: chartData.map((item) => item.count),
-				backgroundColor: chartData.map((item) => makeRGBATransparent(item.color, 0.7)),
+				backgroundColor: chartData.map((item) =>
+					makeRGBATransparent(item.color, 0.7),
+				),
 				borderColor: chartData.map((item) => item.color),
 				borderWidth: 1,
 			},
@@ -59,6 +61,7 @@ const DefectChart: React.FC = () => {
 				display: true,
 				position: 'top',
 				text: 'Celkový počet závad',
+				color: '#6e6e6e',
 				font: {
 					size: 20,
 					weight: 'bold',

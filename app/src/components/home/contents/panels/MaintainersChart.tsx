@@ -13,15 +13,23 @@ import {
 	ChartOptions,
 	Title,
 	RadialLinearScale,
-    RadarController,
-    Filler
+	RadarController,
+	Filler,
 } from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title, RadialLinearScale, RadarController, Filler);
+ChartJS.register(
+	ArcElement,
+	Tooltip,
+	Legend,
+	Title,
+	RadialLinearScale,
+	RadarController,
+	Filler,
+);
 
 import { Radar } from 'react-chartjs-2';
 import { IDefectsPerMaintainer } from '@centrin/types/defects.dto';
-import { chartPallette, makeRGBTransparent, } from '@centrin/utils/colors';
+import { chartPallette, makeRGBTransparent } from '@centrin/utils/colors';
 
 const MaintainersChart: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -39,17 +47,17 @@ const MaintainersChart: React.FC = () => {
 		fetchCounts();
 	}, []);
 
-    let colorIndex = -1
+	let colorIndex = -1;
 
 	const radarChartDatasets: ChartData<'radar'>['datasets'] = chartData.map(
 		(item) => {
-            colorIndex++
+			colorIndex++;
 
 			return {
 				label: item.maintainer.displayName,
 				data: [item.solved, item.assigned, item.irreparable, item.deferred],
 				backgroundColor: makeRGBTransparent(chartPallette[colorIndex], 0.2),
-                fill: true,
+				fill: true,
 				borderColor: chartPallette[colorIndex],
 				pointBackgroundColor: chartPallette[colorIndex],
 				pointBorderColor: '#fff',
@@ -69,13 +77,14 @@ const MaintainersChart: React.FC = () => {
 		plugins: {
 			legend: {
 				display: true,
-                position: 'left',
+				position: 'left',
 			},
 			title: {
 				display: true,
 				position: 'top',
 				text: 'Výkonnost podřízených',
-                font: {
+				color: '#6e6e6e',
+				font: {
 					size: 20,
 					weight: 'bold',
 				},
@@ -86,9 +95,9 @@ const MaintainersChart: React.FC = () => {
 				angleLines: {
 					display: false,
 				},
-                ticks:{
-                    stepSize: 1
-                }
+				ticks: {
+					stepSize: 1,
+				},
 			},
 		},
 		maintainAspectRatio: false,

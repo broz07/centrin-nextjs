@@ -53,7 +53,9 @@ const BuildingsChart: React.FC = () => {
 			{
 				label: 'Počet závad',
 				data: chartData.map((item) => item.count),
-				backgroundColor: chartData.map((item) => makeRGBTransparent(item.color, 0.7)),
+				backgroundColor: chartData.map((item) =>
+					makeRGBTransparent(item.color, 0.7),
+				),
 				borderColor: chartData.map((item) => item.color),
 				borderWidth: 1,
 			},
@@ -71,6 +73,7 @@ const BuildingsChart: React.FC = () => {
 				display: true,
 				position: 'top',
 				text: 'Počet závad podle budov',
+				color: '#6e6e6e',
 				font: {
 					size: 20,
 					weight: 'bold',

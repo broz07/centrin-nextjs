@@ -76,6 +76,7 @@ const WeeksChart: React.FC = () => {
 				display: true,
 				position: 'top',
 				text: 'Počet závad za posledních 10 týdnů',
+				color: '#6e6e6e',
 				font: {
 					size: 20,
 					weight: 'bold',

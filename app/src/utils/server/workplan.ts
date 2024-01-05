@@ -1,6 +1,10 @@
 'use server';
 
-import { IWorkplanDefect, IWorkplanSelect, IWorkplanStats } from '@centrin/types/workplans.dto';
+import {
+	IWorkplanDefect,
+	IWorkplanSelect,
+	IWorkplanStats,
+} from '@centrin/types/workplans.dto';
 import pool from './db';
 import { IFullDefect } from '@centrin/types/defects.dto';
 import { getWorkplanSelect } from '../workplan';
@@ -209,10 +213,13 @@ export const removeDefectFromWorkplan = async (
 	}
 };
 
-export const getWorkplanStats = async (year?: number, week?: number): Promise<IWorkplanStats | false> => {
-	if(!year || !week) {
+export const getWorkplanStats = async (
+	year?: number,
+	week?: number,
+): Promise<IWorkplanStats | false> => {
+	if (!year || !week) {
 		const currentWorkplan = getWorkplanSelect(new Date());
-		if(!currentWorkplan) return false;
+		if (!currentWorkplan) return false;
 		year = currentWorkplan.year;
 		week = currentWorkplan.week;
 	}
@@ -237,4 +244,4 @@ export const getWorkplanStats = async (year?: number, week?: number): Promise<IW
 		console.log(error);
 		return false;
 	}
-}
+};

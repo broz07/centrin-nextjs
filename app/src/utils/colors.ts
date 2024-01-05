@@ -10,11 +10,11 @@ export const randomRGB = (): string => {
 
 export const makeRGBTransparent = (rgb: string, opacity: number): string => {
 	return rgb.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
-}
+};
 
 export const makeRGBATransparent = (rgba: string, opacity: number): string => {
 	return rgba.replace(/[^,]+(?=\))/, opacity.toString());
-}
+};
 
 export const chartPallette = [
 	'rgb(255, 99, 132)',
