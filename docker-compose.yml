@@ -27,6 +27,49 @@ services:
       dockerfile: backup.dockerfile
       args:
         - userName=centrin
+    environment:
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=root
+      - PG_DB=postgres
+      - PG_PORT=5432
+      - INIT=false
+    depends_on:
+      - postgres
+    volumes:
+      - ./backups:/app/backups
+  
+  init:
+    build: 
+      context: ./scripts
+      dockerfile: restore.dockerfile
+      args:
+        - userName=centrin
+    environment:
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=root
+      - PG_DB=postgres
+      - PG_PORT=5432
+      - INIT=true
+    depends_on:
+      - postgres
+    volumes:
+      - ./backups:/app/backups
+
+  restore: 
+    build: 
+      context: ./scripts
+      dockerfile: restore.dockerfile
+      args:
+        - userName=centrin
+    environment:
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=root
+      - PG_DB=postgres
+      - PG_PORT=5432
+      - INIT=false
     depends_on:
       - postgres
     volumes:

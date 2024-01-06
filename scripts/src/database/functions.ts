@@ -3,6 +3,12 @@ import { PG_CONFIG } from './setup'
 import { exec } from 'child_process'
 import { promises as fs } from 'fs'
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const maxRetries = 6
+let currentRetries = 0
+
 const fileExists = async (filename: string): Promise<boolean> => {
 	try {
 		await fs.access(filename)
@@ -24,10 +30,37 @@ export const doBackup = async () => {
 	const plainBackupFileName = './backups/backup.sql'
 
 	const renameOldBackupCommand = `mv ${backupFileName} ${backupFileName}.old && mv ${plainBackupFileName} ${plainBackupFileName}.old`
+	const renameOldBackupCommand2 = `mv ${backupFileName}.old ${backupFileName}.old2 && mv ${plainBackupFileName}.old ${plainBackupFileName}.old2`
+
+
 
 	const pgDumpCommand = `PGPASSWORD=${PG_CONFIG.password} pg_dump -h ${PG_CONFIG.host} -U ${PG_CONFIG.user} -d ${PG_CONFIG.database} --format=plain -f ${plainBackupFileName} && PGPASSWORD=${PG_CONFIG.password} pg_dump -h ${PG_CONFIG.host} -U ${PG_CONFIG.user} -d ${PG_CONFIG.database} -Fc -f ${backupFileName}`
 
 	try {
+		if (
+			(await fileExists(`${backupFileName}.old`)) &&
+			(await fileExists(`${plainBackupFileName}.old`))
+		) {
+			await new Promise((resolve, reject) => {
+				exec(renameOldBackupCommand2, (error, stdout, stderr) => {
+					if (error) {
+						console.error(`Error during backup: ${error.message}`)
+						reject(error)
+						return
+					}
+
+					if (stderr) {
+						console.error(`Error during backup: ${stderr}`)
+						reject(stderr)
+						return
+					}
+
+					console.log('Old backup renamed')
+					resolve(stdout)
+				})
+			})
+		}
+
 		if (
 			(await fileExists(backupFileName)) &&
 			(await fileExists(plainBackupFileName))
@@ -75,19 +108,29 @@ export const doBackup = async () => {
 		// console.log('Disconnected from the database')
 	} catch (error) {
 		console.error(error)
+		currentRetries++
+		if (currentRetries <= maxRetries) {
+			console.log("I'll retry in 5 seconds...")
+			await new Promise((resolve) => setTimeout(resolve, 5000))
+			console.log('Retrying...')
+			await doBackup()
+		} else {
+			console.log('Max retries reached... exiting')
+		}
 	} finally {
 		await PG_CLIENT.end()
 	}
 }
 
-const maxRetries = 3
-let currentRetries = 0
-
 export const doRestore = async () => {
 	const PG_CLIENT = new Client(PG_CONFIG)
 	await PG_CLIENT.connect()
 
-	const backupFileName = './backups/backup.dump'
+	const init = process.env.INIT || 'false'
+	// console.log(`init: ${init}`)
+
+	// const backupFileName = './backups/backup.dump'
+	const backupFileName = `${init === 'true' ? './init/backup.dump' : './backups/backup.dump'}`
 
 	// const psqlRestoreCommand = `PGPASSWORD=${PG_CONFIG.password} psql -h ${PG_CONFIG.host} -U ${PG_CONFIG.user} -f ${backupFileName} `
 	const pgRestoreCommand = `PGPASSWORD=${PG_CONFIG.password} pg_restore -h ${PG_CONFIG.host} -U ${PG_CONFIG.user} -d ${PG_CONFIG.database} --no-acl --no-owner --clean -Fc -j 4 --if-exists ${backupFileName}`
@@ -113,12 +156,16 @@ export const doRestore = async () => {
 			})
 		})
 
+		init === 'true' && await doBackup()
+
 		// Disconnect from the PostgreSQL database
 		// console.log('Disconnected from the database')
 	} catch (error) {
 		console.error(error)
 		currentRetries++
 		if (currentRetries <= maxRetries) {
+			console.log("I'll retry in 5 seconds...")
+			await new Promise((resolve) => setTimeout(resolve, 5000))
 			console.log('Retrying...')
 			await doRestore()
 		} else {

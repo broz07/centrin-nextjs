@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"description": "Script to backup postgres database",
 	"scripts": {
-		"backup": "tsc && node dist/backup.js",
-		"restore": "tsc && node dist/restore.js",
+		"backup": "ts-node src/backup.ts",
+		"restore": "ts-node src/restore.ts",
 		"format": "prettier --check --ignore-path .gitignore .",
 		"pretty": "prettier --write --ignore-path .gitignore ."
 	},
@@ -12,6 +12,7 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
+		"dotenv": "^16.3.1",
 		"node-cron": "^3.0.3",
 		"ts-postgres": "^1.8.0"
 	},
@@ -20,6 +21,7 @@
 		"@types/node-cron": "^3.0.11",
 		"eslint": "^8.54.0",
 		"prettier": "^2.8.8",
+		"ts-node": "^10.9.2",
 		"typescript": "^5.3.2"
 	}
 }
