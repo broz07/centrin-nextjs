@@ -1,8 +1,0 @@
-"id","name","surname","username","email","password","role_id"
-1,Admin,Systému,admin,admin@admin.test,ef42e7432edff886dbe8c161a92dec9530ccb6738271c1d0b0890967dc219920,1
-3,Běžný,Uživatel,user,user@test.foo,"743a25e3896771ed3ebd3cd4b1e673b3aee073dc64b38d72e977fe1c34d1fed7",2
-12,Udržbář,Testovací,udrzbar,"","794002b0a0eb26ea87f7ccf8dc78facae4712fb0de76ee9e02492287a795f587",4
-17,Sestra,Zdravotní,sestra,"","30af210ca5fbef05dbc701e374581d5e0d0fcd598db1635afb9ece557979b876",6
-18,Ředitel,Testovací,reditel,"",da206bf796afb8babf033068758799360df1ade58f7ee8efe168773fe4ec422a,9
-19,Vedoucí,Pracovník,supervisor,"",bb36a6715a585afe48e59a60d48f8161cc3edec455e63959acbfd1035d0df9ba,5
-20,Testovací,Test,test,"","62e4b80ab902189c5ae4a3eab9cba8f26a8e1da5443b34ca698a800437d343de",1
