@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import './global.css';
+import { UserContextProvider } from '@centrin/contexts/UserContext';
 
 // const poppins = Poppins({
 //   weight: ['400', '700'],
@@ -21,7 +22,7 @@ export default function RootLayout({
 		// <html lang="cs" className={poppins.className}>
 		<html lang="cs">
 			<body>
-				{children}
+				<UserContextProvider>{children}</UserContextProvider>
 				<ToastContainer />
 			</body>
 		</html>

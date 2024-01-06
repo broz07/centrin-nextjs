@@ -109,13 +109,12 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 		setSelectedDefects([]);
 	};
 
-	const closeDialog = () => {
+	const resetDialog = () => {
 		refresh();
 		setLoadingButton(false);
 		setLoadingData(false);
 		resetSelected();
 		setAvailableDefects([]);
-		close();
 	};
 
 	useEffect(() => {
@@ -131,7 +130,8 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 					NotificationPosition.BR,
 					3000,
 				);
-				closeDialog();
+				resetDialog();
+				close();
 			} else {
 				setAvailableDefects(fetchedDefects);
 			}
@@ -172,16 +172,17 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 				3000,
 			);
 		}
-
-		closeDialog();
+		resetDialog();
+		close();
 	};
 
 	return (
 		<Dialog
 			open={open}
-			onClose={closeDialog}
+			onClose={resetDialog}
 			fullScreen
 			TransitionComponent={Transition}
+			closeAfterTransition
 		>
 			<AppBar
 				sx={{
@@ -193,7 +194,7 @@ const AddToWorkplanDialog: React.FC<Props> = ({ open, close }) => {
 					<IconButton
 						edge="start"
 						color="inherit"
-						onClick={closeDialog}
+						onClick={close}
 						aria-label="close"
 					>
 						<CloseIcon />

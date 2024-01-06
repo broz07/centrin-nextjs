@@ -34,7 +34,6 @@ import WorkplanMenu from './Menus/WorkplanMenu';
 interface Props {
 	openAddDialog: () => void;
 }
-// TODO udělat menu, které bude mít možnost odebrat závadu - kontextové menu
 const WorkplanTable: React.FC<Props> = ({ openAddDialog }) => {
 	const {
 		selectedWorkplan,

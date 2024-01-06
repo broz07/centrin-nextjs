@@ -14,11 +14,11 @@ interface Props {
 }
 
 const WorkplanPage: React.FC<Props> = ({ user }) => {
-	const { setUser } = useUserContext();
+	// const { setUser } = useUserContext();
 
-	useEffect(() => {
-		setUser(user);
-	}, [setUser, user]);
+	// useEffect(() => {
+	// 	setUser(user);
+	// }, [setUser, user]);
 
 	return (
 		<PageLayout user={user}>

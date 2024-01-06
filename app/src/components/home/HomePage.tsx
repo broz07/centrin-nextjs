@@ -1,7 +1,12 @@
 'use client';
 
-import { IUser } from '@centrin/types/users.dto';
+import { IUser, RoleEnum } from '@centrin/types/users.dto';
 import PageLayout from '@centrin/components/ui/PageLayout';
+import PageHeader from '../ui/PageHeader';
+import PageContent from '../ui/PageContent';
+import HomeHeader from './HomeHeader';
+import DefaultContent from './contents/DefaultContent';
+import AdminContent from './contents/AdminContent';
 
 interface Props {
 	readonly user: IUser;
@@ -10,7 +15,21 @@ interface Props {
 const HomePage: React.FC<Props> = ({ user }) => {
 	return (
 		<PageLayout user={user}>
-			<h1>Home Page</h1>
+			<PageHeader>
+				<HomeHeader />
+			</PageHeader>
+			<PageContent>
+				{user &&
+					[
+						RoleEnum.USER,
+						RoleEnum.KUCHAR,
+						RoleEnum.PECOVATEL,
+						RoleEnum.SESTRA,
+					].includes(user.role.id) && <DefaultContent />}
+				{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && (
+					<AdminContent />
+				)}
+			</PageContent>
 		</PageLayout>
 	);
 };

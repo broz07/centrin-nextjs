@@ -200,7 +200,7 @@ const DefectsTable: React.FC = () => {
 										<TableCell>Zapsal(a)</TableCell>
 										<TableCell>Řeší</TableCell>
 										{isHistory && <TableCell>Uzavřel(a)</TableCell>}
-										<TableCell></TableCell>
+										{/* <TableCell></TableCell> */}
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -331,18 +331,18 @@ const DefectsTable: React.FC = () => {
 															}`}
 														</TableCell>
 													)}
-													<TableCell>
+													{/* <TableCell>
 														<Tooltip
 															title="Zobrazit detail závady"
 															disableInteractive
 															arrow
 															placement="left"
 														>
-															<IconButton>
+															<IconButton href={`/defect/${defect.id}`}>
 																<ArrowForwardIosIcon />
 															</IconButton>
 														</Tooltip>
-													</TableCell>
+													</TableCell> */}
 												</TableRow>
 											);
 										})}

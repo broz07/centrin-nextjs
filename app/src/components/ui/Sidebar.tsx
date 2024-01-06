@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { IUser, RoleEnum } from '@centrin/types/users.dto';
 import { removeToken } from '@centrin/utils/client/cookies';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ interface Props {
 
 const Sidebar: React.FC<Props> = ({ user }) => {
 	const router = useRouter();
-	const [avatar, setAvatar] = useState<string | undefined>(undefined);
+	// const [avatar, setAvatar] = useState<string | undefined>(undefined);
 
 	const handleLogout = () => {
 		removeToken();
@@ -60,13 +60,7 @@ const Sidebar: React.FC<Props> = ({ user }) => {
 			<div className={`${styles.sidebarInner}`}>
 				<header className={`${styles.sidebarHeader}`}>
 					<button className={`${styles.sidebarBurger}`} onClick={toggleOpen} />
-					<Image
-						src="/assets/app-logo.svg"
-						alt="Cetrin Logo"
-						className={`${styles.sidebarLogo}`}
-						height={20}
-						width={20}
-					/>
+					<span style={{ color: '#f9f9f9' }}>IS CENTRIN</span>
 				</header>
 				<nav className={`${styles.sidebarNav}`}>
 					<Link href="/">

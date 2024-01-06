@@ -1,12 +1,18 @@
 'use server';
 import {
 	IDefectAdd,
+	IDefectsPerState,
 	IDefectsPerBuilding,
 	IFullDefect,
 	ISeverity,
+	IDefectsPerWeek,
+	IDefectsPerMaintainer,
 } from '@centrin/types/defects.dto';
 import pool from './db';
 import { IGetUsersQuery, IUser } from '@centrin/types/users.dto';
+import { chartPallette, randomRGB } from '../colors';
+import { getWeekNumber, getYear } from '../workplan';
+import { getMaintenanceUsers } from './users';
 
 export const getAllDefects = async (): Promise<IFullDefect[] | false> => {
 	try {
@@ -476,7 +482,7 @@ export const getDefectCountPerBuilding = async (): Promise<
 > => {
 	try {
 		const client = await pool.connect();
-		const query = `SELECT COUNT(id) as defect_count, building_id, building_name FROM centrin.all_defects_joined GROUP BY building_id, building_name ORDER BY building_name`;
+		const query = `SELECT COUNT(id) as defect_count, building_name FROM centrin.all_defects_joined GROUP BY building_name ORDER BY building_name`;
 
 		const result = await client.query<any>(query);
 
@@ -484,11 +490,23 @@ export const getDefectCountPerBuilding = async (): Promise<
 
 		client.release();
 
+		let palletteIndex = 0;
+
 		const defects: IDefectsPerBuilding[] = data.map((defect: any) => {
+			if (defect.building_name === null) {
+				return {
+					count: parseInt(defect.defect_count as string),
+					building: 'Venkovní prostory',
+					// color: randomRGB(),
+					color: chartPallette[palletteIndex++],
+				};
+			}
+
 			return {
-				defect_count: parseInt(defect.defect_count as string),
-				building_id: defect.building_id,
-				building_name: defect.building_name,
+				count: parseInt(defect.defect_count as string),
+				building: defect.building_name,
+				// color: randomRGB(),
+				color: chartPallette[palletteIndex++],
 			};
 		});
 
@@ -548,6 +566,182 @@ export const getAvailableUsers = async (): Promise<IUser[] | false> => {
 		});
 
 		return users;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const getDefectCounts = async (): Promise<
+	IDefectsPerState[] | false
+> => {
+	try {
+		const counts: IDefectsPerState[] = [];
+		const client = await pool.connect();
+
+		let query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 1`;
+
+		let result = await client.query(query);
+
+		let data = result.rows;
+
+		counts.push({
+			state: 'Nové',
+			count: parseInt(data[0].count),
+			color: 'rgba(75, 192, 192, 1)',
+		});
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id IN (3,7)`;
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'Odložené',
+			count: parseInt(data[0].count),
+			color: 'rgba(54, 162, 235, 1)',
+		});
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id IN (5,6,8)`;
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'Uzavřené',
+			count: parseInt(data[0].count),
+			color: 'rgba(255, 99, 132, 1)',
+		});
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 4`;
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'Neopravitelné',
+			count: parseInt(data[0].count),
+			color: 'rgba(0,0,0, 1)',
+		});
+
+		query = `SELECT COUNT(id) AS count FROM centrin.defects WHERE defects.state_id = 2`;
+
+		result = await client.query(query);
+
+		data = result.rows;
+
+		counts.push({
+			state: 'V řešení',
+			count: parseInt(data[0].count),
+			color: 'rgba(255, 206, 86, 1)',
+		});
+
+		client.release();
+
+		return counts;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+export const getDefectsOverTime = async (
+	numOfWeeks: number,
+): Promise<IDefectsPerWeek[] | false> => {
+	try {
+		const client = await pool.connect();
+		// const query = `WITH date_series AS ( SELECT generate_series( date_trunc('week', current_date - interval '9 weeks'), date_trunc('week', current_date), '1 week'::interval)::date AS week_start) SELECT ds.week_start, COUNT(d.start_time) AS record_count FROM date_series ds LEFT JOIN centrin.defects d ON date_trunc('week', d.start_time) = ds.week_start GROUP BY ds.week_start ORDER BY ds.week_start;`;
+		const query = `WITH date_series AS ( SELECT generate_series( date_trunc('week', current_date - interval '${
+			numOfWeeks - 1
+		} weeks}'), date_trunc('week', current_date), '1 week'::interval )::date AS week_start) SELECT ds.week_start, s.id AS severity_id, COUNT(d.start_time) AS record_count FROM date_series ds CROSS JOIN centrin.severity s LEFT JOIN centrin.defects d ON date_trunc('week', d.start_time) = ds.week_start AND s.id = d.severity_id GROUP BY ds.week_start, s.id ORDER BY ds.week_start, s.id;`;
+
+		const result = await client.query<any>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const defects: IDefectsPerWeek[] = data.map((defect: any) => {
+			return {
+				count: parseInt(defect.record_count as string),
+				week: getWeekNumber(defect.week_start),
+				year: getYear(defect.week_start),
+				severity: defect.severity_id,
+			};
+		});
+
+		return defects;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};
+
+interface IDefectQuery {
+	solved: boolean;
+	assigned_to?: number;
+	solved_by?: number;
+	state_id: number;
+}
+
+export const getDefectsPerMaintainer = async (): Promise<
+	IDefectsPerMaintainer[] | false
+> => {
+	try {
+		const users = await getMaintenanceUsers();
+
+		if (!users) {
+			return false;
+		}
+
+		const userIds = users.map((user) => user.id);
+
+		const client = await pool.connect();
+
+		const query = `SELECT solved, assigned_to, solved_by, state_id from centrin.defects where assigned_to in (${userIds.join(
+			',',
+		)}) or solved_by in (${userIds.join(',')});`;
+
+		const result = await client.query<IDefectQuery>(query);
+
+		const data = result.rows;
+
+		client.release();
+
+		const output: IDefectsPerMaintainer[] = users.map((user) => {
+			return {
+				maintainer: user,
+				solved: data.filter(
+					(defect) =>
+						defect.solved &&
+						defect.solved_by === user.id &&
+						[5, 6].includes(defect.state_id),
+				).length,
+				assigned: data.filter(
+					(defect) =>
+						!defect.solved &&
+						defect.assigned_to === user.id &&
+						defect.state_id != 3,
+				).length,
+				irreparable: data.filter(
+					(defect) =>
+						defect.solved &&
+						defect.solved_by === user.id &&
+						defect.state_id === 4,
+				).length,
+				deferred: data.filter(
+					(defect) =>
+						!defect.solved &&
+						defect.assigned_to === user.id &&
+						defect.state_id === 3,
+				).length,
+			};
+		});
+
+		return output;
 	} catch (error) {
 		console.log(error);
 		return false;
