@@ -14,7 +14,7 @@ start:
 stop:
 	docker compose down
 
-prune:
+purge:
 	docker compose down -v --remove-orphans && \
 	rm -rf ./postgres-data && \
 	rm -rf ./backups

@@ -44,15 +44,65 @@ cd centrin-nextjs
 * Spusťte inicializaci projektu
 >❗ Projekt používá Makefile, který je dostupný pouze na Linuxu a MacOS ❗
 
-#### Linux a MacOS
 ```bash
-make initialize
-```
+# MacOS a Linux
+make initialize 
 
-#### Windows 
-```bash
+# Windows
 docker compose build && \
 docker compose up -d postgres init app backup
 ```
 
+
 * Po dokončení inicializace je projekt dostupný na adrese [`http://localhost:3000`](http://localhost:3000) a databáze na adrese `localhost:5432`
+
+## Další příkazy
+
+### Spuštění předtím inicializovaného projektu
+```bash
+# MacOS a Linux
+make start
+
+# Windows
+docker compose up -d postgres app backup
+```
+
+
+### Zastavení projektu
+```bash
+# MacOS a Linux
+make stop
+
+# Windows
+docker compose down
+```
+
+### Zastavení projektu a smazání všech dat
+```bash
+# MacOS a Linux
+make purge
+
+# Windows
+docker compose down -v --remove-orphans && \
+rm -rf ./postgres-data && \
+rm -rf ./backups
+```
+
+### Zálohování databáze
+```bash
+# MacOS a Linux
+make backup
+
+# Windows
+docker compose up backup
+```
+
+### Obnovení databáze z nejnovější zálohy
+```bash
+# MacOS a Linux
+make restore
+
+# Windows
+docker compose up restore
+```
+
