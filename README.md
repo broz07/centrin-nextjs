@@ -1,4 +1,9 @@
-# Informační systém Centrin
+# Informační systém Centrin  
+![version](https://img.shields.io/badge/version-1.0.0-blue)
+![contributors](https://img.shields.io/badge/contributors-1-green)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/broz07/centrin-nextjs)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 
 Tento projekt vznikl jako výsledek bakalářské práce a je zaměřen na zlepšení správy a efektivity provozního úseku domova důchodců. Informační systém poskytuje řešení pro centralizované sledování a správu různých aspektů denního provozu v domově důchodců, což přináší výhody v organizaci a poskytování péče seniorům.
 
@@ -13,6 +18,7 @@ Tento projekt vznikl jako výsledek bakalářské práce a je zaměřen na zlep�
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![JWT](https://img.shields.io/badge/json%20web%20tokens-323330?style=for-the-badge&logo=json-web-tokens&logoColor=pink)
 ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
 
 ## Instalace a spuštění
