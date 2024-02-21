@@ -43,7 +43,10 @@ const AdminPage: React.FC<Props> = ({ user }) => {
 			<PageHeader>
 				<AdminHeader />
 			</PageHeader>
-			<PageContent>{renderContent()}</PageContent>
+			<PageContent>
+				{/* {renderContent()} */}
+				<UserContent />
+			</PageContent>
 		</PageLayout>
 	);
 };

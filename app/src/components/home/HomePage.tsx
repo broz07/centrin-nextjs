@@ -25,6 +25,8 @@ const HomePage: React.FC<Props> = ({ user }) => {
 						RoleEnum.KUCHAR,
 						RoleEnum.PECOVATEL,
 						RoleEnum.SESTRA,
+						RoleEnum.UDRZBA,
+						RoleEnum.SUPERVISOR,
 					].includes(user.role.id) && <DefaultContent />}
 				{user && [RoleEnum.ADMIN, RoleEnum.MANAGER].includes(user.role.id) && (
 					<AdminContent />

@@ -20,7 +20,7 @@ const AdminHeader: React.FC<Props> = () => {
 				<h1>Admin Panel</h1>
 				<span>{contentType.description}</span>
 			</div>
-			<div className={styles.buttonsWrapper}>
+			{/* <div className={styles.buttonsWrapper}>
 				<ButtonGroup>
 					<Button
 						startIcon={<PeopleIcon />}
@@ -35,7 +35,7 @@ const AdminHeader: React.FC<Props> = () => {
 						Statistiky
 					</Button>
 				</ButtonGroup>
-			</div>
+			</div> */}
 		</div>
 	);
 };

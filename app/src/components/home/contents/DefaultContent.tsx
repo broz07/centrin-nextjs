@@ -1,6 +1,7 @@
 'use client';
 
 import styles from '@centrin/styles/home/home.module.scss';
+import { NotificationPosition, NotificationType, notify } from '@centrin/utils/client/notify';
 import { Card, CardContent, CardMedia, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
@@ -50,14 +51,18 @@ const DefaultContent: React.FC = () => {
 						userSelect: 'none',
 						cursor: 'pointer',
 					}}
-					onMouseEnter={() => router.prefetch('/defects/add')}
-					onClick={() => router.push('/defects/add')}
+					// onMouseEnter={() => router.prefetch('/defects/add')}
+					// onClick={() => router.push('/defects/add')}
+					onClick={
+						() => notify('Funkce zatím není dostupná! 🛠️', NotificationType.WARNING, NotificationPosition.BR, 5000 )
+					}
 				>
 					<CardMedia
 						component="img"
 						alt="Moje záznamy"
 						height="180"
 						image="/assets/undraw_my_tasks2.svg"
+						
 					/>
 					<CardContent
 						sx={{

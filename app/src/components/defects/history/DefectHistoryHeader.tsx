@@ -8,7 +8,7 @@ const DefectHistoryHeader: React.FC<Props> = () => {
 		<div className={styles.headerWrapper}>
 			<div className={styles.headerGroup}>
 				<h1>Historie závad</h1>
-				<span>TODO</span>
+				<span></span>
 			</div>
 			<div></div>
 		</div>
