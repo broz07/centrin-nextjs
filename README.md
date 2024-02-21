@@ -33,7 +33,38 @@ Tento projekt vznikl jako výsledek bakalářské práce a je zaměřen na zlep�
 3. Po dokončení instalace spusťte Docker Desktop
 
 #### Linux
-1. TODO
+1. Nastavte si repozitář Dockeru
+```bash
+# Přidání oficiálního Docker GPG klíče:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Přidání oficiálního Docker repozitáře do zdrojů apt:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+>❗ Pokud používáte odvozenou distribuci Ubuntu, například Linux Mint, může být nutné použít UBUNTU_CODENAME místo VERSION_CODENAME ❗
+
+2. Nainstalujte poslední verzi Dockeru
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+3. Ověřte, že je Docker nainstalován a funguje
+```bash
+sudo docker run hello-world
+```
+
+4. Pokud service Dockeru není spuštěná, spusťte ji
+```bash
+sudo service docker start
+```
 
 ### Instalace a spuštění projektu
 
@@ -58,7 +89,6 @@ make initialize
 docker compose build && \
 docker compose up -d postgres init app backup
 ```
-
 
 * Po dokončení inicializace je projekt dostupný na adrese [`http://localhost:3000`](http://localhost:3000) a databáze na adrese `localhost:5432`
 
