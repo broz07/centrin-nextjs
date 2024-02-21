@@ -7,8 +7,6 @@
 
 Tento projekt vznikl jako výsledek bakalářské práce a je zaměřen na zlepšení správy a efektivity provozního úseku domova důchodců. Informační systém poskytuje řešení pro centralizované sledování a správu různých aspektů denního provozu v domově důchodců, což přináší výhody v organizaci a poskytování péče seniorům.
 
-## Obsah
-
 ## Použité technologie
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)
