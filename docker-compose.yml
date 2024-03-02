@@ -10,6 +10,12 @@ services:
       - postgres
     ports:
       - "3000:3000"
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 2s
+          max_attempts: 3
+          window: 120s  
       
   postgres:
     image: postgres:16.1
@@ -20,6 +26,12 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 2s
+          max_attempts: 3
+          window: 120s
 
   backup:
     build: 
@@ -38,6 +50,12 @@ services:
       - postgres
     volumes:
       - ./backups:/app/backups
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 2s
+          max_attempts: 3
+          window: 120s
   
   init:
     build: 
@@ -56,6 +74,12 @@ services:
       - postgres
     volumes:
       - ./backups:/app/backups
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 2s
+          max_attempts: 3
+          window: 120s
 
   restore: 
     build: 
@@ -74,3 +98,9 @@ services:
       - postgres
     volumes:
       - ./backups:/app/backups
+    deploy:
+      restart_policy:
+          condition: on-failure
+          delay: 2s
+          max_attempts: 3
+          window: 120s
